@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>虚拟机|如何让VMware虚拟机使用Clash代理访问外网 | 夏凌的博客</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="系统：Ubuntu22.04.4 LTS 软件：VMware Workstation Pro 17 主机部分获取本机 IPcmd -&gt; ipconfig 例如，本机 IP 为：192.168.31.195  一定要找对主机连接的网络，在ipconfig的输出中，往往有多个网络信息，我们需要的，是主机和外部网络的连接。换句话说，就是你电脑连的WiFi，或者插着网线的网络。 打开虚拟网络编辑器编">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虚拟机|如何让VMware虚拟机使用Clash代理访问外网">
+<meta property="og:url" content="https://xialing233.github.io/2024/07/Clash_VMware_Proxy/index.html">
+<meta property="og:site_name" content="夏凌的博客">
+<meta property="og:description" content="系统：Ubuntu22.04.4 LTS 软件：VMware Workstation Pro 17 主机部分获取本机 IPcmd -&gt; ipconfig 例如，本机 IP 为：192.168.31.195  一定要找对主机连接的网络，在ipconfig的输出中，往往有多个网络信息，我们需要的，是主机和外部网络的连接。换句话说，就是你电脑连的WiFi，或者插着网线的网络。 打开虚拟网络编辑器编">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
+<meta property="article:published_time" content="2024-07-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-07-22T16:30:21.634Z">
+<meta property="article:author" content="夏凌">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://xialing233.github.io/2024/07/Clash_VMware_Proxy/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '虚拟机|如何让VMware虚拟机使用Clash代理访问外网',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-07-23 00:30:21'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="夏凌的博客"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">夏凌的博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">虚拟机|如何让VMware虚拟机使用Clash代理访问外网</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-22T16:00:00.000Z" title="发表于 2024-07-23 00:00:00">2024-07-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-07-22T16:30:21.634Z" title="更新于 2024-07-23 00:30:21">2024-07-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="虚拟机|如何让VMware虚拟机使用Clash代理访问外网"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>系统：Ubuntu22.04.4 LTS</p>
+<p>软件：VMware Workstation Pro 17</p>
+<h1 id="主机部分"><a href="#主机部分" class="headerlink" title="主机部分"></a>主机部分</h1><h2 id="获取本机-IP"><a href="#获取本机-IP" class="headerlink" title="获取本机 IP"></a>获取本机 IP</h2><p><code>cmd</code> -&gt; <code>ipconfig</code></p>
+<p>例如，本机 IP 为：<code>192.168.31.195</code></p>
+<p><img src="https://static.xialing.icu/img/202407222336245.webp"></p>
+<p>一定要找对主机连接的网络，在<code>ipconfig</code>的输出中，往往有多个网络信息，我们需要的，是<strong>主机和外部网络的连接</strong>。换句话说，就是你电脑连的WiFi，或者插着网线的网络。</p>
+<h2 id="打开虚拟网络编辑器"><a href="#打开虚拟网络编辑器" class="headerlink" title="打开虚拟网络编辑器"></a>打开虚拟网络编辑器</h2><p><code>编辑</code>-&gt;<code>虚拟网络编辑器</code>，选择<code>VMNet8</code>。</p>
+<h3 id="修改子网-IP"><a href="#修改子网-IP" class="headerlink" title="修改子网 IP"></a>修改子网 IP</h3><p>前两项与主机 IP 一致，但第三项必须不同，如 <code>192.168.21.0</code>。一般<strong>第四项</strong>为0，<strong>第三项</strong>可以看心情修改。</p>
+<h3 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h3><p>一般为 <code>255.255.255.0</code>，不论真实连接的网络的子网掩码是多少。默认不用动。</p>
+<h3 id="NAT-设置"><a href="#NAT-设置" class="headerlink" title="NAT 设置"></a>NAT 设置</h3><ol>
+<li><p>将VMnet信息改为 NAT 模式。</p>
+</li>
+<li><p>网关 IP 前三项与子网 IP 相同，第四项一般为2，如<code>192.168.21.2</code>。</p>
+</li>
+</ol>
+<h3 id="DHCP-设置"><a href="#DHCP-设置" class="headerlink" title="DHCP 设置"></a>DHCP 设置</h3><p>起始 IP 地址与结束 IP 地址的前三项和主机 IP 相同，第四项默认的不需要改，如分别为<code>192.168.21.128</code>，<code>192.168.21.254</code>。</p>
+<h2 id="网络适配器设置"><a href="#网络适配器设置" class="headerlink" title="网络适配器设置"></a>网络适配器设置</h2><p>打开控制面板：<code>cmd</code>-&gt;<code>control</code>-&gt;网络和Internet-&gt;网络和共享中心-&gt;更改适配器选项</p>
+<p>VMNet8的IPv4 的地址设置为 <code>192.168.21.1</code>，前三项与子网 IP 相同，第四项一般是1。</p>
+<p>子网掩码仍为<code>255.255.255.0</code>。</p>
+<h1 id="VMware部分"><a href="#VMware部分" class="headerlink" title="VMware部分"></a>VMware部分</h1><p>在<code> 虚拟机</code>-&gt;<code>设置</code> 中，将硬件网卡（网络适配器）设置为 VMnet8 网络适配器。</p>
+<h1 id="虚拟机（Linux）部分"><a href="#虚拟机（Linux）部分" class="headerlink" title="虚拟机（Linux）部分"></a>虚拟机（Linux）部分</h1><p>随后，启动虚拟机。</p>
+<p>Clash 的端口默认为<code>7890</code>，打开虚拟机的代理设置（<code>Settings</code>-&gt;<code>Network</code>-&gt;<code>Network Proxy</code>），IP 为本机 IP，即最开头提到的<code>192.168.31.195</code>，端口为 Clash 的端口，即<code>7890</code>。</p>
+<p><img src="https://static.xialing.icu/img/202407222356202.webp"></p>
+<h1 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h1><ul>
+<li>在家和学校不同网络下，本机 IP 会变化，这时候，需要修改 IP 到现在的 IP。</li>
+<li>有时候，会出现修改 IP 后，即使设置正确，虚拟机仍无法联网的问题。笔者遇到了这种情况，不知道什么原因。我成功 Debug 的一个方案，就是恢复虚拟机网络的默认设置，删除 VMnet8，再重新设置。注意此时保证虚拟机是关闭的。</li>
+<li>如果在进行操作后，发现Clash无法代理，具体表现为，在主机浏览器中输入任何地址，都会显示无法访问。此时很可能是Clash的端口被占用，发生冲突。可以在命令行窗口(<code>win+R</code> -&gt; <code>cmd</code>)输入<code>netstats -ano</code>查看7890端口被哪个PID占用。之后在任务管理器中的详细信息部分可以查到占用此端口的程序，大概率是vmware。这个时候，把Vmnet8中NAT设置中的端口清空即可。</li>
+<li>如果发现，可以正常访问网页，但是无法登录，具体表现为，打开任何一个网站（百度、B站、学校的统一身份认证），输入账号和密码，提示找不到用户或者重定向后仍然是未登录状态。问题可能在于，使用了浏览器的<code>ModHeader</code>扩展修改了请求头。禁用该扩展后，可以正常登录。</li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/07/Site_Domain_Takeover/" title="建站相关|用于Github Pages的域名被其他用户使用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">建站相关|用于Github Pages的域名被其他用户使用</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">在世界上留下自己的痕迹</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E9%83%A8%E5%88%86"><span class="toc-number">1.</span> <span class="toc-text">主机部分</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%9C%AC%E6%9C%BA-IP"><span class="toc-number">1.1.</span> <span class="toc-text">获取本机 IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%BC%80%E8%99%9A%E6%8B%9F%E7%BD%91%E7%BB%9C%E7%BC%96%E8%BE%91%E5%99%A8"><span class="toc-number">1.2.</span> <span class="toc-text">打开虚拟网络编辑器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%AD%90%E7%BD%91-IP"><span class="toc-number">1.2.1.</span> <span class="toc-text">修改子网 IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81"><span class="toc-number">1.2.2.</span> <span class="toc-text">子网掩码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT-%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.2.3.</span> <span class="toc-text">NAT 设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DHCP-%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.2.4.</span> <span class="toc-text">DHCP 设置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%80%82%E9%85%8D%E5%99%A8%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.3.</span> <span class="toc-text">网络适配器设置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VMware%E9%83%A8%E5%88%86"><span class="toc-number">2.</span> <span class="toc-text">VMware部分</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88Linux%EF%BC%89%E9%83%A8%E5%88%86"><span class="toc-number">3.</span> <span class="toc-text">虚拟机（Linux）部分</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">其他问题</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

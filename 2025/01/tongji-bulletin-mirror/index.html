@@ -1,0 +1,613 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>爬虫+ Web | 同济大学 1 系统通知公告备份与提醒 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="缘起 同济大学 1 系统 是同济大学的教学信息管理平台，发布教务教学的通知公告。发布的通知较为重要，但是过了一段时间便会下架，不给人回看的可能。 在计科导的网站大作业编写的网站没有用户的登录注册等功能，如果因为作业时间仓促而明文存储密码，没什么意义。因此在寒假编写一个生产上较为安全的用户系统。  文章将按模块来展开，梳理网站实现的大部分细节。文章比较长，读者可以选感兴趣的部分阅读。 网站在：同济大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爬虫+ Web | 同济大学 1 系统通知公告备份与提醒">
+<meta property="og:url" content="https://xialing233.github.io/2025/01/tongji-bulletin-mirror/index.html">
+<meta property="og:site_name" content="指针的轨迹">
+<meta property="og:description" content="缘起 同济大学 1 系统 是同济大学的教学信息管理平台，发布教务教学的通知公告。发布的通知较为重要，但是过了一段时间便会下架，不给人回看的可能。 在计科导的网站大作业编写的网站没有用户的登录注册等功能，如果因为作业时间仓促而明文存储密码，没什么意义。因此在寒假编写一个生产上较为安全的用户系统。  文章将按模块来展开，梳理网站实现的大部分细节。文章比较长，读者可以选感兴趣的部分阅读。 网站在：同济大">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
+<meta property="article:published_time" content="2025-01-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-25T16:00:00.000Z">
+<meta property="article:author" content="夏凌">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://xialing233.github.io/2025/01/tongji-bulletin-mirror/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":180,"position":"top","messagePrev":"距离上次更新已过","messageNext":"天，内容可能不具有时效性"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '爬虫+ Web | 同济大学 1 系统通知公告备份与提醒',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-01-26 00:00:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">爬虫+ Web | 同济大学 1 系统通知公告备份与提醒</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-25T16:00:00.000Z" title="发表于 2025-01-26 00:00:00">2025-01-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-25T16:00:00.000Z" title="更新于 2025-01-26 00:00:00">2025-01-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%90%8C%E6%B5%8E/">同济</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="爬虫+ Web | 同济大学 1 系统通知公告备份与提醒"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><ul>
+<li>同济大学 <a target="_blank" rel="noopener" href="https://1.tongji.edu.cn/">1 系统</a> 是同济大学的教学信息管理平台，发布教务教学的通知公告。发布的通知较为重要，但是过了一段时间便会下架，不给人回看的可能。</li>
+<li>在计科导的<a target="_blank" rel="noopener" href="https://tongji.xialing.icu/">网站大作业</a>编写的网站没有用户的登录注册等功能，如果因为作业时间仓促而明文存储密码，没什么意义。因此在寒假编写一个生产上较为安全的用户系统。</li>
+</ul>
+<p>文章将按模块来展开，梳理网站实现的大部分细节。文章比较长，读者可以选感兴趣的部分阅读。</p>
+<p>网站在：<a target="_blank" rel="noopener" href="https://1.xialing.icu/">同济大学通知公告备份站</a>。</p>
+<p><code>Github</code> 仓库在：<a target="_blank" rel="noopener" href="https://github.com/XiaLing233/fetch-1-dot-tongji">Github</a></p>
+<h2 id="爬虫——数据获取"><a href="#爬虫——数据获取" class="headerlink" title="爬虫——数据获取"></a>爬虫——数据获取</h2><h3 id="统一身份认证"><a href="#统一身份认证" class="headerlink" title="统一身份认证"></a>统一身份认证</h3><p><img src="https://static.xialing.icu/img/202501261720226.webp" alt="快转学"></p>
+<p>获取数据需要通过的第一道关卡是统一身份认证，因为如果不登录，是获取不了任何内容的，会返回 <code>401</code> 错误。上图是老的身份认证系统，现在不需要手动点击验证码、只需要点击登录按钮，相对还容易些，不然，如何通过验证码也是个问题。</p>
+<p>在用户输入了用户名和密码后，发生了什么事情呢？</p>
+<h4 id="初步认识"><a href="#初步认识" class="headerlink" title="初步认识"></a>初步认识</h4><p>在 <code>Network</code> 面板中，注意到 1 系统会向 <code>https://iam.tongji.edu.cn/idp/authcenter/ActionAuthChain?...</code> 发送 <code>URL编码后的</code> 如下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">j_username: 2345678</span><br><span class="line">j_password: (加密的密码)</span><br><span class="line">// 下面这行就是 &quot;请输入验证码&quot;，我没有修改其原来的面貌</span><br><span class="line">j_checkcode: 请输入验证码</span><br><span class="line">op: login</span><br><span class="line">spAuthChainCode: (一串字符串)</span><br><span class="line">authnLcKey: (一串字符串)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>当然，我这里说 <strong>注意到</strong>，其实有点马后炮之嫌，因为如果不打断点的话，页面直接会跳转到 1 系统，而在进入到 1 系统后再在 <code>Network</code> 中查看，<strong>是看不到这一请求历史的！（因为这是个 <code>js</code> 请求）</strong> 换句话说，在后面使用 <code>requests</code> 模拟请求时，如果缺失了这一步，登录不成功，获取不到 <code>Cookie</code>！我在这一步卡了很久。不过现在发现，如果在 <code>Network</code> 面板勾选 <code>Preserve log</code> 就能看到按下登录按钮后发生的所有事情，而不会因为页面跳转失去之前的内容。这样也就能解决这一问题了。</p>
+</blockquote>
+<p>这些内容是如何获得的？</p>
+<h4 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h4><p>打个断点调试吧！找到登录按钮的元素，看看 <code>@click</code>，也就是鼠标单击后会发生什么。</p>
+<p><img src="https://static.xialing.icu/img/202501261730192.webp" alt="寻找事件"></p>
+<p>点击③红框中的链接，到了下面的页面：</p>
+<p><img src="https://static.xialing.icu/img/202501261733122.webp" alt="添加断点"></p>
+<p>点击左侧的行号，就会添加断点。这样，等我们按下登录按钮后，页面就不会一下子跳转到登录后的状态，而是一步步执行，让我们可以知道，到底登录过程发生了什么。</p>
+<p><img src="https://static.xialing.icu/img/202501261742528.webp" alt="调试"></p>
+<p>掌握了这些方法，想要获取到登录的全流程仍然比较困难：</p>
+<ol>
+<li><code>js</code> 文件是混淆过的，不知道语句的具体含义；</li>
+<li>运行时函数压栈层层调用，不知道运行到了哪层，贸然跳出当前层很可能导致整个调试过程进行完毕，跳转到登录后的界面；</li>
+<li>登录次数太多会触发系统的验证机制，需要额外输入验证码等。</li>
+</ol>
+<p>应对这些问题，有一些小技巧，例如，把所有和网络请求有关的内容（如 <code>ajax</code> 等）全打上断点，布下天罗地网。或者根据文件名分析函数的功能。但不管怎么说，遇到一个新的问题需要解决时，还是要逐渐摸索。这里就略去这些摸索过程，直接给出结论。</p>
+<h4 id="密码加密"><a href="#密码加密" class="headerlink" title="密码加密"></a>密码加密</h4><p>注意到如下函数会被调用：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//RSA加密</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">encryptByRSA</span>(<span class="params">message</span>) &#123;</span><br><span class="line">    <span class="comment">//debugger;</span></span><br><span class="line">    <span class="keyword">var</span> encrypt = <span class="keyword">new</span> <span class="title class_">JSEncrypt</span>();</span><br><span class="line">    encrypt.<span class="title function_">setPublicKey</span>(<span class="string">&#x27;foo&#x27;</span>);</span><br><span class="line">    <span class="keyword">var</span> encrypted = encrypt.<span class="title function_">encrypt</span>(message);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> encrypted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>message</code> 是输入的明文密码，例如，用户输入的密码是 <code>123456</code>，传入的就是 <code>123456</code>。</p>
+<p>经过了 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/jsencrypt">JSEncrypt 库</a> 的加密后，会返回加密后的 <code>encrypted</code>，然后发送给后端。具体的逻辑在 <code>doSubmit</code> 函数中。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">doSubmit</span>(<span class="params">usernameId</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> authenTypes = $(<span class="string">&quot;#authenTypes&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line">    <span class="keyword">var</span> spAuthentication = $(<span class="string">&quot;#spAuthentication&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line">    <span class="keyword">var</span> authMethodIDs = $(<span class="string">&quot;#authMethodIDs&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> passmm=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> dataes=$(<span class="string">&#x27;#&#x27;</span> + tabFromId).<span class="title function_">serialize</span>();</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">typeof</span>(passwordId) != <span class="string">&quot;undefined&quot;</span> &amp;&amp; $(<span class="string">&quot;#&quot;</span> + passwordId).<span class="title function_">val</span>().<span class="property">length</span>&lt;<span class="number">100</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> pass=$(<span class="string">&quot;#&quot;</span> + passwordId).<span class="title function_">val</span>();</span><br><span class="line">        passmm=<span class="title function_">encryptByRSA</span>(pass); <span class="comment">// 加密的密码！！！</span></span><br><span class="line">        pass=<span class="built_in">encodeURIComponent</span>(pass);</span><br><span class="line">        dataes=dataes.<span class="title function_">replace</span>(<span class="string">&#x27;j_password=&#x27;</span>+pass,<span class="string">&#x27;j_password=&#x27;</span>+passmm);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> urlPath = basePath + <span class="string">&quot;/authcenter/ActionAuthChain?authnLcKey=&quot;</span>+$(<span class="string">&quot;#authnLcKey&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line">    <span class="keyword">var</span> view = <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    $(<span class="string">&#x27;.loginBt&#x27;</span>).<span class="title function_">each</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        $(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;disabled&#x27;</span>, <span class="string">&#x27;disabled&#x27;</span>);</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    $.<span class="title function_">ajax</span>(&#123;</span><br><span class="line">        <span class="attr">url</span>: urlPath,</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">        <span class="attr">cache</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">async</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">data</span>: dataes, <span class="comment">// 发送的数据！！！</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 下略</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在发送的数据中，最难获取的就是加密后的密码，其他字段比较容易获得，留作习题。</p>
+<p>发送完密码后，<code>https://iam.tongji.edu.cn/idp/authcenter/ActionAuthChain?...</code> 会返回 <code>200 OK</code>，进入后续步骤。</p>
+<h4 id="一条龙服务"><a href="#一条龙服务" class="headerlink" title="一条龙服务"></a>一条龙服务</h4><p><code>200 OK</code> 的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">状态码</a>并不会重定向浏览器的页面，因此在后续使用 <code>requests</code> 来模拟请求时，需要手动请求后续页面。不过，找到第一个需要请求的页面就好啦，因为后面是一堆 <code>302</code> 重定向。</p>
+<p>先向 <code>https://iam.tongji.edu.cn/idp/AuthnEngine?...</code> 发送 <code>POST</code> 请求，把刚刚发送的内容再发送一遍。</p>
+<p>如果成功了，我们会在响应头的 <code>Set-Cookie</code> 字段获得 <strong><code>_idp_session</code></strong> 这一 <code>Cookie</code>，并被 <code>Location</code> 字段中的位置重定向到 <code>https://iam.tongji.edu.cn:443/idp/profile/OAUTH2/AuthorizationCode/SSO?...</code>。</p>
+<p>在这里，我们会获得 <strong><code>_idp_authn_lc_key</code></strong> 这一 <code>Cookie</code>，并重定向到：<code>https://1.tongji.edu.cn/api/ssoservice/system/loginIn?...</code>。</p>
+<p>现在来到了 1 系统的地盘。</p>
+<p>在这里，我们会获得一个 <code>demoState</code> 的 <code>Cookie</code>，没什么作用。我们会被继续重定向到：<code>http://1.tongji.edu.cn/ssologin?token=xxx;uid=xxx;ts=xxx</code>。</p>
+<p>在这里，我们会被重定向到 <code>https</code> 的链接（上面的链接是 <code>http</code>），这样，登录结束，不再被重定向了，返回 <code>200 OK</code>。</p>
+<p>叙述的有些繁琐，不过，实际的登录就是这样的一个过程。</p>
+<p>目前为止还没有结束，因为通过观察获得消息通知的请求头（见后续章节），有一个 <code>sessionid</code> <code>Cookie</code> 还没有获得。</p>
+<p>注意到会有一个 <code>POST</code> 请求会被发送到 <code>https://1.tongji.edu.cn/api/sessionservice/session/login</code>，携带的数据是：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;uid&quot;</span><span class="punctuation">:</span><span class="string">&quot;********-****-****-****-************&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span><span class="string">&quot;********************************&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ts&quot;</span><span class="punctuation">:</span><span class="string">&quot;1737894675376&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这三个内容在上一步的链接 <code>http://1.tongji.edu.cn/ssologin?token=xxx;uid=xxx;ts=xxx</code> 中可以获得。</p>
+<p>到此为止，登录工作已经分析完成了，接下来需要用 <code>requests</code> 来模拟。</p>
+<h3 id="requests-模拟登录"><a href="#requests-模拟登录" class="headerlink" title="requests 模拟登录"></a><code>requests</code> 模拟登录</h3><p>代码细节参见 <code>fetchNewEvents.py</code> 中的 <code>login()</code> 函数。</p>
+<blockquote>
+<p>—– 第一步：登录前页面 —–</p>
+</blockquote>
+<p>关键：从 <code>URL</code> 中提取 <code>authnLcKey</code>。</p>
+<blockquote>
+<p>—– 第二步：ActionAuthChain —–</p>
+</blockquote>
+<p>关键：获取 RSA 公钥，加密密码。从 <code>js</code> 中获得写死的 <code>spAuthChainCode</code>。整合数据，发送。记得修改请求头，需要添加 <code>Content-Type</code> 和 <code>Content-Length</code>。</p>
+<p>第二步就是上面提到的容易忘记的一步。</p>
+<blockquote>
+<p>—– 第三步：AuthnEngine —–</p>
+</blockquote>
+<p>关键：再次发送一遍刚刚的内容。</p>
+<blockquote>
+<p>—– 第四步：SSO 登录 —–</p>
+</blockquote>
+<p>关键：需要更新 <code>headers</code>，刚刚加上的两个字段不要了。</p>
+<blockquote>
+<p>—– 第五步：LoginIn code &amp; state—–</p>
+<p>—– 第六步：ssologin token—–</p>
+<p>—– 第七步：转 HTTPS —–</p>
+</blockquote>
+<p>源代码这里获取了 <code>AES</code> 公钥的链接，因为存储 <code>AES</code> 公钥的 <code>js</code> 文件名在这个页面的返回内容中可以提取到。</p>
+<blockquote>
+<p>—– 第八步：login —–</p>
+</blockquote>
+<p>关键：把 <code>token</code>、<code>ts</code> 和 <code>uid</code> 发送出去。</p>
+<h3 id="requests-获取通知内容"><a href="#requests-获取通知内容" class="headerlink" title="requests 获取通知内容"></a><code>requests</code> 获取通知内容</h3><p>观察到 1 系统获取通知内容用到了两个方法：<code>findMyCommonMsgPublish</code> 和 <code>findMyCommonMsgPublishById</code>。它们获取到的内容分别是这样：</p>
+<h4 id="findMyCommonMsgPublish"><a href="#findMyCommonMsgPublish" class="headerlink" title="findMyCommonMsgPublish"></a><code>findMyCommonMsgPublish</code></h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">200</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;msg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;pageNum_&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;pageSize_&quot;</span><span class="punctuation">:</span> <span class="number">100</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;total_&quot;</span><span class="punctuation">:</span> <span class="number">24</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;list&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;pageNum_&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>                              <span class="comment">// 【注意】这个字段没用，正确的 pageNum_ 是外层的</span></span><br><span class="line">                <span class="attr">&quot;pageSize_&quot;</span><span class="punctuation">:</span> <span class="number">10</span><span class="punctuation">,</span>                            <span class="comment">// 【注意】这个字段没用，正确的 pageSize_ 是外层的</span></span><br><span class="line">                <span class="attr">&quot;dic&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">1271</span><span class="punctuation">,</span>                                 <span class="comment">// id 应该是唯一的</span></span><br><span class="line">                <span class="attr">&quot;startTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2024-10-23 00:00:00.0&quot;</span><span class="punctuation">,</span>       <span class="comment">// 发布时间</span></span><br><span class="line">                <span class="attr">&quot;endTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-10-01 00:00:00.0&quot;</span><span class="punctuation">,</span>         <span class="comment">// 过期时间</span></span><br><span class="line">                <span class="attr">&quot;popStatus&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0&quot;</span><span class="punctuation">,</span>                           <span class="comment">// 是否弹出</span></span><br><span class="line">                <span class="attr">&quot;topStatus&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1&quot;</span><span class="punctuation">,</span>                           <span class="comment">// 是否置顶</span></span><br><span class="line">                <span class="attr">&quot;invalidTopTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-09-01 00:00:00.0&quot;</span><span class="punctuation">,</span>  <span class="comment">// 到了什么时候停止置顶</span></span><br><span class="line">                <span class="attr">&quot;receiverPattern&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;customGroupId&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;faceUser&quot;</span><span class="punctuation">:</span> <span class="string">&quot;224,254,20,219,253&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;faceUserName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;全校&quot;</span><span class="punctuation">,</span>                     <span class="comment">// 面向的对象，我能接收到的应该只有全校</span></span><br><span class="line">                <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;教学部门首问视频会议室&quot;</span><span class="punctuation">,</span>          <span class="comment">// 标题</span></span><br><span class="line">                <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span>                            <span class="comment">// 【注意】这里不会返回内容，需要用其他方法请求</span></span><br><span class="line">                <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;workflowNo&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;tagStatus&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;rejectReason&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;createId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;12345&quot;</span><span class="punctuation">,</span>                        <span class="comment">// 发布信息的教师工号</span></span><br><span class="line">                <span class="attr">&quot;createUser&quot;</span><span class="punctuation">:</span> <span class="string">&quot;夏凌&quot;</span><span class="punctuation">,</span>                       <span class="comment">// 发布信息的教师姓名</span></span><br><span class="line">                <span class="attr">&quot;createTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2022-03-10 09:25:39.0&quot;</span><span class="punctuation">,</span>      <span class="comment">// 创建消息的时间</span></span><br><span class="line">                <span class="attr">&quot;publishTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2022-03-10 09:26:11.0&quot;</span><span class="punctuation">,</span>     <span class="comment">// 发布消息的时间</span></span><br><span class="line">                <span class="attr">&quot;groupIds&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;noTipsMsg&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;ids&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;editExplain&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;evidenceList&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;commonAttachmentList&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;porjIds&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;projIdStr&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;marReadStatus&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;publishStartTime&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;publishEndTime&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;receiverList&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;userCode&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>方法为 <code>POST</code>。</p>
+<p>这一方法会返回当前页面范围内的所有通知，但是不会返回内容和附件。因此，把 <code>pageSize_</code> 开大一点，获取所有的通知数，然后再逐个获取细节即可。</p>
+<h4 id="findMyCommonMsgPublishById"><a href="#findMyCommonMsgPublishById" class="headerlink" title="findMyCommonMsgPublishById"></a><code>findMyCommonMsgPublishById</code></h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">200</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;msg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;pageNum_&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pageSize_&quot;</span><span class="punctuation">:</span> <span class="number">10</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;dic&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">2204</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;startTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-01-15 00:00:00.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;endTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-01-22 00:00:00.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;popStatus&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;topStatus&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;invalidTopTime&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;receiverPattern&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;customGroupId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;faceUser&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;faceUserName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;全校&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;关于2024-2025学年第二学期本科生、研究生及继续教育（本科）教材选用情况的公示&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;p&gt;test&lt;/p&gt;&quot;</span><span class="punctuation">,</span> <span class="comment">// 这里存放了内容</span></span><br><span class="line">    <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;workflowNo&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tagStatus&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;rejectReason&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;createId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;12345&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;createUser&quot;</span><span class="punctuation">:</span> <span class="string">&quot;夏凌&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;createTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-01-15 17:26:41.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;publishTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-01-16 15:11:50.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;groupIds&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;noTipsMsg&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ids&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;editExplain&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;evidenceList&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;commonAttachmentList&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="comment">// 这里存放了附件</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;pageNum_&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span> <span class="comment">// 忽略</span></span><br><span class="line">        <span class="attr">&quot;pageSize_&quot;</span><span class="punctuation">:</span> <span class="number">10</span><span class="punctuation">,</span> <span class="comment">// 忽略</span></span><br><span class="line">        <span class="attr">&quot;dic&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">10100</span><span class="punctuation">,</span> <span class="comment">// 这个 id 应该是唯一的</span></span><br><span class="line">        <span class="attr">&quot;relationId&quot;</span><span class="punctuation">:</span> <span class="number">2204</span><span class="punctuation">,</span> <span class="comment">// 和通知 id 的关系</span></span><br><span class="line">        <span class="attr">&quot;relationType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;01&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fileName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xxx&quot;</span><span class="punctuation">,</span>  <span class="comment">// 文件名</span></span><br><span class="line">        <span class="attr">&quot;fileLacation&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xxx&quot;</span><span class="punctuation">,</span> <span class="comment">// 文件存放地址，需要进行加密后发送下载请求。就是 Lacation!</span></span><br><span class="line">        <span class="attr">&quot;uploadUserId&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;uploadName&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;uploadTime&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;moduleName&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;rateStatus&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;processRate&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;projId&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;projIdI18n&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;porjIds&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;projIdStr&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;marReadStatus&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;publishStartTime&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;publishEndTime&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;receiverList&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;userCode&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>方法为 <code>GET</code>。</p>
+<p>链接携带了 <code>id</code> 和时间戳，但其实只携带 <code>id</code> 就够了。</p>
+<p>内容的获取比较简单，先获取所有的通知，然后再逐个遍历即可。当出现新通知的时候，发送邮件提醒。此外，需要判断这条通知有没有记录过，否则会做多余的工作，涉及到数据库的部分。</p>
+<p>因此，接下来依次叙述邮件服务的建立以及数据库表格的设置。</p>
+<h4 id="附件的下载"><a href="#附件的下载" class="headerlink" title="附件的下载"></a>附件的下载</h4><p>1 系统中附件的下载并不是简单地 <code>&lt;a&gt;&lt;/a&gt;</code> 标签，存放了文件地址，而是通过一个 <code>js</code> 动态生成的。</p>
+<p>具体的原理是，把附件的 <code>fileLacation</code> 的值（我没打错，就是 <code>FileLacation</code>）经过 <code>AES</code> 加密，获得目标链接即可。<code>AES</code> 加密用到的是 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/crypto-js">Crypto-JS</a> 库。</p>
+<h3 id="邮件通知"><a href="#邮件通知" class="headerlink" title="邮件通知"></a>邮件通知</h3><p>如果不想用属于自己的域名发送邮件提醒，用 QQ 邮箱、163 邮箱，甚至是同济邮箱就足够了（现在想想，同济邮箱甚至可达性更高一些，不过似乎没有 <code>SMTP</code> 功能呢）。</p>
+<p>建立自己的邮件服务，有两个方案：自己搭建或者使用企业邮箱。<a target="_blank" rel="noopener" href="https://kabe.dev/%E5%BC%80%E5%A7%8B%E8%87%AA%E5%BB%BA%E9%82%AE%E7%AE%B1%E4%B9%8B%E5%89%8D/">这篇文章</a>写的很不错，只不过一开始我不信邪。</p>
+<h4 id="自己搭建"><a href="#自己搭建" class="headerlink" title="自己搭建"></a>自己搭建</h4><p>我在服务器上采用 <code>Dovecot</code> 和 <code>Postfix</code> 搭建了一个简陋的邮件服务器，也做好了域名解析。然而，因为服务器商一般不会开放 <code>25</code> 端口，也就是 <code>SMTP</code> 服务器端口，用来发送邮件。所以在测试的时候，只能接收到其他邮箱 <strong>发来</strong> 的邮件（<code>POP3</code> &#x2F; <code>IMAP</code>），而无法对外发送邮件。</p>
+<p>因此找到了一些邮件转发服务，如亚马逊 <code>SES</code>。不过，可能对方觉得我的资质不够，没能通过我的申请。</p>
+<p><img src="https://static.xialing.icu/img/202501262116757.webp" alt="Rejected"></p>
+<p>所以这条路走不通啦！我在寻觅下一个邮件转发服务商的过程中想起来了上面那篇被我嗤之以鼻的文章，于是申请了一个阿里云的企业邮箱。</p>
+<h4 id="企业邮箱"><a href="#企业邮箱" class="headerlink" title="企业邮箱"></a>企业邮箱</h4><p>申请的方法很简单，最大的困难可能就是一个自己的域名了。我估计<a target="_blank" rel="noopener" href="https://tongji.icu/">乌龙茶</a>的大哥也是这种做法吧。因为很简单，所以不赘述了。</p>
+<h3 id="数据库的配置"><a href="#数据库的配置" class="headerlink" title="数据库的配置"></a>数据库的配置</h3><p>使用的是免费的 <code>MySQL</code> 作为数据库。数据库表格的设置是这样的：</p>
+<blockquote>
+<p>通知表(notifications)</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>类型</th>
+<th>描述</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>通知的唯一标识符</td>
+<td>和 1 系统数据库中的一致</td>
+</tr>
+<tr>
+<td>title</td>
+<td>VARCHAR(500)</td>
+<td>通知的标题</td>
+<td></td>
+</tr>
+<tr>
+<td>content</td>
+<td>LONGTEXT</td>
+<td>通知的内容(HTML)</td>
+<td>用 LONGTEXT，不然存不下 base64 的图片</td>
+</tr>
+<tr>
+<td>start_time</td>
+<td>DATETIME</td>
+<td>通知的发布时间</td>
+<td>用 DATETIME 而不是 TIMESTAMP…</td>
+</tr>
+<tr>
+<td>end_time</td>
+<td>DATETIME</td>
+<td>通知的下架时间</td>
+<td>…是因为 DATETIME 不考虑时区…</td>
+</tr>
+<tr>
+<td>invalid_top_time</td>
+<td>DATETIME</td>
+<td>什么时候停止置顶</td>
+<td>…不过主要还是因为和 1 系统的一致</td>
+</tr>
+<tr>
+<td>created_id</td>
+<td>VARCHAR(45)</td>
+<td>发布人的工号</td>
+<td>不能用 INT，否则存储不了 admin，且 0 开头的工号会略去首 0</td>
+</tr>
+<tr>
+<td>created_user</td>
+<td>VARCHAR(45)</td>
+<td>发布人的姓名</td>
+<td></td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>DATETIME</td>
+<td>通知的创建时间</td>
+<td></td>
+</tr>
+<tr>
+<td>publish_time</td>
+<td>DATETIME</td>
+<td>通知的发布时间</td>
+<td></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>附件表(attachments)</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>类型</th>
+<th>描述</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>附件的唯一标识符</td>
+<td>和 1 系统数据库中的一致</td>
+</tr>
+<tr>
+<td>file_name</td>
+<td>VARCHAR(500)</td>
+<td>附件文件名</td>
+<td>json 中的 fileName</td>
+</tr>
+<tr>
+<td>file_location_remote</td>
+<td>VARCHAR(500)</td>
+<td>在学校服务器的路径</td>
+<td>json 中的 fileLocation</td>
+</tr>
+<tr>
+<td>file_location_local</td>
+<td>VARCHAR(500)</td>
+<td>本地的存储路径</td>
+<td>不包含前缀地址，即 config.ini 中的 Storage.path</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>通知和附件的关系表(relations)</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>类型</th>
+<th>描述</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>主键</td>
+<td>它的数值不重要</td>
+</tr>
+<tr>
+<td>notification_id</td>
+<td>INT</td>
+<td>存放通知</td>
+<td></td>
+</tr>
+<tr>
+<td>attachment_id</td>
+<td>INT</td>
+<td>存放附件</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>因为通知和附件是典型的多对多关系（不设置成一对多是为了防止一个附件被多个通知引用，毕竟名字都叫 <code>commonAttachmentList</code> 了）。</p>
+<p>到此为止，我们就把 1 系统的数据爬取到了本地，并且形成了有序的组织结构。接下来对这些数据再次处理，展示到页面上。</p>
+<h3 id="跳板机"><a href="#跳板机" class="headerlink" title="跳板机"></a>跳板机</h3><p>因为服务器在国外（不需要备案），但是总是用国外的 <code>IP</code> 登录学校的系统也不是个好事，正好国内有台上海的服务器，利用起来。</p>
+<p>使用 <code>ssh</code> 新建一个 <code>socks5</code> 代理</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -f -N -D port -i /path/to/your/private/ley cirno@ip_addr</span><br></pre></td></tr></table></figure>
+
+<p><code>-f</code> 表示放入后台，<code>-N</code> 表示不执行任何命令，<code>-D</code> 指明了端口号，<code>-i</code> 指明了私钥的位置。</p>
+<p>之后再在脚本中使用 <code>pySocks</code> 创建一个代理就好了。</p>
+<p>或许是掩耳盗铃吧。</p>
+<h2 id="Web——数据展示"><a href="#Web——数据展示" class="headerlink" title="Web——数据展示"></a>Web——数据展示</h2><p>数据展示的网站编写采用的技术栈是：</p>
+<ul>
+<li>前端：<code>vue3</code></li>
+<li>后端：<code>flask</code></li>
+<li>数据库：<code>MySQL</code></li>
+</ul>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p>先说数据库，因为后续可能会用到其中的表格信息：</p>
+<blockquote>
+<p>用户表(users)</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>类型</th>
+<th>描述</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>主键</td>
+<td></td>
+</tr>
+<tr>
+<td>username</td>
+<td>VARCHAR(100)</td>
+<td>昵称</td>
+<td></td>
+</tr>
+<tr>
+<td>email</td>
+<td>VARCHAR(100)</td>
+<td>注册邮箱</td>
+<td></td>
+</tr>
+<tr>
+<td>password</td>
+<td>VARCHAR(100)</td>
+<td>加密的密码</td>
+<td></td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>DATETIME</td>
+<td>注册时间</td>
+<td></td>
+</tr>
+<tr>
+<td>receive_noti</td>
+<td>BOOLEAN</td>
+<td>是否接收通知提醒</td>
+<td></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>登录记录表(login_logs)</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>类型</th>
+<th>描述</th>
+<th>补充说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>主键</td>
+<td></td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>VARCHAR(100)</td>
+<td>用户 id</td>
+<td>外键</td>
+</tr>
+<tr>
+<td>ip_address</td>
+<td>VARCHAR(100)</td>
+<td>登录 IP</td>
+<td></td>
+</tr>
+<tr>
+<td>login_at</td>
+<td>DATETIME</td>
+<td>登录时间</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h3><p>先说后端，因为后端比较复杂。</p>
+<p>前文说过，计科导的<a target="_blank" rel="noopener" href="https://tongji.xialing.icu/">网站大作业</a>并没有用户系统，所以这次我就想做一个比较完备的用户系统，估计也只会做这一次了，因为太麻烦。</p>
+<p>接下来按功能模块来阐述后端的任务。</p>
+<h4 id="用户注册"><a href="#用户注册" class="headerlink" title="用户注册"></a>用户注册</h4><p>新用户需要先用邮箱注册，为了数据安全，只接收同济邮箱（<code>@tongji.edu.cn</code>）。</p>
+<p>如果用户的邮箱正确，则随机生成一个六位验证码。此时会生成一个和用户对应的 <code>session</code>，这样，后续就可以判断用户输入的验证码是否正确了。否则，万一同时有一堆人注册，怎样区分哪个验证码是哪个用户的呢？生成 <code>session</code> 是通过 <code>flask_session</code> 来的。</p>
+<p>存储 <code>session</code> 使用 <code>redis</code> 数据库，而不是存在内存中，这样做有两个好处：</p>
+<ol>
+<li>使用 <code>gunicorn</code> 部署服务时，多线程下可以正常工作；</li>
+<li>服务重启后，<code>session</code> 仍然存在。</li>
+</ol>
+<p>验证码正确，用户就注册成功了。把用户信息写入数据库。这里需要提一嘴密码的处理。明文密码很不安全，因此采用 <code>argon2</code> 加密。数据库中存储的密码长这样：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>nickname</th>
+<th>email</th>
+<th>password</th>
+<th>created_at</th>
+<th>receive_noti</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3</td>
+<td>cirno</td>
+<td><code>cirno@tongji.edu.cn</code></td>
+<td><code>$argon2id$v=19$m=65536,t=3,p=4$mzAj2HA19xJ+3AYe2tLfuw$w1S8Zj885OvJTi6PMIM4B/5tAmXpDScd9+i2AfKzvEI</code></td>
+<td>2025-01-23 14:19:16</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>默认的 <code>receive_noti</code> 为 0.也就是说，如果用户想要接受邮件提醒，需要手动设置，这样可以避免不必要的打扰。</p>
+<h4 id="用户登录"><a href="#用户登录" class="headerlink" title="用户登录"></a>用户登录</h4><p>登录只支持邮箱+密码的登录方式。</p>
+<p>传入的密码经过了 <code>RSA</code> 加密的，和 1 系统的处理方式一样。上文用户注册，下文忘记密码中传送的密码也都是加密过的。<code>RSA</code> 是一种不对称加密。就算在 <code>js</code> 中的公钥被人所知也没关系，因为只有私钥才能破解原来的内容。但相对地，<code>AES</code> 加密就是一种对称加密，只有一把钥匙。因此最好不要用 <code>AES</code> 加密来加密密码。</p>
+<p>后端解密密码使用的是 <code>Cryptodome</code> 库。</p>
+<p>每一次登录，后端会记录登录的 <code>IP</code> 地址和登录时间，写入 <code>login_logs</code> 中。获取时间很简单，如何获取 <code>IP</code> 呢？因为后端服务是使用 <code>nginx</code> 反向代理的，无法直接获得客户端 <code>IP</code>，只能直接获得本机 <code>IP</code>，也就是 <code>localhost</code>。实现的方法是通过 <code>X-Forwarded-For</code> 头部，通过配置 <code>nginx</code>，这一头部会返回一连串的转发 <code>IP</code>，最开始的就是用户的 <code>IP</code>。当然，我现在看到的 <code>IP</code> 还会多一层，因为除了本机的 <code>nginx</code> 一层代理之外，<code>Cloudflare</code> 也有一层代理。</p>
+<h4 id="忘记密码"><a href="#忘记密码" class="headerlink" title="忘记密码"></a>忘记密码</h4><p>如果忘记了密码，就再发送一封邮件到邮箱，接收验证码，输入新密码，和注册的流程类似。</p>
+<h4 id="获取通知"><a href="#获取通知" class="headerlink" title="获取通知"></a>获取通知</h4><p>获取通知的简略内容。从数据库中 <code>SELECT *</code> 就好啦。</p>
+<p>而获取通知的细节内容，只需要针对传入的通知 <code>id</code>，在数据库中查询即可。</p>
+<p>下载附件，则是打开本地文件，返回二进制数据。</p>
+<p>从叙述中可以看出来，如果手中有了数据，想展示出来是很容易的。然而如果想要爬取别人的数据，就需要费许多功夫了。</p>
+<h4 id="凭证的管理"><a href="#凭证的管理" class="headerlink" title="凭证的管理"></a>凭证的管理</h4><p>其他的一些简单方法就不赘述了，最后提一句关于用户登录状态的管理。</p>
+<p>使用 <code>flask-jwt-extended</code> 实现登录凭证。如果登录成功，会发送一个 <code>xl_token</code> 和 <code>csrf_access_token</code>，后者是为了防止一种攻击而设置的，每次在请求头中请求时需要手动加到 <code>headers</code> 里。</p>
+<p>每一个需要登录后才能访问的 <code>api</code> 加上一个 <code>@jwt_required</code> 装饰器就好了。</p>
+<p>登出的时候要清除发放的凭证，使用 <code>unset_access_token</code> 来实现。</p>
+<h3 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h3><p>前端使用 <code>vue3</code> 的 <code>optionsAPI</code> 来实现，使用了 <code>Element Plus</code> 组件库，1 系统同款。</p>
+<p>先按页面叙述，最后再说说用的非平凡的技术有哪些。</p>
+<h4 id="登录前页面"><a href="#登录前页面" class="headerlink" title="登录前页面"></a>登录前页面</h4><p><img src="https://static.xialing.icu/img/202501262222652.webp" alt="登录"></p>
+<p>很朴素的登录页面。</p>
+<h4 id="首页"><a href="#首页" class="headerlink" title="首页"></a>首页</h4><p><img src="https://static.xialing.icu/img/202501262225713.webp" alt="首页"></p>
+<p>这个页面可以说一说。</p>
+<p>页面右上方有两个下拉菜单。昵称所在的下拉菜单可以维护个人信息和退出登录；关于所在的下拉菜单指向 <code>Github</code> 仓库。</p>
+<p>绿色的提示条，点击后会开启一个新手指导。</p>
+<p>表格展示了通知的信息，状态列头的下箭头可以筛选通知公告的状态。表格的每一行都是可以点击的，点击后会弹出通知的详细信息，如下：</p>
+<p><img src="https://static.xialing.icu/img/202501262230301.webp" alt="通知内容"></p>
+<h4 id="个人信息维护"><a href="#个人信息维护" class="headerlink" title="个人信息维护"></a>个人信息维护</h4><p><img src="https://static.xialing.icu/img/202501262233290.webp" alt="用户界面"></p>
+<p>在个人信息界面，可以查看基本信息，控制是否接收通知，修改密码，以及查看最近的几次登录记录。</p>
+<h4 id="vue-router——页面跳转"><a href="#vue-router——页面跳转" class="headerlink" title="vue router——页面跳转"></a><code>vue router</code>——页面跳转</h4><p>使用 <code>vue-router</code> 实现页面跳转，值得说明的是，对于一些登录后才能访问的界面，可以在 <code>beforeEnter</code> 中进行设置，只有登录后才能进入对应页面，否则会跳转到 <code>login</code> 界面。反之，如果已经登录过了，则在访问登录、注册等页面时会跳转到根目录。</p>
+<p>比如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/register&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;register&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;../views/RegisterView.vue&#x27;</span>),</span><br><span class="line">    <span class="attr">beforeEnter</span>: <span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (store.<span class="property">state</span>.<span class="property">isLoggedin</span>) &#123;</span><br><span class="line">        <span class="title function_">next</span>(&#123; <span class="attr">name</span>: <span class="string">&#x27;home&#x27;</span> &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">next</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<h4 id="vuex——状态存储"><a href="#vuex——状态存储" class="headerlink" title="vuex——状态存储"></a><code>vuex</code>——状态存储</h4><p>使用 <code>vuex</code> 来进行状态的存储，状态的变换要使用 <code>mutations</code>，有点像数字逻辑的有限状态机。还有一些更复杂的方法，项目没有涉及到。</p>
+<p>需要注意的是，如果单纯地使用 <code>vuex</code> 来存储状态，由于状态在内存中存储，所以刷新页面或者打开的新页面并不会保留先前的状态，因此需要把状态存储到 <code>localStorage</code> 或者 <code>sessionStorage</code> 中。</p>
+<h4 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h4><p>仿照 1 系统做的 logo，只需要新建一个渐变色的矩形。之后创建剪切蒙版就好了。</p>
+<p>个人信息维护的背景界面，是调整为灰度后，加了干画笔滤镜、调整色阶得到的。</p>
+<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><p>网站还是要部署到服务器上才好。</p>
+<p>服务器是利用学生优惠白嫖了一年的 <code>DigitalOcean</code> 服务器，系统为 <code>Ubuntu 24.04 LTS</code>，地理位置在新加坡，这样不用备案，比较方便。</p>
+<h4 id="Python-环境配置"><a href="#Python-环境配置" class="headerlink" title="Python 环境配置"></a><code>Python</code> 环境配置</h4><p>和本地的配置环境类似，用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m venv venv</span><br></pre></td></tr></table></figure>
+
+<p>新建一个虚拟环境。</p>
+<p>再使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> venv/bin/activate</span><br></pre></td></tr></table></figure>
+
+<p>和本地的 <code>.venv/Scripts/activate</code> 略有不同。</p>
+<p>之后再安装包就可以了。</p>
+<h4 id="DNS-解析"><a href="#DNS-解析" class="headerlink" title="DNS 解析"></a><code>DNS</code> 解析</h4><p>使用裸 <code>IP</code> 访问很不好，需要使用域名来解析到 <code>IP</code>。如果有域名的话，添加一条 <code>DNS</code> 解析的 <code>A</code> 记录，指向服务器的 <code>IP</code> 就好了。</p>
+<h4 id="SSL-证书"><a href="#SSL-证书" class="headerlink" title="SSL 证书"></a><code>SSL</code> 证书</h4><p>使用 <code>https</code> 比较安全，因此需要申请证书。我的域名在腾讯云注册的，在那里申请的免费证书。</p>
+<h4 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a><code>Nginx</code></h4><p>就像客户端访问网页需要浏览器一样，服务器也需要软件来提供 <code>Web</code> 服务，常见的有 <code>Nginx</code> 和 <code>Apache</code>，我这次试了试后者，感觉好像不是很好用，所以还是用回了熟悉的 <code>Nginx</code>。</p>
+<p><code>Nginx</code> 的配置还算可以理解。网站的配置文件放在 <code>/etc/nginx/sites-available</code> 下，如果要启用这一网站，则在 <code>sites-enabled</code> 下使用 <code>sudo ln -s xxx</code> 创建一个符号链接即可。一个典型的 <code>server</code> 块长这个样子</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl;</span><br><span class="line">    <span class="attribute">server_name</span> cirno.xialing.icu;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ssl 证书需要配置这两个文件</span></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /path/to/cirno.xialing.icu.crt; </span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /path/to/cirno.xialing.icu.key;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">root</span> /var/www/dot;</span><br><span class="line">    <span class="attribute">index</span> index.html;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> /api/ &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:8000;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>root</code> 应该指向要部署的网站，这里的 <code>dot</code> 存放了 <code>vue</code> 生成的前端页面。生成这一文件夹的命令是 <code>npm run build</code>。</p>
+<p><code>location /api/</code> 指向了本地的后端服务，并设定了一些头部。</p>
+<h4 id="gUnicorn"><a href="#gUnicorn" class="headerlink" title="gUnicorn"></a><code>gUnicorn</code></h4><p><code>gUnicorn</code> 是用来部署 <code>Flask</code> 的。可以采用系统服务的形式来创建一个部署。新建一个 <code>.service</code> 文件，设定好环境和文件位置，把它放到 <code>/etc/systemd/system</code> 下，启动就好了。</p>
+<h4 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h4><p>和网站部署没关系。爬虫也需要每日定期运行，所以这里顺带着提上一嘴。</p>
+<p>用 <code>cron</code> 来实现定时任务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0 9 * * * /bin/bash -c <span class="string">&#x27;source /path/to/your/venv/bin/activate &amp;&amp; /path/to/your/venv/bin/python /path/to/your_script.py &gt;&gt; /path/to/logfile.log 2&gt;&amp;1&#x27;</span></span><br><span class="line">0 17 * * * /bin/bash -c <span class="string">&#x27;source /path/to/your/venv/bin/activate &amp;&amp; /path/to/your/venv/bin/python /path/to/your_script.py &gt;&gt; /path/to/logfile.log 2&gt;&amp;1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p>花了放假的两周，完成了这一个小项目。目的很单纯，一个是练习爬虫。<a target="_blank" rel="noopener" href="https://lib.xialing.icu/">之前</a>爬取的图书馆网站的数据比较简单，因为不需要登录。这次爬一个难度大的。再一个是练习用户管理。最后，或许是为了做一个类似于<a target="_blank" rel="noopener" href="https://github.com/shuosc/shu-scheduling-helper">上大</a>的排课助手做准备？也许会做吧，太累了。</p>
+<p>总结这次项目，花了两三天研究明白了统一身份认证，花了两三天模拟了爬虫，登录成功。再花了一周左右设计了数据库表格，写完了前后端。</p>
+<p>虽然对自己写出来的代码不像 <code>OOP</code> 的大作业一样，能够说明白每一句话的具体功能，不过，写了三四个网站，确实是越来越清晰了。向前走下去吧。</p>
+<h2 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h2><p>感谢同济大学提供的数据与网站。</p>
+<p>感谢<a target="_blank" rel="noopener" href="https://photo.tongji.edu.cn/">印象同济</a>的背景图片。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2025/01/tongji-login/" title="同济统一身份认证登录 1 系统"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">同济统一身份认证登录 1 系统</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">16</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%98%E8%B5%B7"><span class="toc-number">1.</span> <span class="toc-text">缘起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%AC%E8%99%AB%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96"><span class="toc-number">2.</span> <span class="toc-text">爬虫——数据获取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%9F%E4%B8%80%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81"><span class="toc-number">2.1.</span> <span class="toc-text">统一身份认证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86"><span class="toc-number">2.1.1.</span> <span class="toc-text">初步认识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E8%AF%95"><span class="toc-number">2.1.2.</span> <span class="toc-text">调试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86"><span class="toc-number">2.1.3.</span> <span class="toc-text">密码加密</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E6%9D%A1%E9%BE%99%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.1.4.</span> <span class="toc-text">一条龙服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requests-%E6%A8%A1%E6%8B%9F%E7%99%BB%E5%BD%95"><span class="toc-number">2.2.</span> <span class="toc-text">requests 模拟登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#requests-%E8%8E%B7%E5%8F%96%E9%80%9A%E7%9F%A5%E5%86%85%E5%AE%B9"><span class="toc-number">2.3.</span> <span class="toc-text">requests 获取通知内容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#findMyCommonMsgPublish"><span class="toc-number">2.3.1.</span> <span class="toc-text">findMyCommonMsgPublish</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#findMyCommonMsgPublishById"><span class="toc-number">2.3.2.</span> <span class="toc-text">findMyCommonMsgPublishById</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%99%84%E4%BB%B6%E7%9A%84%E4%B8%8B%E8%BD%BD"><span class="toc-number">2.3.3.</span> <span class="toc-text">附件的下载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E9%80%9A%E7%9F%A5"><span class="toc-number">2.4.</span> <span class="toc-text">邮件通知</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BA"><span class="toc-number">2.4.1.</span> <span class="toc-text">自己搭建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%81%E4%B8%9A%E9%82%AE%E7%AE%B1"><span class="toc-number">2.4.2.</span> <span class="toc-text">企业邮箱</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">2.5.</span> <span class="toc-text">数据库的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%B3%E6%9D%BF%E6%9C%BA"><span class="toc-number">2.6.</span> <span class="toc-text">跳板机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%B1%95%E7%A4%BA"><span class="toc-number">3.</span> <span class="toc-text">Web——数据展示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">3.1.</span> <span class="toc-text">数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF"><span class="toc-number">3.2.</span> <span class="toc-text">后端</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E6%B3%A8%E5%86%8C"><span class="toc-number">3.2.1.</span> <span class="toc-text">用户注册</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">用户登录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%98%E8%AE%B0%E5%AF%86%E7%A0%81"><span class="toc-number">3.2.3.</span> <span class="toc-text">忘记密码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E9%80%9A%E7%9F%A5"><span class="toc-number">3.2.4.</span> <span class="toc-text">获取通知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%AD%E8%AF%81%E7%9A%84%E7%AE%A1%E7%90%86"><span class="toc-number">3.2.5.</span> <span class="toc-text">凭证的管理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF"><span class="toc-number">3.3.</span> <span class="toc-text">前端</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%E5%89%8D%E9%A1%B5%E9%9D%A2"><span class="toc-number">3.3.1.</span> <span class="toc-text">登录前页面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A6%96%E9%A1%B5"><span class="toc-number">3.3.2.</span> <span class="toc-text">首页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E7%BB%B4%E6%8A%A4"><span class="toc-number">3.3.3.</span> <span class="toc-text">个人信息维护</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#vue-router%E2%80%94%E2%80%94%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC"><span class="toc-number">3.3.4.</span> <span class="toc-text">vue router——页面跳转</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#vuex%E2%80%94%E2%80%94%E7%8A%B6%E6%80%81%E5%AD%98%E5%82%A8"><span class="toc-number">3.3.5.</span> <span class="toc-text">vuex——状态存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PS"><span class="toc-number">3.3.6.</span> <span class="toc-text">PS</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">3.4.</span> <span class="toc-text">部署</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Python-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">3.4.1.</span> <span class="toc-text">Python 环境配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DNS-%E8%A7%A3%E6%9E%90"><span class="toc-number">3.4.2.</span> <span class="toc-text">DNS 解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSL-%E8%AF%81%E4%B9%A6"><span class="toc-number">3.4.3.</span> <span class="toc-text">SSL 证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx"><span class="toc-number">3.4.4.</span> <span class="toc-text">Nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gUnicorn"><span class="toc-number">3.4.5.</span> <span class="toc-text">gUnicorn</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%88%AC%E8%99%AB"><span class="toc-number">3.4.6.</span> <span class="toc-text">爬虫</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A2%8E%E7%A2%8E%E5%BF%B5"><span class="toc-number">4.</span> <span class="toc-text">碎碎念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%B4%E8%B0%A2"><span class="toc-number">5.</span> <span class="toc-text">致谢</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CS50AI - 第 0 章 - 搜索 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="0. 序搜索是人工智能领域很重要的内容，例如如何导航到目标地点，如何在游戏中获得胜利等等，都需要进行最优方法的选择。哈佛大学的 CS50 AI 课程把它作为了课程的第一课。听完后醍醐灌顶，赶紧趁热写一篇文章，把大意整理下来，供未来自己复习。 1. 单机游戏1.1 一般的搜索给定一张有向图，从某个节点寻找前往另一个节点的道路，这很简单。关键在于维护一个 Frontier 列表，然后重复进行如下的操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS50AI - 第 0 章 - 搜索">
+<meta property="og:url" content="https://xialing233.github.io/2025/02/cs50ai-chap0/index.html">
+<meta property="og:site_name" content="指针的轨迹">
+<meta property="og:description" content="0. 序搜索是人工智能领域很重要的内容，例如如何导航到目标地点，如何在游戏中获得胜利等等，都需要进行最优方法的选择。哈佛大学的 CS50 AI 课程把它作为了课程的第一课。听完后醍醐灌顶，赶紧趁热写一篇文章，把大意整理下来，供未来自己复习。 1. 单机游戏1.1 一般的搜索给定一张有向图，从某个节点寻找前往另一个节点的道路，这很简单。关键在于维护一个 Frontier 列表，然后重复进行如下的操作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
+<meta property="article:published_time" content="2025-02-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-27T16:00:00.000Z">
+<meta property="article:author" content="夏凌">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://xialing233.github.io/2025/02/cs50ai-chap0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":180,"position":"top","messagePrev":"距离上次更新已过","messageNext":"天，内容可能不具有时效性"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CS50AI - 第 0 章 - 搜索',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-02-28 00:00:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">19</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CS50AI - 第 0 章 - 搜索</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-27T16:00:00.000Z" title="更新于 2025-02-28 00:00:00">2025-02-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CS50AI - 第 0 章 - 搜索"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="0-序"><a href="#0-序" class="headerlink" title="0. 序"></a>0. 序</h2><p>搜索是人工智能领域很重要的内容，例如如何导航到目标地点，如何在游戏中获得胜利等等，都需要进行最优方法的选择。哈佛大学的 <a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/2024/">CS50 AI</a> 课程把它作为了课程的第一课。听完后醍醐灌顶，赶紧趁热写一篇文章，把大意整理下来，供未来自己复习。</p>
+<h2 id="1-单机游戏"><a href="#1-单机游戏" class="headerlink" title="1. 单机游戏"></a>1. 单机游戏</h2><h3 id="1-1-一般的搜索"><a href="#1-1-一般的搜索" class="headerlink" title="1.1 一般的搜索"></a>1.1 一般的搜索</h3><p>给定一张有向图，从某个节点寻找前往另一个节点的道路，这很简单。关键在于维护一个 <code>Frontier</code> 列表，然后重复进行如下的操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 如果 `Frontier` 列表为空</span><br><span class="line">    * 则中止，无解。</span><br><span class="line">2. 从中选取一个结点，作为要考虑的结点。</span><br><span class="line">3. 如果这个结点就是目标</span><br><span class="line">    * 则返回解，停止。</span><br><span class="line">4. 否则，考察这个结点的邻居，把邻居添加到 `Frontier` 中</span><br></pre></td></tr></table></figure>
+
+<p>当然这样的选取有一些问题，不妨考虑这样的一个有向图，其中 A、B 两个结点之间有双向的箭头。把 A 作为起点。</p>
+<p>这样的问题是，<code>Frontier</code> 中一开始只有 A，A 不是终点，所以考虑和 A 连接的节点，假设只有 B，所以把 B 放到 <code>Frontier</code> 中。现在从 <code>Frontier</code> 中取 B，B 也不是终点，考虑 B 能连接的节点，假如有 A 和 C。那么 A 和 C 加入到 <code>Frontier</code> 中，下一次再考虑 A。如此反复，就进入了一个死循环。</p>
+<p>因此，在第 4 步需要增加一个判断：只有没有访问过、并且不在 <code>Frontier</code> 中已经出现的节点，才会添加到 <code>Frontier</code> 中。这样就避免了回环的问题。这，就是最基础的搜索。</p>
+<blockquote>
+<p>我学到这里最深切的感受是，总算明白为什么 <code>Dijkstra</code>、<code>Kruskal</code> 等算法一开始的时候要把初始数组设置为只包含起点了，因为这个维护的数组表示的是可以访问到的节点，而一开始，只有起点可以访问到。</p>
+</blockquote>
+<p>前面的搜索的伪算法，并不能算是一个很好的算法，因为它在一个语句上表述得并不具有确定性，也就是 <strong>选取</strong> 二字。怎么选？这就引出了两种不同的搜索算法：深度优先搜索和广度优先搜索。</p>
+<p>下面的算法都以迷宫作为背景。</p>
+<h3 id="1-2-DFS"><a href="#1-2-DFS" class="headerlink" title="1.2. DFS"></a>1.2. DFS</h3><p>深度优先搜索对于 <code>Frontier</code> 的维护采用栈来作为数据结构，Last In, First Out。直观造成的效果就是一条道走到黑，只有走到死胡同才会回头。而且这回头不简单——好像回到了存档点一样，从最近的分岔路口再次开始，选择另一条道路，再一次地走到黑。这就体现出栈这一数据结构具有保存现场的作用啦！</p>
+<p>深度优先搜索的好处是，在起止点相距较远的情景下，占用更小的内存，就能找到可行解。但不足是，它并不能确保每次找到的解是距离最短的最优解。</p>
+<h3 id="1-3-BFS"><a href="#1-3-BFS" class="headerlink" title="1.3. BFS"></a>1.3. BFS</h3><p>广度优先搜索和深度优先搜索唯一的区别就在于 <code>Frontier</code> 的维护，BFS 采用队列作为数据结构，First In, First Out。达成的效果是一种层次遍历，就像古诗说的：</p>
+<blockquote>
+<p>泻水置平地，各自东西南北流。</p>
+</blockquote>
+<p>BFS 就像在起点洒了一桶水，水在到达终点之前，会蔓延到所有与起点距离小于等于起止点距离的格子。但这样有个好处，就是可以确保找到的是最优解。证明也很简单，不妨用反证法。假如存在一条路径，使得起止点之间的距离更短，那么根据 BFS 的原理，这条路径应该早就被蔓延到了。</p>
+<p>不过 BFS 当然也有缺点，那就是需要的内存比较多，它需要多线程般探寻多条路径，才能得到最终的结果。如果起止点的距离相距太远，甚至会搜索完整个迷宫空间。</p>
+<h3 id="1-4-贪心”最佳优先”搜索"><a href="#1-4-贪心”最佳优先”搜索" class="headerlink" title="1.4. 贪心”最佳优先”搜索"></a>1.4. 贪心”最佳优先”搜索</h3><p>之前讲的 BFS 和 DFS 都是无信息检索，也及时没有用到具体问题的背景知识，所以显得没那么智慧。怎样就能更智慧了呢？比如让人类来走迷宫，给他一张纸，左下角是起点，右上角是终点。人直觉地在面对岔路口时，就会选择向右的、向上的，因为在不考虑墙的前提下，确实离终点越来越近了。这就是一种贪心算法。</p>
+<p>在岔路口面临抉择的时候，到底怎么选？BFS 和 DFS 并没有给出选择的不同，所以这样随机的选择往往会走不少低智商的弯路。有人说啊，那不是一个从前面 pop，一个从后面 pop 吗？但这只是指定了退出的顺序，没有指定进入的顺序呀。比如列表里有 ABC，你说，用栈的话就是 CBA，用队列就是 ABC，确实是这样。但并没有保证每次进入的时候都是 ABC 啊，进入的顺序还是随机的，可能下次就是 BCA，CAB 了。这样的话，最终选择还是随机的。</p>
+<p>而贪心算法则不一样，对每种选择，通过启发函数得到一个值，在迷宫的问题背景下就是下一个格子和终点之间的曼哈顿距离（曼哈顿距离就是只能横平竖直地走，不能走对角线），最后选取距离小的。这样就能和前面的两种搜索找出不同了——不管程序运行多少次，选择的路径肯定是一样的，没有半点随机因素，小就是小，大就是大。</p>
+<h3 id="1-5-A-搜索"><a href="#1-5-A-搜索" class="headerlink" title="1.5. A* 搜索"></a>1.5. A* 搜索</h3><p>但是贪心算法也不一定是最优解，因为它眼光是狭窄的，未能远谋。在一个分岔路口，一边是 19，一边是 18，它就选择了 18。它哪里知道，19 是山坡的最高峰，再往后一马平川；又哪里知道 18 后面还要面临重峦叠嶂、蜿蜒曲折的山路呢？所以最终要表达的就是，如果在树林中有两条路，在当时的条件下选了 18，最后走的路可能比 19 多得多。</p>
+<p>这样岂不是太傻了？除了曼哈顿距离之外，还有什么指标可以修正呢？啊，距离，距离！我通过 18 这个路口，走了 200 步才到了曼哈顿距离是 5 的格子；我通过 19 这个路口，再走14 步就到了距离为 5 的格子。这样看来，不仅要考虑启发函数的值，还要考虑得到这个值的代价！就好像参加 ICPC 拿到金奖就能在保研上获得很大优势一样，如果花了很大力气才能得金奖，不如中途停下来思考一下，当前距离目标的远近和自己已经付出的代价，如果发现不值当，不如马上切换到另一条路线。所以在 A* 搜索中，代价（这里是走的步数）+ 启发函数值的和才作为选择的判据。</p>
+<p>这个方法很巧妙，比如就走迷宫这个例子，如果距离目标越来越近，代价 + 启发函数值是不变的，步数多了一个，后者少了一个，总和不变。然而若是稍微走了一点回头路，总和会 +2、+2、+2 进行下去，很快就会超过岔路口的另一个选择（如果二者差别并不悬殊的话）。</p>
+<h2 id="2-对弈"><a href="#2-对弈" class="headerlink" title="2. 对弈"></a>2. 对弈</h2><h3 id="2-1-Minimax"><a href="#2-1-Minimax" class="headerlink" title="2.1 Minimax"></a>2.1 Minimax</h3><p>前面的搜索算法都是一个人的奋斗，但是在生活中，你方唱罢我登场的场面比比皆是，不仅要考虑自己的水平，还要衡量对方的能力，更有甚者，还得零和博弈。</p>
+<p>这里以双方的竞争为例，让自己获胜，等价于让别人失败。对方呢，也是这样想的。人类知道获胜、失败的具体含义，但机器可不知道，怎样量化胜负这件事儿呢？不妨用数字啦！</p>
+<p>对弈的双方，一方想让数字升高，另一方想让数字降低，如同拔河一般的拉锯战。Minimax 就是这样一种算法，一方要 minimize outcome，而另一方要 maximize it。至于说怎样得到所谓的最大值和最小值，其实是一种递归的思路。不妨以想要让结果变大的一方为例。</p>
+<ol>
+<li><p>现在摆在它面前的是一场残局，轮到他走下一步。到底落子何处？有许多选择，这些选择分叉出来。</p>
+</li>
+<li><p>不管他选择哪种，现在的主动权到了对方手中。</p>
+</li>
+<li><p>对方想让数值尽可能的小，所以也要面对同样的思考方式。到底落子何处呢？又有许多选择，但不管哪种，现在又轮到结果变大的一方来落子了。</p>
+</li>
+<li><p>就这样循环往复，递归下去，直到最后分出胜负。这里我们只考虑相邻的两层，按照递归的经典分析方法。现在我们回到第 2 步，主动权到了变小的一方。假设这里可以得出棋局的最终值，分别是，6，5，4，7，2。那么，变大的一方就知道了，哦，我现在面临五种选择，分别让结果变大的个数是这些，我肯定选择更大的，所以选择了 7。因为这种选择是建立在对方下的是最优解的基础上的，所以，如果他选择了 4 甚至是 2，对方就会顺着这条路走下去，达到让结果变小的目的，这样是不好的。</p>
+</li>
+</ol>
+<p>不过这样有个问题，对于井字棋游戏这种规模小的游戏还好说，对于国际象棋、围棋那种对弈，层层递归下去，要大量的内存，花费时间多不说，还很有可能爆栈，能不能稍微减少点运算量呢？</p>
+<h3 id="2-2-α-β-剪枝"><a href="#2-2-α-β-剪枝" class="headerlink" title="2.2 α-β 剪枝"></a>2.2 α-β 剪枝</h3><p>看这张图：</p>
+<p><img src="https://cs50.harvard.edu/ai/2024/notes/0/alphabeta.png" alt="a-b(ref:https:&#x2F;&#x2F;cs50.harvard.edu&#x2F;ai&#x2F;2024&#x2F;notes&#x2F;0&#x2F;)"></p>
+<p>现在最顶层的绿色想尽可能增大结果，不过在分析它的值之前，按递归的思路，先得看看底层的数值。第一个分支，选择最小的 4。第二个分支，走到第二步就知道，红色肯定 &lt;&#x3D; 3 了，也就是红色削弱数值增加的能力最弱也是 3，和第一个分支中，最强的削弱能力是 4 相比，不用考虑了。后面的 2 也是同理，看到第一个，就不用往后看了。这样的话，就可以减少大量的递归运算，层次越高，越有效。换句话说，就是预测到了这个分支顶天也就这种能力了，不如已经备选的分支，所以可以及时止损。</p>
+<h3 id="2-3-深度限制的-Minimax"><a href="#2-3-深度限制的-Minimax" class="headerlink" title="2.3 深度限制的 Minimax"></a>2.3 深度限制的 Minimax</h3><p>你可能觉得，现在这种优化还是不够过瘾，因为毕竟在更复杂的游戏中，很难递归到终局的局面。所以有的时候，对递归的层数有限制，到了最深层后，通过另一个函数对残局进行评价，比如谁剩子多等指标来评判出谁占优势，从而生成一个值。这个相对没那么精确的值，就是上一层筛选的指标了。</p>
+<h2 id="3-结语"><a href="#3-结语" class="headerlink" title="3. 结语"></a>3. 结语</h2><p>以上就是有关搜索的全部内容，听起来很爽，也让我想到了人生中的一些抉择。当时学离散的第一课，老师就说，不知道同学们是不是已经接触过贪心算法了，贪心算法，有的时候不一定就是最好的。</p>
+<p>是呀，竞赛？科研？甚至我有个朋友为了保研名额，在大一下的那个岔路口选择了去保研率更高的专业班型，他的选择是离终点更近的吗？我选择留在现在的专业，就保研来说，是最优解吗？</p>
+<p>到底该用什么算法来走这一遭呢？</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2025/02/crawl-dola-xiaoquan/" title="哆啦校圈 API 分析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">哆啦校圈 API 分析</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">19</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">0. 序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8D%95%E6%9C%BA%E6%B8%B8%E6%88%8F"><span class="toc-number">2.</span> <span class="toc-text">1. 单机游戏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%B8%80%E8%88%AC%E7%9A%84%E6%90%9C%E7%B4%A2"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 一般的搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-DFS"><span class="toc-number">2.2.</span> <span class="toc-text">1.2. DFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-BFS"><span class="toc-number">2.3.</span> <span class="toc-text">1.3. BFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E8%B4%AA%E5%BF%83%E2%80%9D%E6%9C%80%E4%BD%B3%E4%BC%98%E5%85%88%E2%80%9D%E6%90%9C%E7%B4%A2"><span class="toc-number">2.4.</span> <span class="toc-text">1.4. 贪心”最佳优先”搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-A-%E6%90%9C%E7%B4%A2"><span class="toc-number">2.5.</span> <span class="toc-text">1.5. A* 搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AF%B9%E5%BC%88"><span class="toc-number">3.</span> <span class="toc-text">2. 对弈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Minimax"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 Minimax</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%CE%B1-%CE%B2-%E5%89%AA%E6%9E%9D"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 α-β 剪枝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%B7%B1%E5%BA%A6%E9%99%90%E5%88%B6%E7%9A%84-Minimax"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 深度限制的 Minimax</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BB%93%E8%AF%AD"><span class="toc-number">4.</span> <span class="toc-text">3. 结语</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

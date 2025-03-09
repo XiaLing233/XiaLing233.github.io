@@ -1,0 +1,308 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CS50AI - 第 1 章 - 知识 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="0. 序这节课讲知识。在上节课的搜索中，我们的 agent 在 bfs 和 dfs 中如没头苍蝇一般，到处乱撞。然而有了启发函数和 A* 搜索后，agent 仿佛就智慧了些。 所以这节课就讲一讲，除了这种较为基础的函数来推断之外，还有哪些存储大量知识，并高效的用他们推理的技术。 1. 命题逻辑我们最先接触到的数理逻辑概念叫命题逻辑。 1.1. 符号与连接词命题逻辑有两个组成部分：符号和连接词。 符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS50AI - 第 1 章 - 知识">
+<meta property="og:url" content="https://xialing233.github.io/2025/03/cs50ai-chap1/index.html">
+<meta property="og:site_name" content="指针的轨迹">
+<meta property="og:description" content="0. 序这节课讲知识。在上节课的搜索中，我们的 agent 在 bfs 和 dfs 中如没头苍蝇一般，到处乱撞。然而有了启发函数和 A* 搜索后，agent 仿佛就智慧了些。 所以这节课就讲一讲，除了这种较为基础的函数来推断之外，还有哪些存储大量知识，并高效的用他们推理的技术。 1. 命题逻辑我们最先接触到的数理逻辑概念叫命题逻辑。 1.1. 符号与连接词命题逻辑有两个组成部分：符号和连接词。 符">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
+<meta property="article:published_time" content="2025-03-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-08T16:00:00.000Z">
+<meta property="article:author" content="夏凌">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://xialing233.github.io/2025/03/cs50ai-chap1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":180,"position":"top","messagePrev":"距离上次更新已过","messageNext":"天，内容可能不具有时效性"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CS50AI - 第 1 章 - 知识',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-09 00:00:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CS50AI - 第 1 章 - 知识</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-08T16:00:00.000Z" title="发表于 2025-03-09 00:00:00">2025-03-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-08T16:00:00.000Z" title="更新于 2025-03-09 00:00:00">2025-03-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CS50AI - 第 1 章 - 知识"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="0-序"><a href="#0-序" class="headerlink" title="0. 序"></a>0. 序</h2><p>这节课讲<a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/2024/weeks/1/">知识</a>。在上节课的搜索中，我们的 agent 在 <code>bfs</code> 和 <code>dfs</code> 中如没头苍蝇一般，到处乱撞。然而有了启发函数和 <code>A*</code> 搜索后，agent 仿佛就智慧了些。</p>
+<p>所以这节课就讲一讲，除了这种较为基础的函数来推断之外，还有哪些存储大量知识，并高效的用他们推理的技术。</p>
+<h2 id="1-命题逻辑"><a href="#1-命题逻辑" class="headerlink" title="1. 命题逻辑"></a>1. 命题逻辑</h2><p>我们最先接触到的数理逻辑概念叫命题逻辑。</p>
+<h3 id="1-1-符号与连接词"><a href="#1-1-符号与连接词" class="headerlink" title="1.1. 符号与连接词"></a>1.1. 符号与连接词</h3><p>命题逻辑有两个组成部分：符号和连接词。</p>
+<p>符号很好理解，是非真即假的陈述句。几种常见的错误有疑问句、感叹句、悖论等等。</p>
+<p>孤木不成林。连接词指的是把符号连接起来的组分，常见的有与、或、非、蕴含、等价连接词。</p>
+<p>如果读者学习过数字逻辑和离散数学，对这些概念应该了然于胸，这里就不赘述了。补充一点，描述这些连接词的性质（什么时候真、什么时候假），经常用到的工具是真值表。</p>
+<h3 id="1-2-模式"><a href="#1-2-模式" class="headerlink" title="1.2. 模式"></a>1.2. 模式</h3><p>课程原文用的是 <em>Model</em>，如果用屈婉玲老师《离散数学》那本教材的语言，应该是赋值或解释。也就是把所有的符号都赋一个真 &#x2F; 假的值。</p>
+<p>模式的另一种解释叫 <em>Possible World</em>，一种可能的情形。这个词我认为很科幻、很浪漫。就像是许多平行世界一样，有的世界中，这件事发生了，而另一个世界中没有。每一个模式，就是平行世界中的一个。</p>
+<h3 id="1-3-知识库"><a href="#1-3-知识库" class="headerlink" title="1.3. 知识库"></a>1.3. 知识库</h3><p><em>Knowledge Base</em> 是 AI 已经知道的内容，哪些为真、哪些为假。不过可以认为存储的都是为真的陈述，因为对于假的内容，取反就成真了。</p>
+<p>如果用《离散数学》的语言，知识库应该叫「前提」。</p>
+<h3 id="1-4-蕴含"><a href="#1-4-蕴含" class="headerlink" title="1.4. 蕴含"></a>1.4. 蕴含</h3><p><em>Entailment</em> 这个词居然翻译过来是蕴含，我觉得很容易和 $\rightarrow$ 这个蕴含连接词弄混。所以采用《离散数学》的语言，应该叫「推理正确」。</p>
+<p>它指的是，如果条件为真，结论也为真。换句话说，如果是在数学证明中，就是条件可以推出结论。</p>
+<p>蕴含用的是这个符号 $\models$，屈婉玲老师的教材用的也是这个符号。</p>
+<h3 id="1-5-推理理论"><a href="#1-5-推理理论" class="headerlink" title="1.5. 推理理论"></a>1.5. 推理理论</h3><p>不像离散数学的教学方法，先把等值式、范式教授完毕后再进行单方向的推理的学习，这门课直接进入到了推理阶段。</p>
+<p>似乎也可以理解，因为我们并不关心两个结论是否可以互推，只要一个可以推理出另一个就可以了。至于过程中可能出现条件减弱的情形，我们不在乎。</p>
+<p>推理正确的定义，是在所有条件为真的情形下，结论都成立。所以直觉上，我们的想法就是，穷举那些条件为真的情形，找出这样的 <em>Possible World</em>，然后看，在这样的世界里，结论是否为真。</p>
+<p>为什么不在乎那些条件为假的情形？因为根据蕴含连接词的定义，当前件为假时，公式恒为真。</p>
+<p>这件事我一直不能理解，怎么会这样呢？经过了一学期离散数学的学习，加上这门课的再次解释，我大概清楚了。</p>
+<p>蕴含连接词表示的是一个推断：如果…那么…</p>
+<p>要是前件压根就不成立，这个推断并没有说明任何问题，因为推断是建立在前件为真的基础上的（如果…）。如果前件为假，我们无法从中得到任何有益内容，所以推断<em>平凡</em>为真。</p>
+<p>可能还是表述的不是很清楚，就这样接受吧。</p>
+<blockquote>
+<p>话说回来</p>
+</blockquote>
+<p>所以如果要编写一个程序来实现的话，思路是递归式的对每个符号赋真或假。对于所有让 <strong>KB</strong> 成真的赋值，如果待验证的结论都为真，则推理正确。如果不全为真，则推理错误。</p>
+<h3 id="1-6-知识工程"><a href="#1-6-知识工程" class="headerlink" title="1.6. 知识工程"></a>1.6. 知识工程</h3><p><em>Knowledge engineering</em> 是探索如何在 AI 中表示命题和逻辑的过程。如果用中文来表示的话，或许是「命题符号化」。</p>
+<p>课程举了三个例子，一个是叫 <em>Clue</em> 的游戏，有点像狼人杀，不过又有一些区别。</p>
+<p>游戏的大概流程是，分三个板块，人物、地点、武器。每个版块抽取一个放入信封，然后根据剩余的信息猜测信封中是什么。</p>
+<p>另一个例子是一人一房，每个人有一间房，而每个房也只能装一个人。</p>
+<p>还有一个例子是 <em>Mastermind</em>，有点像 <em>Wordle</em>，只不过这里不是单词，而是颜色。目标是把对应的颜色放到对应位置，每次排序，会返回正确位置的颜色数。</p>
+<p>每个例子下来，符号化会越来越繁琐。</p>
+<p>第一个例子中，如果三个板块分别有 $a$、$b$、$c$ 个对象，只需要 $a + b + c$ 个符号就完成了符号化。因为这样做已经可以确保每个符号非真即假。</p>
+<p>第二个例子中，如果有 $n$ 个人，$n$ 个房子，就需要 $n^2$ 个符号。因为我们要确保，一个符号是非真即假的陈述句。如果仍然采用 $2 \cdot n$，每个人、每个房子作为一个符号，表明不了真假。</p>
+<p>第三个例子则更加复杂，如果有 $m$ 种颜色，也就对应了 $m$ 个位置。需要 $m!$ 种表示。</p>
+<p>这些都可以通过程序来实现。</p>
+<h3 id="1-7-推理规则"><a href="#1-7-推理规则" class="headerlink" title="1.7 推理规则"></a>1.7 推理规则</h3><p>模式检查，如果进行算法分析，可以得到，这是一个指数级别的复杂度。因为如果有 $n$ 个符号，每个符号非真即假，这样就有 $2^n$ 种真值表。</p>
+<p>还是那句话：</p>
+<blockquote>
+<p>指数级别的复杂度不可接受！</p>
+</blockquote>
+<p>怎样更高效的分析嘞？可以用推理规则。</p>
+<p>这里的推理规则并不强求是等值式。不过等值式是两个方向的，单方向的推理当然成立啦。</p>
+<p>有这样几个<strong>推理</strong>理论（不一定等值喔！）：</p>
+<table>
+<thead>
+<tr>
+<th>English</th>
+<th>中文</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Modus Ponens</td>
+<td>假言推理规则</td>
+</tr>
+<tr>
+<td>And Elimination</td>
+<td>化简规则</td>
+</tr>
+<tr>
+<td>Double Negation Elimination</td>
+<td>双重否定律</td>
+</tr>
+<tr>
+<td>Implication Elimination</td>
+<td>蕴含等值式</td>
+</tr>
+<tr>
+<td>Biconditional Elimination</td>
+<td>等价等值式</td>
+</tr>
+<tr>
+<td>De Morgan’s Law</td>
+<td>德摩根律</td>
+</tr>
+<tr>
+<td>Distributive Property</td>
+<td>分配律</td>
+</tr>
+</tbody></table>
+<p>这里的推理和前一节课的搜索有隐约的联系。</p>
+<p>一开始的初始状态是 <em>KB</em>，一个个推理就是 <em>Actions</em>，<em>Transition Model</em> 是变换后新的 <em>Knowledge Base</em>，<em>Goal Test</em> 是判断要证明的语句是否在知识库中，<em>Path cost function</em> 则记录了证明需要的步骤。</p>
+<h3 id="1-8-消解证明法"><a href="#1-8-消解证明法" class="headerlink" title="1.8. 消解证明法"></a>1.8. 消解证明法</h3><p>这部分知识在课内没有学习过，课本上有，但老师没讲，真是很遗憾了。因为，合取范式的意义就在于可以用消解证明法来高效的证明结论是否成立啊！</p>
+<p><img src="https://cs50.harvard.edu/ai/2024/notes/1/resolution1.png" alt="消解证明法，引自：https:&#x2F;&#x2F;cs50.harvard.edu&#x2F;ai&#x2F;2024&#x2F;notes&#x2F;1&#x2F;resolution1.png"></p>
+<p>比如这个显然的例子，要么 $P$ 成立，要么 $Q$ 成立，结果 $P$ 还不成立。您猜怎么着，肯定 $Q$ 成立啊。</p>
+<p>再看一个例子：</p>
+<p><img src="https://cs50.harvard.edu/ai/2024/notes/1/resolution2.png" alt="消解证明法，引自：https:&#x2F;&#x2F;cs50.harvard.edu&#x2F;ai&#x2F;2024&#x2F;notes&#x2F;1&#x2F;resolution2.png"></p>
+<p>要么 $P$ 成立，要么 $Q$ 成立，要么 $\neg P$ 成立，要么 $R$ 成立，能推出什么呢？如果 $P$ 成立的话，$\neg P$ 不成立，这样 $R$ 必须成立；或者 $P$ 不成立，那么 $Q$ 就必须成立。哦，所以得到 $Q \lor R$</p>
+<p>这里的 $Q$ 或者 $R$ 也可以是好多用 $\lor$ 连接起来的公式的集合。</p>
+<p>这种形式很明显，非常高效，所以如何求得这种形式的命题公式成为了一个值得探讨的话题。这种形式的命题就是合取范式（Conjunctive Normal Form），没有主。</p>
+<p>如何获得合取范式，不说了，太简单。来看看怎样运用消解证明法呢？</p>
+<blockquote>
+<p>用反证法</p>
+</blockquote>
+<p>假设结论不成立，引入到 <strong>KB</strong> 中，看看会不会推出空语句。因为空语句标志着一个命题和它的否定同时出现了。</p>
+<h2 id="2-一阶逻辑"><a href="#2-一阶逻辑" class="headerlink" title="2. 一阶逻辑"></a>2. 一阶逻辑</h2><p>命题逻辑无法实现对事物更细粒度的刻画。</p>
+<p>一阶逻辑包含两个符号：常量符号和谓词符号。前者表示一个对象，后者表示一种关系。</p>
+<p>像前面那个分房的例子，我们需要 $n^2$ 个符号，而如果用一阶逻辑来表述，分别定义 $2 \cdot n$ 个人 or 房子。再定义一个谓词表示人属于这个房子。就足以表达所有的情形。这样需要的符号就显著减少了，只有 9 个，不过要表示的命题数量还是 $n^2$ 个。</p>
+<p>在一阶逻辑中还有量词的存在，全称量词、特称量词。不再赘述了。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2025/03/computer-architecture-number-encoding/" title="计组 | 数字在计算机中的编码"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">计组 | 数字在计算机中的编码</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%BA%8F"><span class="toc-text">0. 序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%91%BD%E9%A2%98%E9%80%BB%E8%BE%91"><span class="toc-text">1. 命题逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E7%AC%A6%E5%8F%B7%E4%B8%8E%E8%BF%9E%E6%8E%A5%E8%AF%8D"><span class="toc-text">1.1. 符号与连接词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A8%A1%E5%BC%8F"><span class="toc-text">1.2. 模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E7%9F%A5%E8%AF%86%E5%BA%93"><span class="toc-text">1.3. 知识库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E8%95%B4%E5%90%AB"><span class="toc-text">1.4. 蕴含</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-%E6%8E%A8%E7%90%86%E7%90%86%E8%AE%BA"><span class="toc-text">1.5. 推理理论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-%E7%9F%A5%E8%AF%86%E5%B7%A5%E7%A8%8B"><span class="toc-text">1.6. 知识工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7-%E6%8E%A8%E7%90%86%E8%A7%84%E5%88%99"><span class="toc-text">1.7 推理规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-8-%E6%B6%88%E8%A7%A3%E8%AF%81%E6%98%8E%E6%B3%95"><span class="toc-text">1.8. 消解证明法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%80%E9%98%B6%E9%80%BB%E8%BE%91"><span class="toc-text">2. 一阶逻辑</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

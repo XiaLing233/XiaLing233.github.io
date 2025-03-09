@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CS50AI - 第 1 章 - 知识 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="0. 序这节课讲知识。在上节课的搜索中，我们的 agent 在 bfs 和 dfs 中如没头苍蝇一般，到处乱撞。然而有了启发函数和 A* 搜索后，agent 仿佛就智慧了些。 所以这节课就讲一讲，除了这种较为基础的函数来推断之外，还有哪些存储大量知识，并高效的用他们推理的技术。 1. 命题逻辑我们最先接触到的数理逻辑概念叫命题逻辑。 1.1. 符号与连接词命题逻辑有两个组成部分：符号和连接词。 符">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CS50AI - 第 0 章 - 搜索 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="0. 序搜索是人工智能领域很重要的内容，例如如何导航到目标地点，如何在游戏中获得胜利等等，都需要进行最优方法的选择。哈佛大学的 CS50 AI 课程把它作为了课程的第一课。听完后醍醐灌顶，赶紧趁热写一篇文章，把大意整理下来，供未来自己复习。 1. 单机游戏1.1 一般的搜索给定一张有向图，从某个节点寻找前往另一个节点的道路，这很简单。关键在于维护一个 Frontier 列表，然后重复进行如下的操作">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS50AI - 第 1 章 - 知识">
+<meta property="og:title" content="CS50AI - 第 0 章 - 搜索">
 <meta property="og:url" content="https://xialing233.github.io/2025/02/cs50ai-chap0/index.html">
 <meta property="og:site_name" content="指针的轨迹">
-<meta property="og:description" content="0. 序这节课讲知识。在上节课的搜索中，我们的 agent 在 bfs 和 dfs 中如没头苍蝇一般，到处乱撞。然而有了启发函数和 A* 搜索后，agent 仿佛就智慧了些。 所以这节课就讲一讲，除了这种较为基础的函数来推断之外，还有哪些存储大量知识，并高效的用他们推理的技术。 1. 命题逻辑我们最先接触到的数理逻辑概念叫命题逻辑。 1.1. 符号与连接词命题逻辑有两个组成部分：符号和连接词。 符">
+<meta property="og:description" content="0. 序搜索是人工智能领域很重要的内容，例如如何导航到目标地点，如何在游戏中获得胜利等等，都需要进行最优方法的选择。哈佛大学的 CS50 AI 课程把它作为了课程的第一课。听完后醍醐灌顶，赶紧趁热写一篇文章，把大意整理下来，供未来自己复习。 1. 单机游戏1.1 一般的搜索给定一张有向图，从某个节点寻找前往另一个节点的道路，这很简单。关键在于维护一个 Frontier 列表，然后重复进行如下的操作">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
 <meta property="article:published_time" content="2025-02-27T16:00:00.000Z">
@@ -50,7 +50,7 @@
   },
   autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'CS50AI - 第 1 章 - 知识',
+  title: 'CS50AI - 第 0 章 - 搜索',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
@@ -171,106 +171,54 @@
         }
       }
       detectApple()
-    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CS50AI - 第 1 章 - 知识</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-27T16:00:00.000Z" title="更新于 2025-02-28 00:00:00">2025-02-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CS50AI - 第 1 章 - 知识"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="0-序"><a href="#0-序" class="headerlink" title="0. 序"></a>0. 序</h2><p>这节课讲<a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/2024/weeks/1/">知识</a>。在上节课的搜索中，我们的 agent 在 <code>bfs</code> 和 <code>dfs</code> 中如没头苍蝇一般，到处乱撞。然而有了启发函数和 <code>A*</code> 搜索后，agent 仿佛就智慧了些。</p>
-<p>所以这节课就讲一讲，除了这种较为基础的函数来推断之外，还有哪些存储大量知识，并高效的用他们推理的技术。</p>
-<h2 id="1-命题逻辑"><a href="#1-命题逻辑" class="headerlink" title="1. 命题逻辑"></a>1. 命题逻辑</h2><p>我们最先接触到的数理逻辑概念叫命题逻辑。</p>
-<h2 id="1-1-符号与连接词"><a href="#1-1-符号与连接词" class="headerlink" title="1.1. 符号与连接词"></a>1.1. 符号与连接词</h2><p>命题逻辑有两个组成部分：符号和连接词。</p>
-<p>符号很好理解，是非真即假的陈述句。几种常见的错误有疑问句、感叹句、悖论等等。</p>
-<p>孤木不成林。连接词指的是把符号连接起来的组分，常见的有与、或、非、蕴含、等价连接词。</p>
-<p>如果读者学习过数字逻辑和离散数学，对这些概念应该了然于胸，这里就不赘述了。补充一点，描述这些连接词的性质（什么时候真、什么时候假），经常用到的工具是真值表。</p>
-<h2 id="1-2-模式"><a href="#1-2-模式" class="headerlink" title="1.2. 模式"></a>1.2. 模式</h2><p>课程原文用的是 <em>Model</em>，如果用屈婉玲老师《离散数学》那本教材的语言，应该是赋值或解释。也就是把所有的符号都赋一个真 &#x2F; 假的值。</p>
-<p>模式的另一种解释叫 <em>Possible World</em>，一种可能的情形。这个词我认为很科幻、很浪漫。就像是许多平行世界一样，有的世界中，这件事发生了，而另一个世界中没有。每一个模式，就是平行世界中的一个。</p>
-<h2 id="1-3-知识库"><a href="#1-3-知识库" class="headerlink" title="1.3. 知识库"></a>1.3. 知识库</h2><p><em>Knowledge Base</em> 是 AI 已经知道的内容，哪些为真、哪些为假。不过可以认为存储的都是为真的陈述，因为对于假的内容，取反就成真了。</p>
-<p>如果用《离散数学》的语言，知识库应该叫「前提」。</p>
-<h2 id="1-4-蕴含"><a href="#1-4-蕴含" class="headerlink" title="1.4. 蕴含"></a>1.4. 蕴含</h2><p><em>Entailment</em> 这个词居然翻译过来是蕴含，我觉得很容易和 $\rightarrow$ 这个蕴含连接词弄混。所以采用《离散数学》的语言，应该叫「推理正确」。</p>
-<p>它指的是，如果条件为真，结论也为真。换句话说，如果是在数学证明中，就是条件可以推出结论。</p>
-<p>蕴含用的是这个符号 $\models$，屈婉玲老师的教材用的也是这个符号。</p>
-<h2 id="1-5-推理理论"><a href="#1-5-推理理论" class="headerlink" title="1.5. 推理理论"></a>1.5. 推理理论</h2><p>不像离散数学的教学方法，先把等值式、范式教授完毕后再进行单方向的推理的学习，这门课直接进入到了推理阶段。</p>
-<p>似乎也可以理解，因为我们并不关心两个结论是否可以互推，只要一个可以推理出另一个就可以了。至于过程中可能出现条件减弱的情形，我们不在乎。</p>
-<p>推理正确的定义，是在所有条件为真的情形下，结论都成立。所以直觉上，我们的想法就是，穷举那些条件为真的情形，找出这样的 <em>Possible World</em>，然后看，在这样的世界里，结论是否为真。</p>
-<p>为什么不在乎那些条件为假的情形？因为根据蕴含连接词的定义，当前件为假时，公式恒为真。</p>
-<p>这件事我一直不能理解，怎么会这样呢？经过了一学期离散数学的学习，加上这门课的再次解释，我大概清楚了。</p>
-<p>蕴含连接词表示的是一个推断：如果…那么…</p>
-<p>要是前件压根就不成立，这个推断并没有说明任何问题，因为推断是建立在前件为真的基础上的（如果…）。如果前件为假，我们无法从中得到任何有益内容，所以推断<em>平凡</em>为真。</p>
-<p>可能还是表述的不是很清楚，就这样接受吧。</p>
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CS50AI - 第 0 章 - 搜索</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-27T16:00:00.000Z" title="更新于 2025-02-28 00:00:00">2025-02-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CS50AI - 第 0 章 - 搜索"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="0-序"><a href="#0-序" class="headerlink" title="0. 序"></a>0. 序</h2><p>搜索是人工智能领域很重要的内容，例如如何导航到目标地点，如何在游戏中获得胜利等等，都需要进行最优方法的选择。哈佛大学的 <a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/2024/">CS50 AI</a> 课程把它作为了课程的第一课。听完后醍醐灌顶，赶紧趁热写一篇文章，把大意整理下来，供未来自己复习。</p>
+<h2 id="1-单机游戏"><a href="#1-单机游戏" class="headerlink" title="1. 单机游戏"></a>1. 单机游戏</h2><h3 id="1-1-一般的搜索"><a href="#1-1-一般的搜索" class="headerlink" title="1.1 一般的搜索"></a>1.1 一般的搜索</h3><p>给定一张有向图，从某个节点寻找前往另一个节点的道路，这很简单。关键在于维护一个 <code>Frontier</code> 列表，然后重复进行如下的操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 如果 `Frontier` 列表为空</span><br><span class="line">    * 则中止，无解。</span><br><span class="line">2. 从中选取一个结点，作为要考虑的结点。</span><br><span class="line">3. 如果这个结点就是目标</span><br><span class="line">    * 则返回解，停止。</span><br><span class="line">4. 否则，考察这个结点的邻居，把邻居添加到 `Frontier` 中</span><br></pre></td></tr></table></figure>
+
+<p>当然这样的选取有一些问题，不妨考虑这样的一个有向图，其中 A、B 两个结点之间有双向的箭头。把 A 作为起点。</p>
+<p>这样的问题是，<code>Frontier</code> 中一开始只有 A，A 不是终点，所以考虑和 A 连接的节点，假设只有 B，所以把 B 放到 <code>Frontier</code> 中。现在从 <code>Frontier</code> 中取 B，B 也不是终点，考虑 B 能连接的节点，假如有 A 和 C。那么 A 和 C 加入到 <code>Frontier</code> 中，下一次再考虑 A。如此反复，就进入了一个死循环。</p>
+<p>因此，在第 4 步需要增加一个判断：只有没有访问过、并且不在 <code>Frontier</code> 中已经出现的节点，才会添加到 <code>Frontier</code> 中。这样就避免了回环的问题。这，就是最基础的搜索。</p>
 <blockquote>
-<p>话说回来</p>
+<p>我学到这里最深切的感受是，总算明白为什么 <code>Dijkstra</code>、<code>Kruskal</code> 等算法一开始的时候要把初始数组设置为只包含起点了，因为这个维护的数组表示的是可以访问到的节点，而一开始，只有起点可以访问到。</p>
 </blockquote>
-<p>所以如果要编写一个程序来实现的话，思路是递归式的对每个符号赋真或假。对于所有让 <strong>KB</strong> 成真的赋值，如果待验证的结论都为真，则推理正确。如果不全为真，则推理错误。</p>
-<h2 id="1-6-知识工程"><a href="#1-6-知识工程" class="headerlink" title="1.6. 知识工程"></a>1.6. 知识工程</h2><p><em>Knowledge engineering</em> 是探索如何在 AI 中表示命题和逻辑的过程。如果用中文来表示的话，或许是「命题符号化」。</p>
-<p>课程举了三个例子，一个是叫 <em>Clue</em> 的游戏，有点像狼人杀，不过又有一些区别。</p>
-<p>游戏的大概流程是，分三个板块，人物、地点、武器。每个版块抽取一个放入信封，然后根据剩余的信息猜测信封中是什么。</p>
-<p>另一个例子是一人一房，每个人有一间房，而每个房也只能装一个人。</p>
-<p>还有一个例子是 <em>Mastermind</em>，有点像 <em>Wordle</em>，只不过这里不是单词，而是颜色。目标是把对应的颜色放到对应位置，每次排序，会返回正确位置的颜色数。</p>
-<p>每个例子下来，符号化会越来越繁琐。</p>
-<p>第一个例子中，如果三个板块分别有 $a$、$b$、$c$ 个对象，只需要 $a + b + c$ 个符号就完成了符号化。因为这样做已经可以确保每个符号非真即假。</p>
-<p>第二个例子中，如果有 $n$ 个人，$n$ 个房子，就需要 $n^2$ 个符号。因为我们要确保，一个符号是非真即假的陈述句。如果仍然采用 $2 \cdot n$，每个人、每个房子作为一个符号，表明不了真假。</p>
-<p>第三个例子则更加复杂，如果有 $m$ 种颜色，也就对应了 $m$ 个位置。需要 $m!$ 种表示。</p>
-<p>这些都可以通过程序来实现。</p>
-<h2 id="1-7-推理规则"><a href="#1-7-推理规则" class="headerlink" title="1.7 推理规则"></a>1.7 推理规则</h2><p>模式检查，如果进行算法分析，可以得到，这是一个指数级别的复杂度。因为如果有 $n$ 个符号，每个符号非真即假，这样就有 $2^n$ 种真值表。</p>
-<p>还是那句话：</p>
+<p>前面的搜索的伪算法，并不能算是一个很好的算法，因为它在一个语句上表述得并不具有确定性，也就是 <strong>选取</strong> 二字。怎么选？这就引出了两种不同的搜索算法：深度优先搜索和广度优先搜索。</p>
+<p>下面的算法都以迷宫作为背景。</p>
+<h3 id="1-2-DFS"><a href="#1-2-DFS" class="headerlink" title="1.2. DFS"></a>1.2. DFS</h3><p>深度优先搜索对于 <code>Frontier</code> 的维护采用栈来作为数据结构，Last In, First Out。直观造成的效果就是一条道走到黑，只有走到死胡同才会回头。而且这回头不简单——好像回到了存档点一样，从最近的分岔路口再次开始，选择另一条道路，再一次地走到黑。这就体现出栈这一数据结构具有保存现场的作用啦！</p>
+<p>深度优先搜索的好处是，在起止点相距较远的情景下，占用更小的内存，就能找到可行解。但不足是，它并不能确保每次找到的解是距离最短的最优解。</p>
+<h3 id="1-3-BFS"><a href="#1-3-BFS" class="headerlink" title="1.3. BFS"></a>1.3. BFS</h3><p>广度优先搜索和深度优先搜索唯一的区别就在于 <code>Frontier</code> 的维护，BFS 采用队列作为数据结构，First In, First Out。达成的效果是一种层次遍历，就像古诗说的：</p>
 <blockquote>
-<p>指数级别的复杂度不可接受！</p>
+<p>泻水置平地，各自东西南北流。</p>
 </blockquote>
-<p>怎样更高效的分析嘞？可以用推理规则。</p>
-<p>这里的推理规则并不强求是等值式。不过等值式是两个方向的，单方向的推理当然成立啦。</p>
-<p>有这样几个<strong>推理</strong>理论（不一定等值喔！）：</p>
-<table>
-<thead>
-<tr>
-<th>English</th>
-<th>中文</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Modus Ponens</td>
-<td>假言推理规则</td>
-</tr>
-<tr>
-<td>And Elimination</td>
-<td>化简规则</td>
-</tr>
-<tr>
-<td>Double Negation Elimination</td>
-<td>双重否定律</td>
-</tr>
-<tr>
-<td>Implication Elimination</td>
-<td>蕴含等值式</td>
-</tr>
-<tr>
-<td>Biconditional Elimination</td>
-<td>等价等值式</td>
-</tr>
-<tr>
-<td>De Morgan’s Law</td>
-<td>德摩根律</td>
-</tr>
-<tr>
-<td>Distributive Property</td>
-<td>分配律</td>
-</tr>
-</tbody></table>
-<p>这里的推理和前一节课的搜索有隐约的联系。</p>
-<p>一开始的初始状态是 <em>KB</em>，一个个推理就是 <em>Actions</em>，<em>Transition Model</em> 是变换后新的 <em>Knowledge Base</em>，<em>Goal Test</em> 是判断要证明的语句是否在知识库中，<em>Path cost function</em> 则记录了证明需要的步骤。</p>
-<h2 id="1-8-消解证明法"><a href="#1-8-消解证明法" class="headerlink" title="1.8. 消解证明法"></a>1.8. 消解证明法</h2><p>这部分知识在课内没有学习过，课本上有，但老师没讲，真是很遗憾了。因为，合取范式的意义就在于可以用消解证明法来高效的证明结论是否成立啊！</p>
-<p><img src="https://cs50.harvard.edu/ai/2024/notes/1/resolution1.png" alt="消解证明法，引自：https:&#x2F;&#x2F;cs50.harvard.edu&#x2F;ai&#x2F;2024&#x2F;notes&#x2F;1&#x2F;resolution1.png"></p>
-<p>比如这个显然的例子，要么 $P$ 成立，要么 $Q$ 成立，结果 $P$ 还不成立。您猜怎么着，肯定 $Q$ 成立啊。</p>
-<p>再看一个例子：</p>
-<p><img src="https://cs50.harvard.edu/ai/2024/notes/1/resolution2.png" alt="消解证明法，引自：https:&#x2F;&#x2F;cs50.harvard.edu&#x2F;ai&#x2F;2024&#x2F;notes&#x2F;1&#x2F;resolution2.png"></p>
-<p>要么 $P$ 成立，要么 $Q$ 成立，要么 $\neg P$ 成立，要么 $R$ 成立，能推出什么呢？如果 $P$ 成立的话，$\neg P$ 不成立，这样 $R$ 必须成立；或者 $P$ 不成立，那么 $Q$ 就必须成立。哦，所以得到 $Q \lor R$</p>
-<p>这里的 $Q$ 或者 $R$ 也可以是好多用 $\lor$ 连接起来的公式的集合。</p>
-<p>这种形式很明显，非常高效，所以如何求得这种形式的命题公式成为了一个值得探讨的话题。这种形式的命题就是合取范式（Conjunctive Normal Form），没有主。</p>
-<p>如何获得合取范式，不说了，太简单。来看看怎样运用消解证明法呢？</p>
-<blockquote>
-<p>用反证法</p>
-</blockquote>
-<p>假设结论不成立，引入到 <strong>KB</strong> 中，看看会不会推出空语句。因为空语句标志着一个命题和它的否定同时出现了。</p>
-<h2 id="2-一阶逻辑"><a href="#2-一阶逻辑" class="headerlink" title="2. 一阶逻辑"></a>2. 一阶逻辑</h2><p>命题逻辑无法实现对事物更细粒度的刻画。</p>
-<p>一阶逻辑包含两个符号：常量符号和谓词符号。前者表示一个对象，后者表示一种关系。</p>
-<p>像前面那个分房的例子，我们需要 $n^2$ 个符号，而如果用一阶逻辑来表述，分别定义 $2 \cdot n$ 个人 or 房子。再定义一个谓词表示人属于这个房子。就足以表达所有的情形。这样需要的符号就显著减少了，只有 9 个，不过要表示的命题数量还是 $n^2$ 个。</p>
-<p>在一阶逻辑中还有量词的存在，全称量词、特称量词。不再赘述了。</p>
-</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/02/cs50ai-chap0/" title="CS50AI - 第 0 章 - 搜索"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">CS50AI - 第 0 章 - 搜索</div></div></a></div><div class="next-post pull-right"><a href="/2025/02/crawl-dola-xiaoquan/" title="哆啦校圈 API 分析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">哆啦校圈 API 分析</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">0. 序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%91%BD%E9%A2%98%E9%80%BB%E8%BE%91"><span class="toc-number">2.</span> <span class="toc-text">1. 命题逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E7%AC%A6%E5%8F%B7%E4%B8%8E%E8%BF%9E%E6%8E%A5%E8%AF%8D"><span class="toc-number">3.</span> <span class="toc-text">1.1. 符号与连接词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">1.2. 模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E7%9F%A5%E8%AF%86%E5%BA%93"><span class="toc-number">5.</span> <span class="toc-text">1.3. 知识库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E8%95%B4%E5%90%AB"><span class="toc-number">6.</span> <span class="toc-text">1.4. 蕴含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E6%8E%A8%E7%90%86%E7%90%86%E8%AE%BA"><span class="toc-number">7.</span> <span class="toc-text">1.5. 推理理论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%E7%9F%A5%E8%AF%86%E5%B7%A5%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text">1.6. 知识工程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-%E6%8E%A8%E7%90%86%E8%A7%84%E5%88%99"><span class="toc-number">9.</span> <span class="toc-text">1.7 推理规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-%E6%B6%88%E8%A7%A3%E8%AF%81%E6%98%8E%E6%B3%95"><span class="toc-number">10.</span> <span class="toc-text">1.8. 消解证明法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%80%E9%98%B6%E9%80%BB%E8%BE%91"><span class="toc-number">11.</span> <span class="toc-text">2. 一阶逻辑</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+<p>BFS 就像在起点洒了一桶水，水在到达终点之前，会蔓延到所有与起点距离小于等于起止点距离的格子。但这样有个好处，就是可以确保找到的是最优解。证明也很简单，不妨用反证法。假如存在一条路径，使得起止点之间的距离更短，那么根据 BFS 的原理，这条路径应该早就被蔓延到了。</p>
+<p>不过 BFS 当然也有缺点，那就是需要的内存比较多，它需要多线程般探寻多条路径，才能得到最终的结果。如果起止点的距离相距太远，甚至会搜索完整个迷宫空间。</p>
+<h3 id="1-4-贪心”最佳优先”搜索"><a href="#1-4-贪心”最佳优先”搜索" class="headerlink" title="1.4. 贪心”最佳优先”搜索"></a>1.4. 贪心”最佳优先”搜索</h3><p>之前讲的 BFS 和 DFS 都是无信息检索，也及时没有用到具体问题的背景知识，所以显得没那么智慧。怎样就能更智慧了呢？比如让人类来走迷宫，给他一张纸，左下角是起点，右上角是终点。人直觉地在面对岔路口时，就会选择向右的、向上的，因为在不考虑墙的前提下，确实离终点越来越近了。这就是一种贪心算法。</p>
+<p>在岔路口面临抉择的时候，到底怎么选？BFS 和 DFS 并没有给出选择的不同，所以这样随机的选择往往会走不少低智商的弯路。有人说啊，那不是一个从前面 pop，一个从后面 pop 吗？但这只是指定了退出的顺序，没有指定进入的顺序呀。比如列表里有 ABC，你说，用栈的话就是 CBA，用队列就是 ABC，确实是这样。但并没有保证每次进入的时候都是 ABC 啊，进入的顺序还是随机的，可能下次就是 BCA，CAB 了。这样的话，最终选择还是随机的。</p>
+<p>而贪心算法则不一样，对每种选择，通过启发函数得到一个值，在迷宫的问题背景下就是下一个格子和终点之间的曼哈顿距离（曼哈顿距离就是只能横平竖直地走，不能走对角线），最后选取距离小的。这样就能和前面的两种搜索找出不同了——不管程序运行多少次，选择的路径肯定是一样的，没有半点随机因素，小就是小，大就是大。</p>
+<h3 id="1-5-A-搜索"><a href="#1-5-A-搜索" class="headerlink" title="1.5. A* 搜索"></a>1.5. A* 搜索</h3><p>但是贪心算法也不一定是最优解，因为它眼光是狭窄的，未能远谋。在一个分岔路口，一边是 19，一边是 18，它就选择了 18。它哪里知道，19 是山坡的最高峰，再往后一马平川；又哪里知道 18 后面还要面临重峦叠嶂、蜿蜒曲折的山路呢？所以最终要表达的就是，如果在树林中有两条路，在当时的条件下选了 18，最后走的路可能比 19 多得多。</p>
+<p>这样岂不是太傻了？除了曼哈顿距离之外，还有什么指标可以修正呢？啊，距离，距离！我通过 18 这个路口，走了 200 步才到了曼哈顿距离是 5 的格子；我通过 19 这个路口，再走14 步就到了距离为 5 的格子。这样看来，不仅要考虑启发函数的值，还要考虑得到这个值的代价！就好像参加 ICPC 拿到金奖就能在保研上获得很大优势一样，如果花了很大力气才能得金奖，不如中途停下来思考一下，当前距离目标的远近和自己已经付出的代价，如果发现不值当，不如马上切换到另一条路线。所以在 A* 搜索中，代价（这里是走的步数）+ 启发函数值的和才作为选择的判据。</p>
+<p>这个方法很巧妙，比如就走迷宫这个例子，如果距离目标越来越近，代价 + 启发函数值是不变的，步数多了一个，后者少了一个，总和不变。然而若是稍微走了一点回头路，总和会 +2、+2、+2 进行下去，很快就会超过岔路口的另一个选择（如果二者差别并不悬殊的话）。</p>
+<h2 id="2-对弈"><a href="#2-对弈" class="headerlink" title="2. 对弈"></a>2. 对弈</h2><h3 id="2-1-Minimax"><a href="#2-1-Minimax" class="headerlink" title="2.1 Minimax"></a>2.1 Minimax</h3><p>前面的搜索算法都是一个人的奋斗，但是在生活中，你方唱罢我登场的场面比比皆是，不仅要考虑自己的水平，还要衡量对方的能力，更有甚者，还得零和博弈。</p>
+<p>这里以双方的竞争为例，让自己获胜，等价于让别人失败。对方呢，也是这样想的。人类知道获胜、失败的具体含义，但机器可不知道，怎样量化胜负这件事儿呢？不妨用数字啦！</p>
+<p>对弈的双方，一方想让数字升高，另一方想让数字降低，如同拔河一般的拉锯战。Minimax 就是这样一种算法，一方要 minimize outcome，而另一方要 maximize it。至于说怎样得到所谓的最大值和最小值，其实是一种递归的思路。不妨以想要让结果变大的一方为例。</p>
+<ol>
+<li><p>现在摆在它面前的是一场残局，轮到他走下一步。到底落子何处？有许多选择，这些选择分叉出来。</p>
+</li>
+<li><p>不管他选择哪种，现在的主动权到了对方手中。</p>
+</li>
+<li><p>对方想让数值尽可能的小，所以也要面对同样的思考方式。到底落子何处呢？又有许多选择，但不管哪种，现在又轮到结果变大的一方来落子了。</p>
+</li>
+<li><p>就这样循环往复，递归下去，直到最后分出胜负。这里我们只考虑相邻的两层，按照递归的经典分析方法。现在我们回到第 2 步，主动权到了变小的一方。假设这里可以得出棋局的最终值，分别是，6，5，4，7，2。那么，变大的一方就知道了，哦，我现在面临五种选择，分别让结果变大的个数是这些，我肯定选择更大的，所以选择了 7。因为这种选择是建立在对方下的是最优解的基础上的，所以，如果他选择了 4 甚至是 2，对方就会顺着这条路走下去，达到让结果变小的目的，这样是不好的。</p>
+</li>
+</ol>
+<p>不过这样有个问题，对于井字棋游戏这种规模小的游戏还好说，对于国际象棋、围棋那种对弈，层层递归下去，要大量的内存，花费时间多不说，还很有可能爆栈，能不能稍微减少点运算量呢？</p>
+<h3 id="2-2-α-β-剪枝"><a href="#2-2-α-β-剪枝" class="headerlink" title="2.2 α-β 剪枝"></a>2.2 α-β 剪枝</h3><p>看这张图：</p>
+<p><img src="https://cs50.harvard.edu/ai/2024/notes/0/alphabeta.png" alt="a-b(ref:https:&#x2F;&#x2F;cs50.harvard.edu&#x2F;ai&#x2F;2024&#x2F;notes&#x2F;0&#x2F;)"></p>
+<p>现在最顶层的绿色想尽可能增大结果，不过在分析它的值之前，按递归的思路，先得看看底层的数值。第一个分支，选择最小的 4。第二个分支，走到第二步就知道，红色肯定 &lt;&#x3D; 3 了，也就是红色削弱数值增加的能力最弱也是 3，和第一个分支中，最强的削弱能力是 4 相比，不用考虑了。后面的 2 也是同理，看到第一个，就不用往后看了。这样的话，就可以减少大量的递归运算，层次越高，越有效。换句话说，就是预测到了这个分支顶天也就这种能力了，不如已经备选的分支，所以可以及时止损。</p>
+<h3 id="2-3-深度限制的-Minimax"><a href="#2-3-深度限制的-Minimax" class="headerlink" title="2.3 深度限制的 Minimax"></a>2.3 深度限制的 Minimax</h3><p>你可能觉得，现在这种优化还是不够过瘾，因为毕竟在更复杂的游戏中，很难递归到终局的局面。所以有的时候，对递归的层数有限制，到了最深层后，通过另一个函数对残局进行评价，比如谁剩子多等指标来评判出谁占优势，从而生成一个值。这个相对没那么精确的值，就是上一层筛选的指标了。</p>
+<h2 id="3-结语"><a href="#3-结语" class="headerlink" title="3. 结语"></a>3. 结语</h2><p>以上就是有关搜索的全部内容，听起来很爽，也让我想到了人生中的一些抉择。当时学离散的第一课，老师就说，不知道同学们是不是已经接触过贪心算法了，贪心算法，有的时候不一定就是最好的。</p>
+<p>是呀，竞赛？科研？甚至我有个朋友为了保研名额，在大一下的那个岔路口选择了去保研率更高的专业班型，他的选择是离终点更近的吗？我选择留在现在的专业，就保研来说，是最优解吗？</p>
+<p>到底该用什么算法来走这一遭呢？</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/03/ubunntu-to-windows/" title="Ubuntu 重装系统到 Windows"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Ubuntu 重装系统到 Windows</div></div></a></div><div class="next-post pull-right"><a href="/2025/02/crawl-dola-xiaoquan/" title="哆啦校圈 API 分析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">哆啦校圈 API 分析</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%BA%8F"><span class="toc-text">0. 序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8D%95%E6%9C%BA%E6%B8%B8%E6%88%8F"><span class="toc-text">1. 单机游戏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%B8%80%E8%88%AC%E7%9A%84%E6%90%9C%E7%B4%A2"><span class="toc-text">1.1 一般的搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-DFS"><span class="toc-text">1.2. DFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-BFS"><span class="toc-text">1.3. BFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E8%B4%AA%E5%BF%83%E2%80%9D%E6%9C%80%E4%BD%B3%E4%BC%98%E5%85%88%E2%80%9D%E6%90%9C%E7%B4%A2"><span class="toc-text">1.4. 贪心”最佳优先”搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-A-%E6%90%9C%E7%B4%A2"><span class="toc-text">1.5. A* 搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AF%B9%E5%BC%88"><span class="toc-text">2. 对弈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Minimax"><span class="toc-text">2.1 Minimax</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%CE%B1-%CE%B2-%E5%89%AA%E6%9E%9D"><span class="toc-text">2.2 α-β 剪枝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%B7%B1%E5%BA%A6%E9%99%90%E5%88%B6%E7%9A%84-Minimax"><span class="toc-text">2.3 深度限制的 Minimax</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BB%93%E8%AF%AD"><span class="toc-text">3. 结语</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
   window.MathJax = {
     tex: {
       inlineMath: [['$', '$'], ['\\(', '\\)']],

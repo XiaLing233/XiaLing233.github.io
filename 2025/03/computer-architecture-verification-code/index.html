@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计组 | 校验码 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="这些校验码的校验原理都是：在数据位之外，增加几个校验位，用来验证传送的数据是否正确。 奇偶校验码比较经典的奇偶校验码是在数据位之外添加一个校验位。分成两种校验方式，奇校验和偶校验。前者要求数据位和校验位中 1 的数量是奇数；后者要求 1 的数量是偶数。 检错能力：1 位；纠错能力：0 位。 如果有两位或两位以上同时在相反方向进行了变化，则不一定检查出错误。如果说 不一定 能检查出错误，就说明纠错的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计组 | 校验码">
+<meta property="og:url" content="https://xialing233.github.io/2025/03/computer-architecture-verification-code/index.html">
+<meta property="og:site_name" content="指针的轨迹">
+<meta property="og:description" content="这些校验码的校验原理都是：在数据位之外，增加几个校验位，用来验证传送的数据是否正确。 奇偶校验码比较经典的奇偶校验码是在数据位之外添加一个校验位。分成两种校验方式，奇校验和偶校验。前者要求数据位和校验位中 1 的数量是奇数；后者要求 1 的数量是偶数。 检错能力：1 位；纠错能力：0 位。 如果有两位或两位以上同时在相反方向进行了变化，则不一定检查出错误。如果说 不一定 能检查出错误，就说明纠错的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
+<meta property="article:published_time" content="2025-03-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-13T16:00:00.000Z">
+<meta property="article:author" content="夏凌">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://xialing233.github.io/2025/03/computer-architecture-verification-code/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":180,"position":"top","messagePrev":"距离上次更新已过","messageNext":"天，内容可能不具有时效性"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '计组 | 校验码',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-14 00:00:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">计组 | 校验码</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-13T16:00:00.000Z" title="发表于 2025-03-14 00:00:00">2025-03-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-13T16:00:00.000Z" title="更新于 2025-03-14 00:00:00">2025-03-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%BB%84/">计组</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="计组 | 校验码"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>这些校验码的校验原理都是：在数据位之外，增加几个校验位，用来验证传送的数据是否正确。</p>
+<h2 id="奇偶校验码"><a href="#奇偶校验码" class="headerlink" title="奇偶校验码"></a>奇偶校验码</h2><p>比较经典的奇偶校验码是在数据位之外添加一个校验位。分成两种校验方式，奇校验和偶校验。前者要求数据位和校验位中 <code>1</code> 的数量是奇数；后者要求 <code>1</code> 的数量是偶数。</p>
+<p>检错能力：<code>1</code> 位；<br>纠错能力：<code>0</code> 位。</p>
+<p>如果有两位或两位以上同时在相反方向进行了变化，则不一定检查出错误。如果说 <strong>不一定</strong> 能检查出错误，就说明纠错的能力丧失了，这种评价标准对于后续的校验方式同理。</p>
+<p>如果有 <code>1</code> 位发生了错误，确实不满足校验标准，然而，到底哪一位出错呢？不知道，任何一位出错都会造成校验失败。</p>
+<p>举个例子。</p>
+<p><strong>偶</strong>校验，数据是 <code>ASCII</code> 码的 <code>A</code>: <code>00010001</code>，当前二进制序列已经有偶数个 <code>1</code> 了，校验位是 <code>0</code>。所以发送方发送的数据是：<code>0</code> + <code>00010001</code>。</p>
+<p>如果有 <code>1</code> 位发生了错误，不妨是数据位的最低位，那么接收方接收到的是：<code>0</code> + <code>0010000</code>，不满足偶校验，检出错误。但是不知道是哪位出了错，所有的位数其中之一，都具有翻转的可能。如果有两位发生了错误，不妨设最低两位，则接收到的是 <code>0</code> + <code>0010010</code>，仍然满足偶校验，检查不出来。</p>
+<h2 id="循环冗余校验码"><a href="#循环冗余校验码" class="headerlink" title="循环冗余校验码"></a>循环冗余校验码</h2><p>循环冗余校验码（CRC 码）是通过余数来检查传输错误的一种算法。它适用的场景是网络通信、光盘等可能连续出错的情况。</p>
+<p>发送端通过把原始数据除以（这里的除是模 2 除法，可以理解为按位异或）<strong>生成多项式</strong>（生成多项式有几个要求，参见下文）得到余数，再令原始数据加上余数，目的是让修正后的数据再除以多项式余数为 <code>0</code>。换言之，除以生成多项式余数为 <code>0</code> 说明传输没有发生错误。但，如果余数不为 <code>0</code>，则说明发生了错误。而且，在余数的范围大于数据位长度时，可以指明哪位发生了错误。</p>
+<p>比如，如果数据位长度为 <code>4</code>，生成多项式是 <code>1011</code>，则余数可能是 0 ~ 10，除去正常情况 <code>0</code> 外共有 9 种可能，足够检验每一位数据位。</p>
+<p>接收方把数据除以生成多项式，余数为 0，编码正确。否则，余数指明了发生错误的位数。</p>
+<p>生成多项式需要做到：</p>
+<ol>
+<li>任何一位发生错误，余数都不能为 0（否则无法和正常情况区分了）；</li>
+<li>不同位发生错误，余数应该不同（否则无法检验不同位的错误了）；</li>
+<li>应满足余数循环规律（否则无法按补 0 的方法进行循环）。</li>
+</ol>
+<p>纠错的话，因为生成多项式已经确保了余数和出错位数一一对应，所以，根据余数，通过异或出错位就可以实现纠错。不过在底层的实现上比较复杂，移位一个周期，在最高位纠正，然后再移回去。</p>
+<p>看看笔算如何利用 CRC 码查错呢？</p>
+<p>利用 (7, 4) 循环码，数据是：<code>1001010</code>，生成多项式是：<code>1011</code>。</p>
+<p><img src="https://static.xialing.icu/img/202503141122066.webp" alt="得到余数 - 图源：西电车向泉老师的 ppt"></p>
+<p>进行模二除法，也就是按位异或。商不重要，在意的是余数。把余数加上，就得到了装配后的数据。</p>
+<p><img src="https://static.xialing.icu/img/202503141125176.webp" alt="验证 - 图源：西电车向泉老师的 ppt"></p>
+<p>如果出现了一位错误，可以实现纠错。然而，如果发生错误的位数过多，或者校验位出了错，那就没救了。但是，CRC 码的检错能力还是比较强的。</p>
+<h2 id="海明码"><a href="#海明码" class="headerlink" title="海明码"></a>海明码</h2><p>海明码适于磁盘这种错误随机发生的系统，可以实现错误的检验和纠正。</p>
+<p>它的核心是这个公式：</p>
+<p>$$<br>2^r \geq m + r + 1<br>$$</p>
+<p>其中，$r$ 表示校验位的个数；$m$ 表示数据位的个数。</p>
+<p>对这个公式的解释如下：有 $r$ 个校验位，就有 $2^r$ 个状态，可以检测 $2^r$ 个位。</p>
+<p>那么我们要检测多少个位呢？看等式右侧，数据位的 $m$ 个是一定要检测的；$r$ 个校验位也要检测；当然还有一个状态用来表示没有出错。</p>
+<p>对于校验位的位置，并不像 CRC 一样在数据的末尾，而是嵌入在数据位中，在 $2^m$ 的位置。比如，$1, 2, 4, 8, 16, 32 \ldots$（从 1 开始计数）</p>
+<p>每一个校验位的校验规则如下：</p>
+<ol>
+<li>奇校验 or 偶校验？</li>
+<li>对于每个校验位，从这位开始，检测 $m$ 位，跳过 $m$ 位…</li>
+</ol>
+<p>其中，$m$ 表示校验位的位置，从 <code>1</code> 开始计数。如，如果一个校验位在第 <code>4</code> 个位置，那么它要检测的位数是 $4, 5, 6, 7, 12, 13, 14, 15\ldots$</p>
+<p>检测到最高位为止，比如，如果一共就 12 位，后面的 $13, 14, 15$ 就不检测了。</p>
+<p>它的取值仍然按照奇校验或者偶校验的规则，如果是偶校验，检测的数据位有奇数个 <code>1</code>，则取值为 <code>1</code>，否则为 <code>0</code>。</p>
+<p>规则 2 在数学上是这样理解的，就是对于一个位置的标号，把它用 2 的幂次来表示，如果这个标号的幂次包含了校验位的位置标号，则校验位要检测它。比如，$7 &#x3D; 1 + 2 + 4$，那么在 4 号的校验位就要检测它。但 $9 &#x3D; 8 + 1$，那么 4 号的就不检测它。常用的技巧就是上面提到的，检测多少个，然后跳过多少个。</p>
+<p>海明码的纠错能力是 $\lfloor \frac{n}{2} \rfloor$，检错能力是 $n-1$， $n$ 是两个<strong>正确</strong>数据之间的最小汉明距离（不同位的个数）。可以想象，如果位数的变化个数没有偏离两个数中间的那条界限，是可以纠正回原来的数据的。</p>
+<p>但是要是变化的太多，那就不知道原来的样貌了。不过，只要不变化的太多（比如，没有通过翻转 $n$ 位而导致变成了另一个合法编码），就能够检测出错误，然而这时候纠正是不可信的。</p>
+<p>以常见的 8 位数据，4 位校验的海明码为例。因为最小海明距离为 3（每个数据位至少被 2 个校验位检测，如果一个数据位变化了，这两个校验位也会变化，形成一个新的海明码。校验位要是出错了，不在乎，因为出错后的编码非法），所以能检测 2 位错误，纠正 1 位错误。</p>
+<p>检错的话，直接分别对校验位偶校验即可。</p>
+<p>纠错的话，校验位出错，记为 1；否则为 0。校验位从高到低组成的二进制数表明了出错位置（仍然是从下标为 1 开始）。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/03/computer-architecture-arithmetic/" title="计组 | 数据的运算"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">计组 | 数据的运算</div></div></a></div><div class="next-post pull-right"><a href="/2025/03/mysql-user/" title="MySQL 的用户和用户权限管理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">MySQL 的用户和用户权限管理</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">23</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A5%87%E5%81%B6%E6%A0%A1%E9%AA%8C%E7%A0%81"><span class="toc-text">奇偶校验码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8C%E7%A0%81"><span class="toc-text">循环冗余校验码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%B7%E6%98%8E%E7%A0%81"><span class="toc-text">海明码</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

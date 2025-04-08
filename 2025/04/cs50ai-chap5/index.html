@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CS50AI - 第 5 章 - 神经网络 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="神经网络属于当下极其热门的话题，AAAI, NeurlIPS 等等期刊成为了许多本科生接触科研，发表文章的首选。与神经网络相关的名词术语也往往出现在学术中，当然也出现在群聊中。 因此这节就讲一讲什么叫神经网络。 仿生学神经网络的产生，要从人类讲起。人工智能的这一学派是链接主义，也就是通过模仿人类大脑中神经元的连接来让机器形成智能。 剩下的两大流派我们也早有接触。 一个流派是符号主义，他们主张用数理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS50AI - 第 5 章 - 神经网络">
+<meta property="og:url" content="https://xialing233.github.io/2025/04/cs50ai-chap5/index.html">
+<meta property="og:site_name" content="指针的轨迹">
+<meta property="og:description" content="神经网络属于当下极其热门的话题，AAAI, NeurlIPS 等等期刊成为了许多本科生接触科研，发表文章的首选。与神经网络相关的名词术语也往往出现在学术中，当然也出现在群聊中。 因此这节就讲一讲什么叫神经网络。 仿生学神经网络的产生，要从人类讲起。人工智能的这一学派是链接主义，也就是通过模仿人类大脑中神经元的连接来让机器形成智能。 剩下的两大流派我们也早有接触。 一个流派是符号主义，他们主张用数理">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
+<meta property="article:published_time" content="2025-04-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-07T16:00:00.000Z">
+<meta property="article:author" content="夏凌">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://xialing233.github.io/2025/04/cs50ai-chap5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":180,"position":"top","messagePrev":"距离上次更新已过","messageNext":"天，内容可能不具有时效性"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CS50AI - 第 5 章 - 神经网络',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-04-08 00:00:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">42</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CS50AI - 第 5 章 - 神经网络</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-07T16:00:00.000Z" title="发表于 2025-04-08 00:00:00">2025-04-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-07T16:00:00.000Z" title="更新于 2025-04-08 00:00:00">2025-04-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CS50AI - 第 5 章 - 神经网络"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>神经网络属于当下极其热门的话题，AAAI, NeurlIPS 等等期刊成为了许多本科生接触科研，发表文章的首选。与神经网络相关的名词术语也往往出现在学术中，当然也出现在群聊中。</p>
+<p>因此这节就讲一讲什么叫神经网络。</p>
+<h2 id="仿生学"><a href="#仿生学" class="headerlink" title="仿生学"></a>仿生学</h2><p>神经网络的产生，要从人类讲起。人工智能的这一学派是链接主义，也就是通过模仿人类大脑中神经元的连接来让机器形成智能。</p>
+<p>剩下的两大流派我们也早有接触。</p>
+<p>一个流派是符号主义，他们主张用数理逻辑(如果…就…)来求解问题。主要在 <em>Knowledge</em> 这一章进行了展开。是啊，这一章中我们定义了多少符号呢！</p>
+<p>另一个流派是行为主义，他们主张让 agent 通过与环境交互，获得奖励惩罚，从而形成更好的决策。主要在上一章 <em>Learning</em> 中进行了小小的展开。上一章作业中的 Nim 是一个典型的行为主义的例子。</p>
+<p>不过，不管是什么主义，似乎，共同的理念就是让机器来解决问题，而不是人类给出一一个显式的算法。比如，计算机视觉(Computer Vision，简称 CV)中的手写数字识别，很难用一个，如果这几个像素为黑，那么就是数字几，的算法来解决问题。所以人类的处理方法是，给机器一个数据集，对输入稍加处理，让机器寻找个中的规律。</p>
+<blockquote>
+<p>这是不是说明，人类的思考能力已经到达了上限？</p>
+</blockquote>
+<p>或许是吧。就像以前几次工业革命一样。人怎么可能跑得过新干线呢（清濑灰二语）？君子生非异也，善假于物也。</p>
+<p>人工智能也是一样。现在人们已经进化到了，不依靠自己的脑力解决问题，而是通过电脑自己来解决问题的阶段。感觉，硅基生命就像是一个新的物种一样。我们不清楚它是如何工作的，就像是一个黑盒子。但是，它确实能很好的解决问题。或许生物学上对牛马为何能吃苦耐劳的性格有了很深入的研究，不过，对硅基生命的研究，恐怕没那么容易。</p>
+<p>所以，算法在人工智能领域，不再是面向问题的，而是面向 AI 的。怎样才能让 AI 更好的学习呢？</p>
+<blockquote>
+<p>话说回来。</p>
+</blockquote>
+<p>所以，每一个神经元都可以接收一定的输入，产生特定的输出，逐级传递。</p>
+<p>一个最简单的例子就是或函数。有两个输入神经元，位于同一层次。它们两个连接一个输出神经元。每条边有权重，每个输出神经元自己也有一个 bias。所以一共有三个权重。根据权重和输入，可以形成一个函数。</p>
+<p>而对于这个函数，还要进一步处理，才能实现分类的效果。</p>
+<h2 id="激发函数-Activation-Function"><a href="#激发函数-Activation-Function" class="headerlink" title="激发函数(Activation Function)"></a>激发函数(Activation Function)</h2><p>这一函数处在更高的一个层次，对原始输出进行进一步处理。大概有以下几种：</p>
+<ul>
+<li>Step Function：就是一个门槛，以 0 为界，左侧为 0，右侧（包含边界）为 1；</li>
+<li>Logistic Sigmoid：和上面的硬门槛相比，在边界区域形成的是缓和的曲线；</li>
+<li>Rectified Linear Unit(ReLU)：0 左侧是 0，右侧是数值本身。即 $max(0, x)$。</li>
+</ul>
+<p>进一步处理的目的是，让最终的输出落到某一类别中，从而实现分类的效果。</p>
+<h2 id="梯度下降算法-Gradient-Descent"><a href="#梯度下降算法-Gradient-Descent" class="headerlink" title="梯度下降算法(Gradient Descent)"></a>梯度下降算法(Gradient Descent)</h2><p>我们大概已经理解了神经网络的大概结构。包含节点和边，以及一个激发函数。不过，激发函数是可以事先指定的，每条边的权重该如何获得呢？</p>
+<p>上一章中，我们通过邻居、感知机或者其他的算法来获得了边界的位置。但，对权重，我们该如何操作呢？</p>
+<p>解决问题的方法是「梯度下降算法」。有点数学上梯度的感觉。</p>
+<p>这一算法的基本思路是，用随机权重初始化所有边。然后重复下列步骤：以损失(Loss) 为评判标准，对于所有输入，计算梯度向量；用梯度更新权重。</p>
+<p>这个算法的计算是准确的，然而开销是很大的。因此，有 <strong>Stochastic Gradient Descent</strong> 算法，随机选定一个数据点。然而这一算法有点太极端了，很可能得到错误的梯度。因此， <strong>Mini-Batch Gradient Descent</strong> 算法折中，通过随机选定的<strong>几个</strong>数据点来计算梯度。</p>
+<h2 id="多层神经网络-Multilayer-Neural-Networks"><a href="#多层神经网络-Multilayer-Neural-Networks" class="headerlink" title="多层神经网络(Multilayer Neural Networks)"></a>多层神经网络(Multilayer Neural Networks)</h2><p>然而，不管上面的算法怎么优化，面临的问题是，它们只能对数据集进行线性的分类。</p>
+<p>要解决这一问题，需要增加神经网络的层数，从而实现更高阶的控制。额外添加的中间层叫 Hidden Layer。</p>
+<h2 id="反向传播算法-Backpropagation"><a href="#反向传播算法-Backpropagation" class="headerlink" title="反向传播算法(Backpropagation)"></a>反向传播算法(Backpropagation)</h2><p>多了一层，看似可以解决线性分类的问题。但是，又如何来更新每条边的权重呢？</p>
+<p>解决问题的方案是反向传播算法。</p>
+<p>这一算法先计算输出层的错误，然后考虑上一层中的每个单元对错误的贡献，更新权重，直到输入层为止。</p>
+<p>这样，权重就可以被逐层更新，可以应对更深层的神经网络，即 Deep Neural Networks。</p>
+<h2 id="过拟合-Overfitting"><a href="#过拟合-Overfitting" class="headerlink" title="过拟合(Overfitting)"></a>过拟合(Overfitting)</h2><p>在训练的过程中，遇到的常见问题是过拟合。即，获得的权重太依赖于特定的输入(如，我们选取的训练集)，而不能反映一般情况。</p>
+<p>在上一章中，我们学习到了交叉测试的算法，这里又使用了另一种方法，叫 dropout。也就是说，每次在训练神经网络时，随机丢弃一些结点。训练多次，每次丢弃的结点不一样。这样可以保证最终获得的神经网络不依赖于特定的结点。</p>
+<h2 id="TensorFlow"><a href="#TensorFlow" class="headerlink" title="TensorFlow"></a>TensorFlow</h2><p><code>TensorFlow</code> 是 <code>Google</code> 研发的一个 <code>Python</code> 库，可以实现许多神经网络的相关功能。</p>
+<h2 id="计算机视觉-Computer-Vision"><a href="#计算机视觉-Computer-Vision" class="headerlink" title="计算机视觉(Computer Vision)"></a>计算机视觉(Computer Vision)</h2><p>实际问题中，对图片的处理是很常见的。比如，对手写数字的识别，对水果腐烂程度的判断，对道路障碍的检测等。计算机视觉就是解决这些问题的研究领域。</p>
+<h2 id="图像卷积-Image-Convolution"><a href="#图像卷积-Image-Convolution" class="headerlink" title="图像卷积(Image Convolution)"></a>图像卷积(Image Convolution)</h2><p>这个词，我好久之前就接触过了。记得去年这时候，需要在英语课上进行论文的汇报。我选的是一个苹果腐烂识别的算法。</p>
+<p>那时候对人工智能完全不懂，看到各种 Layer，无从下手。最后把 pre 糊弄完了。今天听完这次课后，对计算机视觉有关的名词，清晰多了。</p>
+<p>为什么叫卷积呢？卷积，就是两个多项式，每项分别相乘，得到一个新的多项式。</p>
+<p>图像的卷积，确实也是一样。为了问题的简单，这里考虑灰度图像。每个像素是 0 - 255 之间的数字。</p>
+<blockquote>
+<p>问题 1：为什么不直接把每个像素展平，作为输入？</p>
+</blockquote>
+<p>因为，一方面，输入的规模太大；一方面，不符合识别图像的直觉。</p>
+<p>第一方面比较简单，这里谈谈第二方面。人类识别图像，并不是根据每个像素来识别的，而是通过一些整体特征，如弧线、边界等，来识别图片。</p>
+<p>因此，需要综合考虑多个数据点。类似于，之前用 k-邻居 算法，现在需要通过感知机来整体考虑问题。</p>
+<p>我们采用一个方阵作为筛子，来考虑图片的整体特征。借用官网的图片：</p>
+<p><img src="https://cs50.harvard.edu/ai/2024/notes/5/convolution.png" alt="https:&#x2F;&#x2F;cs50.harvard.edu&#x2F;ai&#x2F;2024&#x2F;notes&#x2F;5&#x2F;convolution.png"></p>
+<p>对于图片上的每个 $3 \times 3$ 区域，每个像素要和筛子上的对应位置做乘法，最后加起来，也就是卷积的定义。这样可以得到一个 $4 \times 4$ 大小的图片，包含了整体特征。</p>
+<p>有一个方阵被常常使用：</p>
+<p>$$<br>\begin{bmatrix}<br>-1 &amp; -1 &amp; -1 \<br>-1 &amp; 8 &amp; -1 \<br>-1 &amp; -1 &amp; -1<br>\end{bmatrix}<br>$$</p>
+<p>它可以有效识别图像的边界。</p>
+<h2 id="池化-Pooling"><a href="#池化-Pooling" class="headerlink" title="池化(Pooling)"></a>池化(Pooling)</h2><p>池化，也就是合并的意思。通过卷积得到的图像可能很大。这时候，通过池化就可以提取图片的共同特征。如，从 $n \times n$ 的像素集合中选择最高的，或者取平均值。</p>
+<blockquote>
+<p>值得注意的是，图像卷积中，一个像素可能被考虑多次；而池化中，每个像素只考虑一次。</p>
+</blockquote>
+<p>造成这一问题的原因是，图像卷积的筛选器是平移的，每次平移一个像素，直到到达边界；而池化类似于对图片进行划分，不重不漏。</p>
+<p>在实际操作中，往往多次重复卷积和池化的步骤。</p>
+<h2 id="重现神经网络-Recurrent-Neural-Networks"><a href="#重现神经网络-Recurrent-Neural-Networks" class="headerlink" title="重现神经网络(Recurrent Neural Networks)"></a>重现神经网络(Recurrent Neural Networks)</h2><p>前面讲到的神经网络都是单方向的：输入-&gt;网络-&gt;输出。</p>
+<p>然而对于有些问题而言，网络的输出重新作为网络的输入是有帮助的，比如，用图像生成文本，视频的分类，语音识别说话人等情景。</p>
+<p>概括一下，重现神经网络适用于多个输入（视频、音频）有依赖关系或多个输出（句子）的情景。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2025/03/winter-spring/" title="鲁迅公园半日游"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">鲁迅公园半日游</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">42</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%BF%E7%94%9F%E5%AD%A6"><span class="toc-text">仿生学</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BF%80%E5%8F%91%E5%87%BD%E6%95%B0-Activation-Function"><span class="toc-text">激发函数(Activation Function)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%AE%97%E6%B3%95-Gradient-Descent"><span class="toc-text">梯度下降算法(Gradient Descent)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-Multilayer-Neural-Networks"><span class="toc-text">多层神经网络(Multilayer Neural Networks)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95-Backpropagation"><span class="toc-text">反向传播算法(Backpropagation)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%8B%9F%E5%90%88-Overfitting"><span class="toc-text">过拟合(Overfitting)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TensorFlow"><span class="toc-text">TensorFlow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-Computer-Vision"><span class="toc-text">计算机视觉(Computer Vision)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF-Image-Convolution"><span class="toc-text">图像卷积(Image Convolution)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%A0%E5%8C%96-Pooling"><span class="toc-text">池化(Pooling)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E7%8E%B0%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-Recurrent-Neural-Networks"><span class="toc-text">重现神经网络(Recurrent Neural Networks)</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>

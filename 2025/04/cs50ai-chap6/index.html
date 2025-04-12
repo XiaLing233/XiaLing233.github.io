@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CS50AI - 第 6 章 - 语言 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="转眼到了 CS50 AI 的最后一节课。 这节课讲的是当下热门中的热门——自然语言处理。 语言之前我们都是把问题和算法转换为某一种机器语言让机器来执行，这一次我们要让机器理解人类的语言。 语法和语义(Syntax and Semantics)涉及到自然语言，就不得不涉及一些语言学的知识——语法和语义。 语法是一门语言要遵循的基本原则。其实一些机器语言也是一样。比如，Python 在语法错误的时候会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS50AI - 第 6 章 - 语言">
+<meta property="og:url" content="https://xialing233.github.io/2025/04/cs50ai-chap6/index.html">
+<meta property="og:site_name" content="指针的轨迹">
+<meta property="og:description" content="转眼到了 CS50 AI 的最后一节课。 这节课讲的是当下热门中的热门——自然语言处理。 语言之前我们都是把问题和算法转换为某一种机器语言让机器来执行，这一次我们要让机器理解人类的语言。 语法和语义(Syntax and Semantics)涉及到自然语言，就不得不涉及一些语言学的知识——语法和语义。 语法是一门语言要遵循的基本原则。其实一些机器语言也是一样。比如，Python 在语法错误的时候会">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
+<meta property="article:published_time" content="2025-04-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-11T16:00:00.000Z">
+<meta property="article:author" content="夏凌">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://xialing233.github.io/2025/04/cs50ai-chap6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":180,"position":"top","messagePrev":"距离上次更新已过","messageNext":"天，内容可能不具有时效性"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CS50AI - 第 6 章 - 语言',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-04-12 00:00:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CS50AI - 第 6 章 - 语言</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-11T16:00:00.000Z" title="发表于 2025-04-12 00:00:00">2025-04-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-11T16:00:00.000Z" title="更新于 2025-04-12 00:00:00">2025-04-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CS50AI - 第 6 章 - 语言"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>转眼到了 CS50 AI 的最后一节课。</p>
+<p>这节课讲的是当下热门中的热门——自然语言处理。</p>
+<h2 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h2><p>之前我们都是把问题和算法转换为某一种机器语言让机器来执行，这一次我们要让机器理解人类的语言。</p>
+<h2 id="语法和语义-Syntax-and-Semantics"><a href="#语法和语义-Syntax-and-Semantics" class="headerlink" title="语法和语义(Syntax and Semantics)"></a>语法和语义(Syntax and Semantics)</h2><p>涉及到自然语言，就不得不涉及一些语言学的知识——语法和语义。</p>
+<p>语法是一门语言要遵循的基本原则。其实一些机器语言也是一样。比如，<code>Python</code> 在语法错误的时候会抛出 <code>SyntaxError</code>。</p>
+<p>语义则表示这段话要表示的内容。符合语法的语句不一定有语义，比如说这句话：</p>
+<blockquote>
+<p>Colorless green ideas sleep furiously.</p>
+</blockquote>
+<p>不同的语法结构组成的句子可能会表示同一个意思。</p>
+<h2 id="上下文无关语法-Context-Free-Grammar"><a href="#上下文无关语法-Context-Free-Grammar" class="headerlink" title="上下文无关语法(Context-Free Grammar)"></a>上下文无关语法(Context-Free Grammar)</h2><p>正式语法(Formal Grammar)是一种对于某个语言来说，生成句子的规则。</p>
+<p>我们可以用 parser 对每个单词进行分析，从而形成一个语法树。</p>
+<p>语言，语言。自然语言和机器语言都是一种语言。所以我们在编译原理课程学习到的知识，也可以搬到自然语言中。</p>
+<p>当然，有的时候，可能一句话有许多种语法树的可能。这时候就出现歧义了。如果是一门程序语言，很可能会报错。</p>
+<h2 id="nltk"><a href="#nltk" class="headerlink" title="nltk"></a>nltk</h2><p><code>nltk</code>(Natural Language Toolkit) 是一个支持自然语言处理的库。</p>
+<h2 id="n-grams"><a href="#n-grams" class="headerlink" title="n-grams"></a>n-grams</h2><p>n-grams 指的是从文本的样本中选出来的 n 长度的序列。</p>
+<p>比如这句话中：</p>
+<blockquote>
+<p>the quick brown fox jumps over the lazy dog</p>
+</blockquote>
+<p>3-grams 是 “the quick brown”, “quick brown fox”, “fox jumps over”…</p>
+<h2 id="标记化-Tokenization"><a href="#标记化-Tokenization" class="headerlink" title="标记化(Tokenization)"></a>标记化(Tokenization)</h2><p>Tokenization 的任务是把一句话切碎。只有把一句话切碎了，才能考虑 n-grams 的问题。</p>
+<h2 id="Markov-Models"><a href="#Markov-Models" class="headerlink" title="Markov Models"></a>Markov Models</h2><p>又是马尔科夫链。事实上，基于前面的 n-grams 和 tokenization，我们实际上可以实现一个马尔科夫链，基于概率，预测下一个最可能出现的单词是什么。</p>
+<h2 id="Bag-of-Words-Model"><a href="#Bag-of-Words-Model" class="headerlink" title="Bag-of-Words Model"></a>Bag-of-Words Model</h2><p>一种对单词处理的简化模型是 Bag-of-Words 模型。望文生义，它的作用是，对于一个句子，忽略单词之间的次序，而是作为一个集合来处理。</p>
+<p>虽然这种做法减少了掌握的信息，但是它便于处理，同时提供的结果也可以接受。</p>
+<h2 id="Naive-Bayes"><a href="#Naive-Bayes" class="headerlink" title="Naive Bayes"></a>Naive Bayes</h2><p>结合 Bags-of-Words 模型，我们可以利用朴素贝叶斯实现语句的情感分类效果。</p>
+<p>比如，对于一个购物网站的许多评论，我们需要分出这些评论是好评还是差评。</p>
+<p>思路是，把每个句子拆成单词，这一步利用了 Bags-of-Words Model。然后，利用贝叶斯公式，一番推导，就能得到某个给定句子是好评或是差评的概率。</p>
+<p>下面就展开讲讲朴素贝叶斯。</p>
+<p>为什么它朴素呢？因为它只考虑了单词和情感（更一般地，类别）之间的关系，而不考虑单词之间出现概率的影响（单词与单词独立）。</p>
+<p>这个假设很可能 <em>too simple, sometimes naive</em>，因为，有的单词确实是成簇出现的。比如，my 出现后，grandson 出现的概率就会高一些。</p>
+<p>但是朴素贝叶斯不考虑这件事，让概率计算变得简单。</p>
+<p>数学分析一下。</p>
+<p>我们想计算：</p>
+<p>$$<br>P(HAPPY | foo, bar, baz)<br>$$</p>
+<p>也就是在 foo, bar, baz 这三个单词出现的情况下，好评的概率。</p>
+<p>由贝叶斯公式：</p>
+<p>$$<br>P(HAPPY | foo, bar, baz)<br>&#x3D; \frac{P((foo \land bar \land baz) | HAPPY) \cdot P(HAPPY)}{P(foo \land bar \land baz)} \<br>&#x3D; \frac{P(HAPPY \land foo \land bar \land baz)}{P(foo \land bar \land baz)}<br>$$</p>
+<p>因为我们考虑好评和差评两种对立的情形，所以，可以简化处理。因为对于一条评论来说，上面等式的分母是一样的。所以，我们可以不考虑分母，而是认为，等号左边和右边的分子成比例。</p>
+<p>好评和差评都分别和等式右侧的分子成比例，并且是对立的事件。因此，我们可以对好评和差评分别计算比较好算的 joint 形式分子，再让它们加起来是 1 即可。</p>
+<p>所以现在问题转换为了如何计算 $P(HAPPY \land foo \land bar \land baz)$。</p>
+<p>推导一下：</p>
+<p>$$<br>P(HAPPY \land foo \land bar \land baz)<br>&#x3D; P((foo \land bar \land baz) | HAPPY) \cdot P(HAPPY)<br>&#x3D; P(foo | HAPPY) \cdot P(bar | HAPPY) \cdot P(baz | HAPPY) \cdot P(HAPPY)<br>$$</p>
+<p>其中，最后一个等号基于的就是朴素贝叶斯，也就是假设各个单词之间是相互独立的。</p>
+<p>这样， $P(HAPPY)$ 可以通过训练集中好评句子占总体评价的比例来计算。$P(foo | HAPPY)$ 就可以通过包含 foo 的句子占所有好评的比例来计算。</p>
+<p>有一个细节问题需要探讨。如果一个单词在好评中一次也没出现，而在差评中出现过，按照上述方法计算得到的概率是，差评 100%！似乎不太合理。</p>
+<p>要修复这个问题，课可以使用 Additive Smoothing，对于每个单词，假设其出现的次数比真实次数多一些。一个特殊的 Additive Smoothing 叫 Laplace Smoothing，加的值是 1。</p>
+<h2 id="Word-Representation"><a href="#Word-Representation" class="headerlink" title="Word Representation"></a>Word Representation</h2><p>前面还没有接触到数据表示层面，在计算机内表示单词，把它数字化是明智的想法。</p>
+<p>一种表示方法叫 One-Hot Representation，独热码。也就是在向量中，只有一位是 1，其余都是 0。</p>
+<p>这种表示方法很简单，但是，开销太大。当单词数量增加的时候，难以表示。此外，这种表示方法无法表示单词之间的亲缘关系。比如，authored 和 wrote 应该有相近的意思。</p>
+<p>为此，另一种表示方法叫分布式表示。单词好像 scatter around 整个高维线性空间。</p>
+<p>比如，<code>[-0.34, -0.08, 0.02, -0.18, …] (he)</code>。</p>
+<h2 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h2><p>word2vec 是一种生成单词分布式表示的算法。是通过 Skip-Gram Architecture 实现的。</p>
+<p>很神奇。每个单词的向量值并不重要，但是考虑关联就很重要了。</p>
+<p>比如，对某个单词，找到它周围最近的 10 个邻居，就能找到 10 个近义词。</p>
+<p>此外，更神奇的是，考虑 king 和 man 的距离差。让 woman 加上这个距离差，求最近的一个单词。你猜到了，可以得到 queen！</p>
+<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><p>又来了。是的，对于语言，我们也可以用到神经网络。尤其是翻译过程。</p>
+<p>此外，由于语言的输入输出不是定长的，所以需要用到 Recurrent Neural Network。</p>
+<p>但 Recurrent Neural Network 有个很大的问题。它的操作基础是，每次重现，都要把先前的所有信息和新的输入信息保存到新输出中。随着输入规模的增大，很可能输出保存不下这么庞大的信息。</p>
+<p>此外，各个输入的权重是不一样的，可能有的输入比其他输入更重要。</p>
+<h2 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h2><p>解决这个问题，需要用到 Attention。其实它的想法很简单，就是对每个输入生成一个权重。把$权重 \times 输入$ 的值作为最终考虑的值。</p>
+<p>不过，到底如何生成 Attention 的权重就是研究的重点了。</p>
+<h2 id="Transformers"><a href="#Transformers" class="headerlink" title="Transformers"></a>Transformers</h2><p>当然，Recurrent Neural Network 的一个问题是，计算的太慢。</p>
+<p>唉，其实到最后，底层原理就那些。并行化，不就是行波进位加法器和先行进位加法器的区别吗？</p>
+<p>所以 transformers 是一个新的训练架构。每个输入是同时被输入到神经网络中的，输入的信息除了单词本身，还有单词位置的编码。此外，还会使用到许多 self-attention 步骤来理解输入的上下文。</p>
+<p>在输出阶段，也涉及到注意力机制，不仅注意已经输出了什么，还关注之前的输入。</p>
+<h2 id="结束了"><a href="#结束了" class="headerlink" title="结束了"></a>结束了</h2><p>这周是第七周。经过了七周的学习，总算是完成了 CS50AI 的学习。</p>
+<p>回过头来，到底什么是 AI 呢？AI 是那种让人类觉得似乎有知觉的智能体。换句话说，其实搜索问题、博弈问题、分类问题都是 AI 领域的问题。不过，让 AI 彻底火起来的应该算是 22 年的 ChatGPT，当 AI 能够和人类对话，甚至是表达自己的看法时，才让普罗大众意识到，AI 时代来临了。</p>
+<p>现在 AI 真的是非常火爆的课题，黄渡计系的老师有 80% 以上都在往 AI 靠拢。就算是没有 all in AI 的，也在把 AI 作为研究的辅助工具，和自己的领域结合。</p>
+<p>虽然我对 AI 不太感冒，我的意思是，不太想把 AI 作为自己从事的领域。但我其实不排斥把 AI 用到日常生活中。其实 AI 早就渗透到我的生活中了。现在的 <code>chatgpt.com</code> 就和几十年前的 <code>google.com</code> 一样，不能离开。</p>
+<p>很有意思的一个事情是，每当一个新技术出来的时候，总是有人担心，啊，是不是人类要被取代了。AI 绘图刚出来的几年前，确实很多画师担心过。现在呢？是那些已经被 AI 取代的画师沉默了，还是照样歌舞升平呢？说不清楚。</p>
+<p>AI 最后到底发展成什么样子呢？不清楚。有人说，只由 0，1 组成的计算机永远不可能觉醒智能，还有《细胞生物学》的作者翟中和院士，他认为细胞要比任何一台计算机精巧。</p>
+<p>确实是这样。物理层面的计算机，确实只是由 0 和 1 组成，但事情不能这么看。要是从物理层面来看，生物的细胞不过是一堆分子（有结构的）堆砌。几亿年前可能有先知会这样讲：只由分子组成的细胞不可能形成什么智能！</p>
+<p>不是的。现在，虽然计算机是硅基生命，基于冯诺依曼架构组成的有序系统。但是，现在这个系统已经复杂到了人类无法深入探寻的阶段。这两天在写 AI 课程的作业，老师让结合机器学习进行迷宫问题的求解。我说这种结合是脱裤子放屁，因为机器学习适合的场景是不存在高效算法问题。已经有了 A* 和 Dijkstra，学习？学个屁！</p>
+<p>所以说，AI 解决的问题是，人类已经想不到一个可行的算法来解决的问题。比如说，人脸识别，不可能有一个人把照片的像素点 hard code 到程序的逻辑中，然后来判断。再比如对弈问题，人类也找不到可以把每个棋局各种步骤的先后次序表示出来的算法。还有自然语言处理等等。人类解决不了的问题，诉诸 AI 来解决。</p>
+<p>最后呢，问题确实是解决了，但是怎么解决的呢？没人知道。人们只知道理论基础，嗯，是有一堆 layers，还有好多参数发挥作用。但是，怎么发挥作用的呢？人们只能说出个大概，但更底层的说不出来了。比如说三羧酸循环，人们知道这个反应是什么，很复杂了已经。但是，更底层呢，每个反应是怎么发生的，涉及到哪些细胞器，这些已经研究的差不多了，但更底层呢？从一个细胞分裂开始，到这个细胞死去，中间发生了什么？</p>
+<p>生物学上研究不明白这些问题，计算机领域同样不明白。是啊，有反向传播算法，有 transformer 架构，但更底层的呢？就像人类不知道自己这些思维是怎么形成的一样，他们也不知道 AI 是如何智能的。哈哈，有点像养一个小孩子，小孩就是长大了，参加了高考，又开始培育下一代。但这到底是怎么实现的呢？</p>
+<p>总结一下，我想说的是，计算机的载体确实很简单，就是一堆含硅物体。但是，在这个基础上形成的那种虚的智能深不可测，就像细胞如何诞生了智能一样。</p>
+<p>完。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/04/ai-python-environment/" title="配置 Python 环境复现 Github 项目"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">配置 Python 环境复现 Github 项目</div></div></a></div><div class="next-post pull-right"><a href="/2025/04/cs50ai-chap5/" title="CS50AI - 第 5 章 - 神经网络"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">CS50AI - 第 5 章 - 神经网络</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%AD%E8%A8%80"><span class="toc-text">语言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95%E5%92%8C%E8%AF%AD%E4%B9%89-Syntax-and-Semantics"><span class="toc-text">语法和语义(Syntax and Semantics)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E8%AF%AD%E6%B3%95-Context-Free-Grammar"><span class="toc-text">上下文无关语法(Context-Free Grammar)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nltk"><span class="toc-text">nltk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#n-grams"><span class="toc-text">n-grams</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0%E5%8C%96-Tokenization"><span class="toc-text">标记化(Tokenization)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Markov-Models"><span class="toc-text">Markov Models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bag-of-Words-Model"><span class="toc-text">Bag-of-Words Model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Naive-Bayes"><span class="toc-text">Naive Bayes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Word-Representation"><span class="toc-text">Word Representation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#word2vec"><span class="toc-text">word2vec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">神经网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Attention"><span class="toc-text">Attention</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Transformers"><span class="toc-text">Transformers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9D%9F%E4%BA%86"><span class="toc-text">结束了</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>

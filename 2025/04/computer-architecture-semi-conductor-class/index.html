@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计组 | 半导体存储体系 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="存储器是计算机的一个组成部件。它的进化反应了平衡的思想。 有一个很直觉的问题是：为什么不直接采用一样的材料进行存储器的设计呢？毕竟，分出 Cache、内存、外存这些，好复杂！为什么不能简单点？ 因为存储器需要达到平衡，没有一个在各个方面都非常能打的存储器。总的来说，在存储器方面有 3 个评判标准：  价格； 速度； 容量。  在市场经济中，价格是最终的判则，否则没人购买商品。因此，在价格的限制下，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="计组 | 半导体存储体系">
-<meta property="og:url" content="https://xialing233.github.io/2025/04/computer-architecture-semi-conductor-class/index.html">
+<meta property="og:url" content="https://blog.xialing.icu/2025/04/computer-architecture-semi-conductor-class/index.html">
 <meta property="og:site_name" content="指针的轨迹">
 <meta property="og:description" content="存储器是计算机的一个组成部件。它的进化反应了平衡的思想。 有一个很直觉的问题是：为什么不直接采用一样的材料进行存储器的设计呢？毕竟，分出 Cache、内存、外存这些，好复杂！为什么不能简单点？ 因为存储器需要达到平衡，没有一个在各个方面都非常能打的存储器。总的来说，在存储器方面有 3 个评判标准：  价格； 速度； 容量。  在市场经济中，价格是最终的判则，否则没人购买商品。因此，在价格的限制下，">
 <meta property="og:locale" content="zh_CN">
@@ -10,7 +10,7 @@
 <meta property="article:modified_time" content="2025-04-13T16:00:00.000Z">
 <meta property="article:author" content="夏凌">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://xialing233.github.io/2025/04/computer-architecture-semi-conductor-class/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://blog.xialing.icu/2025/04/computer-architecture-semi-conductor-class/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
   localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},

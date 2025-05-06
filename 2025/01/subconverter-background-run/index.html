@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>subconverter 后台服务运行 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="需求希望使用自定义规则。subconverter 的 release 版本的请求头有一些字段，导致其被一些机场网络服务商屏蔽（参见之前的文章），自己编译的版本每次需要手动打开运行，点击 Clash 进行节点更新，太麻烦。因此使用 Windows 服务的形式来让 exe 后台运行。 步骤下载nssm 是一个开源工具，用于将任何 exe 安装为 Windows 服务。下载地址https:&#x2F;&#x2F;nssm.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="subconverter 后台服务运行">
-<meta property="og:url" content="https://xialing233.github.io/2025/01/subconverter-background-run/index.html">
+<meta property="og:url" content="https://blog.xialing.icu/2025/01/subconverter-background-run/index.html">
 <meta property="og:site_name" content="指针的轨迹">
 <meta property="og:description" content="需求希望使用自定义规则。subconverter 的 release 版本的请求头有一些字段，导致其被一些机场网络服务商屏蔽（参见之前的文章），自己编译的版本每次需要手动打开运行，点击 Clash 进行节点更新，太麻烦。因此使用 Windows 服务的形式来让 exe 后台运行。 步骤下载nssm 是一个开源工具，用于将任何 exe 安装为 Windows 服务。下载地址https:&#x2F;&#x2F;nssm.">
 <meta property="og:locale" content="zh_CN">
@@ -10,7 +10,7 @@
 <meta property="article:modified_time" content="2025-01-13T16:00:00.000Z">
 <meta property="article:author" content="夏凌">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://xialing233.github.io/2025/01/subconverter-background-run/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://blog.xialing.icu/2025/01/subconverter-background-run/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
   localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},

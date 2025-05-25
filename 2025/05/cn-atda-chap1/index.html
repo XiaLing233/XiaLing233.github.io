@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>「计算机网络：自顶向下方法」读书笔记-第一章 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="§1 Computer Networks and the Internet§1.1 What is the Internet可以从两个角度来认识：硬件软件和网络能提供的服务。 §1.1.1 A Nuts-and-Bolts Description在硬件软件上，终端系统通过交流链路和分组交换联系在一起。 不同链路的速率可能不一样，取决于介质。 分组交换需要用到路由器和交换机来转发包。一个合理的类比就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「计算机网络：自顶向下方法」读书笔记-第一章">
+<meta property="og:url" content="https://blog.xialing.icu/2025/05/cn-atda-chap1/index.html">
+<meta property="og:site_name" content="指针的轨迹">
+<meta property="og:description" content="§1 Computer Networks and the Internet§1.1 What is the Internet可以从两个角度来认识：硬件软件和网络能提供的服务。 §1.1.1 A Nuts-and-Bolts Description在硬件软件上，终端系统通过交流链路和分组交换联系在一起。 不同链路的速率可能不一样，取决于介质。 分组交换需要用到路由器和交换机来转发包。一个合理的类比就">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
+<meta property="article:published_time" content="2025-05-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-24T16:00:00.000Z">
+<meta property="article:author" content="夏凌">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://blog.xialing.icu/2025/05/cn-atda-chap1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":180,"position":"top","messagePrev":"距离上次更新已过","messageNext":"天，内容可能不具有时效性"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '「计算机网络：自顶向下方法」读书笔记-第一章',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-05-25 00:00:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">「计算机网络：自顶向下方法」读书笔记-第一章</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-05-24T16:00:00.000Z" title="发表于 2025-05-25 00:00:00">2025-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-24T16:00:00.000Z" title="更新于 2025-05-25 00:00:00">2025-05-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Network/">Network</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>19分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="「计算机网络：自顶向下方法」读书笔记-第一章"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="§1-Computer-Networks-and-the-Internet"><a href="#§1-Computer-Networks-and-the-Internet" class="headerlink" title="§1 Computer Networks and the Internet"></a>§1 Computer Networks and the Internet</h2><h3 id="§1-1-What-is-the-Internet"><a href="#§1-1-What-is-the-Internet" class="headerlink" title="§1.1 What is the Internet"></a>§1.1 What is the Internet</h3><p>可以从两个角度来认识：硬件软件和网络能提供的服务。</p>
+<h4 id="§1-1-1-A-Nuts-and-Bolts-Description"><a href="#§1-1-1-A-Nuts-and-Bolts-Description" class="headerlink" title="§1.1.1 A Nuts-and-Bolts Description"></a>§1.1.1 A Nuts-and-Bolts Description</h4><p>在硬件软件上，终端系统通过交流链路和分组交换联系在一起。</p>
+<p>不同链路的速率可能不一样，取决于介质。</p>
+<p>分组交换需要用到路由器和交换机来转发包。一个合理的类比就像是一群大巴车运仓库的一个特大件货物一样。</p>
+<p>终端系统通过 ISP 接入互联网，有提供各种各样服务的 ISP。</p>
+<p>互联网中协议很重要，TCP 和 IP 是两个很重要的协议，这就是为什么互联网的系列协议栈的名称是 TCP&#x2F;IP。</p>
+<p>为了让大家对协议达成一致，有两个机构来制定互联网中用到的协议。偏硬件（物理层、数据链路层）的协议由 IEEE802 LAN&#x2F;MAN 标准委员会来制定。一些涉及到以太网、无线网等的协议由他们制定。</p>
+<p>而偏上层的协议，如 TCP、IP、HTTP、SMTP 等协议由 IETF(Internet Engineer Task Force) 来制定，它们制定的每一个标准叫 RFC(requests for comment)。</p>
+<h4 id="§1-1-2-A-Services-Description"><a href="#§1-1-2-A-Services-Description" class="headerlink" title="§1.1.2 A Services Description"></a>§1.1.2 A Services Description</h4><p>从服务的角度来看，互联网就是提供服务的基础设施。就像是通过邮局发邮件一样，我们可以享受邮递服务。不过同时还要遵守邮递的规则，比如要写明目的地、收件人、发件人信息等等。</p>
+<h4 id="§1-1-3-What-Is-a-Protocol"><a href="#§1-1-3-What-Is-a-Protocol" class="headerlink" title="§1.1.3 What Is a Protocol"></a>§1.1.3 What Is a Protocol</h4><p>协议很重要，有必要展开讲讲。还是用类比，比如一个人要向另一个人问时间，他先打招呼 Hi~，对方可能也会回应一个 Hi，也可能回复没时间，也可能压根没回复。</p>
+<blockquote>
+<p>所谓的协议，就是定义了信息交换的格式和顺序，并且定义了在信息传输或事件发生时要采取的行动。</p>
+</blockquote>
+<p>比如说，有礼貌的人在提问前应该先问好，对方又该采取什么行动。如果对方乐意回答，怎么做；对方不愿意回答，怎么做；对方超时，没反应，又该怎么做。</p>
+<h2 id="§1-2-The-Network-Edge"><a href="#§1-2-The-Network-Edge" class="headerlink" title="§1.2 The Network Edge"></a>§1.2 The Network Edge</h2><h3 id="§1-2-1-Access-Networks"><a href="#§1-2-1-Access-Networks" class="headerlink" title="§1.2.1 Access Networks"></a>§1.2.1 Access Networks</h3><p>下面看看终端是如何接入互联网的。这部分网络也叫“边缘网络”。</p>
+<p>比较经典的接入方法之一是 Digital Subscriber Line(DSL)，即数字用户线路。用户从给他们提供电话服务的公司那里获得网络连接，此时，电话公司就是 ISP。用户上网的媒介是既有的电话线。电话线根据用途分成了几个频率：高速下行、中速上行以及传统电话线路。</p>
+<p>另一种接入方法叫 Cable Internet Access，有线上网。它指的是利用既有的有线电视线路，此时，用户的 ISP 就是有线电视提供商。构建网络的方法是，从服务商到社区，用的是光纤；从社区到每个用户，是同轴电缆。由于连接网络的过程中使用了两种介质，这种连接方式也叫做光纤同轴混合网。</p>
+<p>说实话，这两种方式都比较老套了。目前这本教材是 2020 年的第 8 版，2025 年的第 9 版在网上还找不到电子版。以我为观测点，我周围的家庭都是光纤入户，甚至现在国内的运营商都不提光纤入户这个词，而是把它作为一种默认的基础标准了。</p>
+<p>除了这两种连接方式之外，还有更快的光纤入户(Fiber to the Home, FTTH)连接方式，原来的第 7 版教材还提到了拨号上网，新教材把几十年前的上网方式删掉了。</p>
+<p>企业连接网络的方式是构建一个以太网的局域网，之后通过企业路由器连接到互联网，当然，也有使用无线网的方式。甚至，现在的家庭也普遍使用无线网络来构建家庭的小网络环境。</p>
+<h3 id="§1-2-2-Physical-Media"><a href="#§1-2-2-Physical-Media" class="headerlink" title="§1.2.2 Physical Media"></a>§1.2.2 Physical Media</h3><p>看完了边缘网络的类型，我们来谈谈网络的介质。网络的介质分为两种：有线的和无线的。</p>
+<p>双绞线是最常见的介质，它在构建局域网时很常用。它的历史很早，电话线就是一种双绞线，不过电话线的速率很低，只有 56kbps。不过不同类型的双绞线有不同的性能，比如 CAT6a 类型的双绞线可以在百米内的距离达到 10Gbps 的速率。</p>
+<p>另一种介质叫同轴电缆，它被使用在有线电视中，以及 Cable Internet Access 中。双绞线的两根铜线是平行的，然而这里的两根铜线是同轴的。这种物理结构使之可以达到很高的速率。</p>
+<p>光纤是另一种很好的有线媒介，它采用光脉冲来传播 0-1 信号。它速度快、抗干扰、衰减低，但是太贵了。所以，光纤多被应用在骨干网和跨海链路中。对于 LAN 来说，双绞线还是更好的选择。</p>
+<p>无线频道不需要有线媒介，这看起来很好，因为信号可以隔空传送，可以穿墙，不需要额外安装介质。不过，信号的优良取决于环境的好坏。比如，对于常见的地面无线频道，有路径衰减、影子衰减、多路衰减、干扰等等负面影响。</p>
+<p>另一种媒介是卫星频道。卫星频道的卫星有两种类型：地球同步卫星和低轨道地球卫星。前者在 36000km 的高空，是高中物理学习过的内容；后者则离地面更近。地球同步卫星的好处在于，相对于地面是静止的，始终覆盖一片区域。然而，36000km 的距离导致延迟可能有数百毫秒；后者离地面近，延迟低，但是却相对地面不静止，往往需要多个卫星组成群来工作。</p>
+<p>关于卫星协同网络，我确实有些了解。现在构建智能算网，一个角度就是让卫星也来承担计算任务。这确实是一个热点。想想确实有意思，原来那些仅仅提供授时功能的卫星居然能承担计算任务。emm，不过我不太看好这个方向，何德何能需要卫星呢？除非以后更换卫星的部件可以不费吹灰之力，就像在地面上一样，否则，更换硬件永远是个棘手的问题。</p>
+<h2 id="§1-3-The-Network-Core"><a href="#§1-3-The-Network-Core" class="headerlink" title="§1.3 The Network Core"></a>§1.3 The Network Core</h2><h3 id="§1-3-1-Packet-Switching"><a href="#§1-3-1-Packet-Switching" class="headerlink" title="§1.3.1 Packet Switching"></a>§1.3.1 Packet Switching</h3><p>终端系统会互相发送消息，为了传输消息，消息被分成小包(packets)。在源头和目的地之间，每个包都会被路由器或者链路层交换机进行多次分组交换。</p>
+<p>大多数分组交换会使用存储与转发传输策略。它的意思是，一个包的第一位到达路由器后，不会被立刻转发出去，而是等到包的全部到达后，再进行转发。</p>
+<p>举个例子，假如源头和目的地之间隔着一个路由器，路由器和源头&#x2F;目的地的链路速度都是 $Rbps$。那么，源头向目的地发送一个位数为 $L$ 的包，就需要 $2\frac{L}{R}$ 的时间。</p>
+<p>推理的过程是，$0$ 时刻，源头开始发包；$\frac{L}{R}$ 时刻，源头发送完毕，中间的路由器也接受全了第一个包，在同一时刻会向出口转发；在 $2\frac{L}{R}$ 时刻，路由器转发完了这个包，目的地也接收完毕。</p>
+<p>如果要发 3 个包，需要 3 倍的时间吗？答案是否定的。这里的时间计算类似于计算机中的流水线——并不是前一条指令完全执行完毕后，下一条才进行。而是，前一条指令的一部分执行完毕了，下一条指令开始执行同一部分。这样在时间上可以争取出重叠的部分。</p>
+<p>这里不过多推导了，但发 3 个包的时间需要 $4\frac{L}{R}$。更一般地，如果一个包从源头到目的地需要经过 $N$ 个速率为 $R$ 的线路，则需要 $N\frac{L}{R}$ 的时间，如果是 $M$ 个包，则需要 $(N + M - 1)\frac{L}{R}$ 的时间。</p>
+<hr>
+<p>包转发中的一个问题是等待延迟。也就是说，如果网络发生了拥塞，传入的包无法第一时刻转发出去，就必须在路由器的缓冲队列中等待，因而产生了等待延迟。这一延迟是多变的，取决于网络的拥塞程度。</p>
+<p>更极端地，要是路由器的缓冲区满了，但还有源源不断的包传入，这时就必须丢包，要么把现有队列的包替换掉，要么把新传入的包丢掉。</p>
+<hr>
+<p>仔细思考一下，一个路由器有多条路径可以传出，路由器是怎么确定把包转发到哪条路的？方法是路由器内部维护一张转发表，它会抽提出包 IP 地址的一部分，从而来决定出口路径。</p>
+<p>可以有一个类比，张三要从北京东四六条开车到上海宛平南路 600 号，他不用导航，而是采用问路的方式。他先问胡同里的老大爷，上海宛平南路 600 号怎么走，老大爷不知道宛平南路，但是他知道上海，所以他告诉张三，走京沪高速。</p>
+<p>张三就走上京沪高速了。下了高速，到了上海，他又问路边的一个桑黑宁，上海宛平南路 600 号怎么走。上海人觉得上海是无用的信息，他知道宛平南路，所以告诉张三，要走内环高架路。张三于是到了宛平南路附近。</p>
+<p>到了路边，他又问了问一个大夫，上海宛平南路 600 号怎么走，大夫指着 600 号的楼，告诉了张三目的地。</p>
+<p>总而言之，IP 地址并不是每一部分都对路由器有用，路由器会提取出有用的部分来进行出口的确定。</p>
+<h3 id="§1-3-2-Circuit-Switching"><a href="#§1-3-2-Circuit-Switching" class="headerlink" title="§1.3.2 Circuit Switching"></a>§1.3.2 Circuit Switching</h3><p>电路交换是另一种思路，分成两种策略，一种叫分频复用，一种叫分时复用。前者把频率分成了很多个频段，每个连接可以使用一个频段；后者把一个时间分成了许多小槽，每个连接可以使用每个时间片的某个小槽。</p>
+<p>电路交换是预约制，起源于电话网络。古早时期，如果两个人要打电话，接线员会在发送方和接收方之间建立一个独享的连接，即使它们不交流，空闲的线路也不能留给对方。</p>
+<p>一个例子可以讲清楚分组交换和电路交换的区别。假如要去一家餐厅吃饭，出门前需要预约座位，到了就可以立马点单的做法，是电路交换；如果出门前不用预约，但是到了餐厅可能需要叫号等位的，是分组交换。</p>
+<p>解释一下，电路交换给每个连接一个单独的线路，只要预约了这个线路，它就是这条连接的了，专线，不会被其他连接影响，而且可以立马使用；分组交换呢，想用就用，不用预约，但是很可能出现需要排队的情况。</p>
+<p>到底分组交换好还是电路交换好呢？对于电话、视频会议这种对时间延时敏感的服务，似乎后者好一些。不过，分组交换是当然的潮流，因为它可以提高线路的使用效率，按需分配资源。当然，现在电话线路在昂贵的国际服务中也通常采用分组交换技术了。</p>
+<h3 id="§1-3-3-A-Network-of-Networks"><a href="#§1-3-3-A-Network-of-Networks" class="headerlink" title="§1.3.3 A Network of Networks"></a>§1.3.3 A Network of Networks</h3><p>互联网它是网络的网络，我们从简单到复杂，逐渐逼近现代网络的架构。</p>
+<p>最简单的网络结构，我们叫他网络结构 1，指的是，连接了终端的所有接入 ISP 都通过一个全球的传输 ISP 互联起来，也就是组成了一个星形结构。这个全球传输 ISP 非常强大，它可以遍布整个世界，连接全球各地的接入 ISP。</p>
+<p>当然，这种假象的强大传输 ISP 是不存在的，一个传输 ISP 顶多覆盖一个有限区域。现在规模降下来了，有利可图，就会有公司做这件事。许多大公司会建立传输 ISP，为接入 ISP 提供服务，当然也要收费。</p>
+<p>这样，网络结构 2 形成了，它指的是，传输 ISP 不只是一个了，而是许多个。这些传输 ISP 之间互联起来，建立起互联网的连通性。接入 ISP 可以从这些传输 ISP 中选择最适合自己功能的提供商。</p>
+<p>当然，网络结构 2 仍然是比较朴素的两级结构，事实上，全球传输 ISP 覆盖的区域是有限的，无法把触手伸得很长，因此，往往还有地区级的 ISP。地区级的 ISP 连接 tier-1 ISP，后者就像是我们假象的全球 ISP。总而言之，这种多层次的结构形成了网络结构 3。</p>
+<p>为了让网络模拟现代互联网的结构，需要假如存在点(Points of Presence, PoP)，多宿主，同伴以及网络交换点这些设施。</p>
+<p>PoP 指的是一组路由器，它把客户 ISP 连接到服务商 ISP 中。我的理解是连接的物理实体。换句话说，之前讲到的连接是虚的，具体怎么建立连接呢？靠的是 PoP。</p>
+<p>多宿主指的是，一家下游 ISP 可以选择多个上游 ISP 来提供服务。比如，客户可以选择联通、电信、移动等运营商的服务，起到容灾等作用。</p>
+<p>前面讲到，下游 ISP 需要通过上级的 ISP 才能连接到互联网，这是需要付费的。有时候，为了剩下一笔费用，相邻的两个 ISP 之间选择建立连接，不走更高级的网络了。如果有多个呢，可以建立一个互联网交换点，这里多个 ISP 可以进行同伴操作。这，形成了网络结构 4。</p>
+<p>网络结构 5 在 4 的基础上多了内容提供商网络。毕竟，前面讲的都是终端，还需要有人提供内容呢。比如，Google 有许多数据中心来提供内容。数据中心之间通过 Google 的内部网络相连，当然有时候也会连接外部互联网。</p>
+<h2 id="§1-4-Delay-Loss-and-Throughput-in-Packet-Switched-Networks"><a href="#§1-4-Delay-Loss-and-Throughput-in-Packet-Switched-Networks" class="headerlink" title="§1.4 Delay, Loss and Throughput in Packet-Switched Networks"></a>§1.4 Delay, Loss and Throughput in Packet-Switched Networks</h2><h3 id="§1-4-1-Overview-of-Delay-in-Packet-Switched-Networks"><a href="#§1-4-1-Overview-of-Delay-in-Packet-Switched-Networks" class="headerlink" title="§1.4.1 Overview of Delay in Packet-Switched Networks"></a>§1.4.1 Overview of Delay in Packet-Switched Networks</h3><p>分组交换网络中常见的有 4 种延迟：处理延迟，等待延迟，传输延迟和传播延迟。</p>
+<p>当数据包到达路由器的时候，路由器需要对包的头部进行处理，看看 IP 地址从而来确定到底指向哪个出口。此外，还可能检查校验位之类的。这部分延迟叫做处理延迟。</p>
+<p>另一部分延迟叫等待延迟。当网络比较拥堵的时候，新来的包需要排队，等它前面的都发送出去后，才能被发送。当然，如果队列为空，那么这一延迟就是 0。</p>
+<p>还有一种延迟叫传输延迟。它和数据包的长度和传输速率有关。这里多提一句，传输速率是怎么确定的呢？有三个参与因素：发送方、接收方和物理链路。比如，发送方一秒钟可以处理 10 个数据包，接收方一秒钟能处理 20 个数据包，链路一秒钟允许 5 个数据包同时传输。那么，最终的传输速率就是 5。</p>
+<p>发送方和接收方具体来说，是路由器的硬件接口。为什么链路也会影响传输速率呢？准确来说，是带宽的影响。带宽大，就能更多地承载发送的数据包，反之则不行。</p>
+<p>最后一种延迟叫传播延迟，它指的是数据包在链路上传播所用的时间，取决于两个路由器之间的物理距离和链路的速度。</p>
+<p>哇，好乱，为什么链路既会影响传输延迟，又能影响传播延迟？拿光纤距离吧，光纤内部传送的是光信号，光的传播速度就是传播速度，它的单位是 $m&#x2F;s$。传播速率的单位是 $bit&#x2F;s$，表示传输的信息量有多少。</p>
+<p>信息量，要有这个敏感度，那不就是 Shannon 提出的那些理论？对的，信息量。传输速率用来评判能传播多少信息。$传输速率 &#x3D; 符号率 \times 每个符号承载的比特数$。</p>
+<p>符号率就是，一秒钟能产生多少个符号，光的强度、电位的高低等等。它的速率受到发送方、接收方和链路的影响。发的太慢，影响速度；接收不了那么快，影响速度；不能传太多，不然干扰、噪声太大，影响速度。</p>
+<p>每个符号承载的比特数，也好理解，比如，用高低电平可以表示两种状态；用 $5V, 3V, -1V, -5V$ 可以表示四种状态。你说，八种，十六种可不可以？那要看介质和接收方能不能区分。要是分成 16 种，传输的过程中都模糊了，或者接收方没有那么高的分辨率，那都不行。</p>
+<p>总而言之，传输速率相比之下比较复杂，涉及到调制和解调的内容，远没有传播速率距离除以时间那个公式那样简单。</p>
+<h3 id="§1-4-2-Queuing-Delay-and-Packet-Loss"><a href="#§1-4-2-Queuing-Delay-and-Packet-Loss" class="headerlink" title="§1.4.2 Queuing Delay and Packet Loss"></a>§1.4.2 Queuing Delay and Packet Loss</h3><p>等待延迟是计算机网络延迟部分最有意思的内容，有许多书籍和论文都在探讨这件事情。总的来说，网络的等待延迟取决于传入速度、传出带宽和传入数据的特性。</p>
+<p>我们用 $\frac{La}{R}$ 衡量当前流量的强度，$L$ 表示数据包的长度，$a$ 表示每秒钟到达多少包，$R$ 表示传出速率。这里简化了，$L$ 认为是固定的，如果不固定，或许需要积分。如果这一比值大于 1，则说明网络拥堵，且等待队列会越来越长。总之，作为一名设计师，不要让这一比值大于 1。</p>
+<p>如果这一比值小于等于 1，那么，传入数据的特性会影响等待延迟。比如，如果传入数据是均匀到来的，那么对每个数据包来说，几乎没有等待时间，因为队列一直是空的；然而，如果传入数据是一个个尖峰到来的，那么后来的数据包就会等待更长的时间。</p>
+<p>当然，队列并不是无限长的。如果网络非常拥塞，以至于队列满了。后来的数据包或者队列中的数据包就会被丢掉。</p>
+<h3 id="§1-4-3-End-to-End-Delay"><a href="#§1-4-3-End-to-End-Delay" class="headerlink" title="§1.4.3 End-to-End Delay"></a>§1.4.3 End-to-End Delay</h3><p>考虑了一个节点的延迟，可以综合考虑端到端的总延迟了。一个常用的探测端到端延迟的工具是 <code>traceroute</code>。</p>
+<p>除了之前讨论的延迟之外，还有一些延迟。比如，通过共享媒介发送信息，共享媒介出于共享的目的，可能会有意限制速度。以及，VoIP 需要把发送的数据分包，这也是一种延迟的来源。</p>
+<h3 id="§1-4-4-Throughput-in-Computer-Networks"><a href="#§1-4-4-Throughput-in-Computer-Networks" class="headerlink" title="§1.4.4 Throughput in Computer Networks"></a>§1.4.4 Throughput in Computer Networks</h3><p>看完了延迟和丢包率，计算机网络的另一个重要衡量指标是吞吐量。它指的是目的主机接收到文件的速率。</p>
+<p>吞吐量，我们见得多了，百度网盘令人发指的限速就是吞吐量。如果有一个大小为 $F$ 的文件，主机 B 花了 $T$ 秒接收完毕，$\frac{F}{T}$ 就是平均吞吐量。</p>
+<p>在没有其他流量干扰的情况下，吞吐量的影响因素取决于瓶颈链路的传输速率。比如，服务器和客户端之间有一个路由器，两个链路，速率分别为 $R_s$ 和 $R_c$，那么，吞吐量就是 $min{R_s, R_c}$。</p>
+<p>这就好比是水流一样。水流到底能流多快，看的是整条路的瓶颈能走多快。</p>
+<p>另一方面，如果存在其他流量干扰，比如，大家都需要使用同一个链路。此时，这个链路也要考虑进来，如果它的传输速率是 $R_l$，则吞吐量为 $min{R_s, R_c, \frac{R_l}{M}}$，其中 $M$ 指的是有多少连接需要共用这个链路。</p>
+<h2 id="§1-5-Protocol-Layers-and-Their-Service-Models"><a href="#§1-5-Protocol-Layers-and-Their-Service-Models" class="headerlink" title="§1.5 Protocol Layers and Their Service Models"></a>§1.5 Protocol Layers and Their Service Models</h2><h3 id="§1-5-1-Layered-Architecture"><a href="#§1-5-1-Layered-Architecture" class="headerlink" title="§1.5.1 Layered Architecture"></a>§1.5.1 Layered Architecture</h3><p>互联网的结构是层次的，就像是乘坐飞机一样，不同层级会提供不同的服务。提供服务需要两件事：(1) 这一层会完成一些工作；(2) 这一层会使用其下所有层提供的服务。</p>
+<p>互联网的协议也是层次化的，这样有一些好处，模块化让系统的描述变得简单，也让系统的维护更加容易。但是，也有一些不足，比如，不同层次可能提供相似的服务（如数据校验），以及层次之间可能需要共享数据（如时间戳）。</p>
+<p>总体来看，互联网分成 5 个层次，自上而下是：应用层，传输层，网络层，链路层和物理层。把这些层的所有协议汇集在一起，就叫做协议栈。</p>
+<p>应用层是网络应用和应用层协议处在的地方。比如，访问页面的 HTTP 协议、发邮件的 SMTP 协议、传送文件的 FTP 协议等等。甚至，DNS 协议也是应用层的协议。</p>
+<p>应用层的协议分布在许多终端系统中，用来传递信息。我们把这种信息叫做<strong>消息</strong>(message)。</p>
+<p>传输层用来传输应用层的信息。有量大传输协议，TCP 和 UDP。前者是面向连接的，提供可靠的传输；后者则不保证传输的可靠性。我们把传输层的小包叫做<strong>片段</strong>(segment)。</p>
+<p>网络层上传输的小包叫做数据报文(datagram)。网络层的协议包括 IP 协议。只有一个 IP 协议，不过有许多路由协议。不过，网络层还是简化为 IP 层，因为它把互联网联系了起来。</p>
+<p>链路层是依赖于具体链路的，比如以太网协议、WiFi 协议、同轴电缆上的 DOCSIS 协议等等。一个网络层的小包可能先被以太网协议传输，再被 PPP 协议传输。链路层的小包叫帧(frame)。</p>
+<p>物理层同样是依赖于链路的，进一步地，还依赖于具体的物理媒介。比如说，以太网有许多物理层的协议，双绞线、光纤等等。</p>
+<h3 id="§1-5-2-Encapsultaion"><a href="#§1-5-2-Encapsultaion" class="headerlink" title="§1.5.2 Encapsultaion"></a>§1.5.2 Encapsultaion</h3><p>互联网的分层结构体现了一种封装理念。应用层的消息被传输层的协议封装，同时添加一些传输层字段；传输层的片段被网络层封装，并添加一些网络层头部。以此类推。</p>
+<p>在消息的传递过程中，需要经过路由器、链路层交换机等等。这些包交换设备会实现一些互联网协议，然而并不会实现全部的，而是实现底层的那些，因为更高层的用不到。</p>
+<p>而终端设备往往需要实现全部的互联网协议。这符合直觉：互联网的很大复杂度在于网络的边缘部分。</p>
+<h2 id="§-1-6-Networks-Under-Attack"><a href="#§-1-6-Networks-Under-Attack" class="headerlink" title="§ 1.6 Networks Under Attack"></a>§ 1.6 Networks Under Attack</h2><p>互联网经常发生攻击事件，有许多坏家伙。他们可以给计算机发送恶意软件；会通过拒绝访问攻击，甚至是分布式拒绝访问攻击阻断正常服务；可以嗅探包的内容；可以伪装成信任的来源等等。</p>
+<p>为什么互联网会这样不安全？因为它一开始的设计目标是基于互信的一群人之间的连接。然而，现代互联网中人们并不是互信的，但是他们仍然需要交流。总而言之，欢迎来到现代计算机网络的世界。</p>
+<h2 id="§1-7-History-of-Computer-Networking-and-the-Internet"><a href="#§1-7-History-of-Computer-Networking-and-the-Internet" class="headerlink" title="§1.7 History of Computer Networking and the Internet"></a>§1.7 History of Computer Networking and the Internet</h2><p>计算机网络的历史，我就不罗列了，总之，经过了圈内人的自嗨，一堆小圈子的自嗨，连接起小圈子，以及商业互联网这几个阶段。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2025/05/database-er-design/" title="数据库 | ER 图设计"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">数据库 | ER 图设计</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A71-Computer-Networks-and-the-Internet"><span class="toc-text">§1 Computer Networks and the Internet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-1-What-is-the-Internet"><span class="toc-text">§1.1 What is the Internet</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%C2%A71-1-1-A-Nuts-and-Bolts-Description"><span class="toc-text">§1.1.1 A Nuts-and-Bolts Description</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%C2%A71-1-2-A-Services-Description"><span class="toc-text">§1.1.2 A Services Description</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%C2%A71-1-3-What-Is-a-Protocol"><span class="toc-text">§1.1.3 What Is a Protocol</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A71-2-The-Network-Edge"><span class="toc-text">§1.2 The Network Edge</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-2-1-Access-Networks"><span class="toc-text">§1.2.1 Access Networks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-2-2-Physical-Media"><span class="toc-text">§1.2.2 Physical Media</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A71-3-The-Network-Core"><span class="toc-text">§1.3 The Network Core</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-3-1-Packet-Switching"><span class="toc-text">§1.3.1 Packet Switching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-3-2-Circuit-Switching"><span class="toc-text">§1.3.2 Circuit Switching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-3-3-A-Network-of-Networks"><span class="toc-text">§1.3.3 A Network of Networks</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A71-4-Delay-Loss-and-Throughput-in-Packet-Switched-Networks"><span class="toc-text">§1.4 Delay, Loss and Throughput in Packet-Switched Networks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-4-1-Overview-of-Delay-in-Packet-Switched-Networks"><span class="toc-text">§1.4.1 Overview of Delay in Packet-Switched Networks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-4-2-Queuing-Delay-and-Packet-Loss"><span class="toc-text">§1.4.2 Queuing Delay and Packet Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-4-3-End-to-End-Delay"><span class="toc-text">§1.4.3 End-to-End Delay</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-4-4-Throughput-in-Computer-Networks"><span class="toc-text">§1.4.4 Throughput in Computer Networks</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A71-5-Protocol-Layers-and-Their-Service-Models"><span class="toc-text">§1.5 Protocol Layers and Their Service Models</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-5-1-Layered-Architecture"><span class="toc-text">§1.5.1 Layered Architecture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A71-5-2-Encapsultaion"><span class="toc-text">§1.5.2 Encapsultaion</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A7-1-6-Networks-Under-Attack"><span class="toc-text">§ 1.6 Networks Under Attack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A71-7-History-of-Computer-Networking-and-the-Internet"><span class="toc-text">§1.7 History of Computer Networking and the Internet</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>

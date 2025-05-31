@@ -1,0 +1,457 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>「数据库系统原理」读书笔记-第七章 | 指针的轨迹</title><meta name="author" content="夏凌"><meta name="copyright" content="夏凌"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="第七章：§7 Relational Database Design §7.1 Features of Good Relational Designs关系模式的设计如果直接根据 E-R 图来导出，那么，E-R 图的好坏就决定了关系模式的好坏。 假如一开始，我们设计了一个这样的关系模式： $in_dep(ID, name, salary, dept_name, building, budget)$ 这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「数据库系统原理」读书笔记-第七章">
+<meta property="og:url" content="https://blog.xialing.icu/2025/05/database-chap7/index.html">
+<meta property="og:site_name" content="指针的轨迹">
+<meta property="og:description" content="第七章：§7 Relational Database Design §7.1 Features of Good Relational Designs关系模式的设计如果直接根据 E-R 图来导出，那么，E-R 图的好坏就决定了关系模式的好坏。 假如一开始，我们设计了一个这样的关系模式： $in_dep(ID, name, salary, dept_name, building, budget)$ 这">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp">
+<meta property="article:published_time" content="2025-05-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-30T16:00:00.000Z">
+<meta property="article:author" content="夏凌">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp"><link rel="shortcut icon" href="https://static.xialing.icu/img/Icon/Summer.webp"><link rel="canonical" href="https://blog.xialing.icu/2025/05/database-chap7/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":180,"position":"top","messagePrev":"距离上次更新已过","messageNext":"天，内容可能不具有时效性"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '「数据库系统原理」读书笔记-第七章',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-05-31 00:00:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">49</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://static.xialing.icu/img/Background/%E5%90%8C%E6%B5%8E%E7%A7%8B%E8%89%B2%20(45)(1).webp')"><nav id="nav"><span id="blog-info"><a href="/" title="指针的轨迹"><img class="site-icon" src="https://static.xialing.icu/img/Icon/Summer.webp"/><span class="site-name">指针的轨迹</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">「数据库系统原理」读书笔记-第七章</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-05-30T16:00:00.000Z" title="发表于 2025-05-31 00:00:00">2025-05-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-30T16:00:00.000Z" title="更新于 2025-05-31 00:00:00">2025-05-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="「数据库系统原理」读书笔记-第七章"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>第七章：§7 Relational Database Design</p>
+<h2 id="§7-1-Features-of-Good-Relational-Designs"><a href="#§7-1-Features-of-Good-Relational-Designs" class="headerlink" title="§7.1 Features of Good Relational Designs"></a>§7.1 Features of Good Relational Designs</h2><p>关系模式的设计如果直接根据 E-R 图来导出，那么，E-R 图的好坏就决定了关系模式的好坏。</p>
+<p>假如一开始，我们设计了一个这样的关系模式：</p>
+<p>$in_dep(ID, name, salary, dept_name, building, budget)$</p>
+<p>这看上去很不错，因为它是 <em>instructor</em> 和 <em>department</em> 的自然连接，有许多查询可以用更少的 JOIN 来实现。但是仔细想想，这造成了冗余的问题。</p>
+<p>一方面，部门的 building 和 budget 这些本来在 <em>department</em> 表中存在的内容需要被重复存储，可能会存在冗余的问题；另一方面，假如创建了一个新的部门，没有老师入职，那么在 <em>in_dep</em> 中表示不了这个部门。</p>
+<h3 id="§7-1-1-Decomposition"><a href="#§7-1-1-Decomposition" class="headerlink" title="§7.1.1 Decomposition"></a>§7.1.1 Decomposition</h3><p>对于有冗余的关系模式，就需要分解它们。当然，如果过于极端，每个关系模式都只有一个属性，那就表示不了任何关系。不过考虑下面这个没那么极端的例子：</p>
+<p>$employee(ID, name, street, city, salary)$</p>
+<p>我们可以把它分解为下面的两个模式，毕竟，分解这种东西，想分就分嘛：</p>
+<p>$employee1(ID, name)$</p>
+<p>$employee2(name, street, city, salary)$</p>
+<p>我的理解是，分解就是 JOIN 的逆操作。</p>
+<p>看看，这个分解有一个问题，问题出现在两个员工同名的情形。假如两个不同的个体具有同一个名字，那么，这样分解的两个模式在 JOIN 的时候会出现错误的混合这种情形。还是费些笔墨写个例子吧：</p>
+<p>$(57766, Kim, Main, Perryridge, 75000)$</p>
+<p>$(98776, Kim, North, Hampton, 67000)$</p>
+<p>分解之后，得到</p>
+<p>$(57766, Kim)$</p>
+<p>$(98776, Kim)$</p>
+<p>以及</p>
+<p>$(Kim, Main, Perryridge, 75000)$</p>
+<p>$(Kim, North, Hampton, 67000)$</p>
+<p>把这两个分解 JOIN 起来，就会得到 4 个合并的元组，而不是原先的两个。这样的分解，就叫做<strong>有损分解</strong>，反之，叫<strong>无损分解</strong>。</p>
+<p>更多的元组，却表示了更少的信息，蕴含了信息量的理论。</p>
+<h3 id="§7-1-2-无损分解"><a href="#§7-1-2-无损分解" class="headerlink" title="§7.1.2 无损分解"></a>§7.1.2 无损分解</h3><p>令 $R$ 是一个关系模式，$R_1$ 和 $R_2$ 是 $R$ 的一个分解。也就是说，从属性的角度来看，$R &#x3D; R_1 + R_2$。如果是一个无损分解，那么，把 $R$ 用 $R_1$ 和 $R_2$ 来替换，不会有信息的损失。</p>
+<p>什么时候有信息的损失呢？也就是对于一个关系实例 $r(R)$，我们必须使用 $r_1(R_1)$ 和 $r_2(R_2)$ 来表示它，而不能只使用 $r_(R)$。为什么会这样，就是因为 JOIN 的时候出现了错误的混合。</p>
+<p>更准确地，如果是无损连接分解的，那么对所有合法的实例，关系 $r$ 包含和下列 SQL 语句相同的元组：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> R1 <span class="keyword">FROM</span> r)</span><br><span class="line"><span class="keyword">NATURAL</span> <span class="keyword">JOIN</span></span><br><span class="line">(<span class="keyword">SELECT</span> R2 <span class="keyword">from</span> r)</span><br></pre></td></tr></table></figure>
+
+<p>回到上面的例子，<em>employee</em> 的分解就是有损的，因为原来的关系实例 $r$ 并不等于上面查询的结果，而是上面结果的子集。</p>
+<p>为什么更多的元组会有更少的信息呢？因为关系模式需要表示关系。分解之后的两个关系模式产生了更多的元组，因而无法正确地表示关系。这一联系丧失了，则意味着信息量少了。</p>
+<h3 id="§7-1-3-Normalization-Theory"><a href="#§7-1-3-Normalization-Theory" class="headerlink" title="§7.1.3 Normalization Theory"></a>§7.1.3 Normalization Theory</h3><p>现在我们就可以看一看什么是好的一个关系模式了。一个好的关系模式应该不存在冗余信息。</p>
+<p>设计一个好的关系模式需要用到正则化技术，它氛围两步走：(1) 判断当前的关系模式是不是一种好的模式（可以存在很多种好的模式）;(2) 如果当前的模式不是一个好的模式，则把它分解为一些小的关系模式，使得达到一个范式。分解<strong>必须</strong>是无损的。</p>
+<p>为了确定关系模式是否是范式，需要用到现实世界的额外信息。最常见的手段是<strong>函数依赖</strong>。</p>
+<h2 id="§7-2-Decomposition-Using-Functional-Dependencies"><a href="#§7-2-Decomposition-Using-Functional-Dependencies" class="headerlink" title="§7.2 Decomposition Using Functional Dependencies"></a>§7.2 Decomposition Using Functional Dependencies</h2><h3 id="§7-2-1-Notational-Conventions"><a href="#§7-2-1-Notational-Conventions" class="headerlink" title="§7.2.1 Notational Conventions"></a>§7.2.1 Notational Conventions</h3><p>略。</p>
+<h3 id="§7-2-2-Keys-and-Functional-Dependencies"><a href="#§7-2-2-Keys-and-Functional-Dependencies" class="headerlink" title="§7.2.2 Keys and Functional Dependencies"></a>§7.2.2 Keys and Functional Dependencies</h3><p>现实生活中最常见的约束可以用键或者函数依赖来表示。之前我们讨论过键，这里来看看扩展了的键——函数依赖。</p>
+<p>之前我们说，一组属性能够成为键，在于它可以确定一个元组。现在，对函数依赖来说，它有两个组成部分，形如 $\alpha \to \beta$。$\alpha$ 是一个属性集，它可以唯一确定 $\beta$。</p>
+<p>我们说，如果一个实例的所有元组对都有 $t_1[\alpha] &#x3D; t_2[\alpha] \implies t_1[\beta] &#x3D; t_2[\beta]$，则这个实例满足函数依赖 $\alpha \to \beta$。</p>
+<p>如果一个模式的所有合法实例都满足 $\alpha \to \beta$ 的话，就说这个模式满足这个函数依赖。</p>
+<p>理解这个点，只需要区分两个概念：实例和模式。前者是后者的一个实例化，后者是前者的抽象。</p>
+<p>函数依赖的作用有两点：</p>
+<ol>
+<li>测试某些关系是否满足给定的函数依赖 $F$；</li>
+<li>在合法关系上添加约束后，只需要关注具有函数依赖的那些关系，其他的不需要考虑。</li>
+</ol>
+<p>有些函数依赖是平凡的，比如 $A \to A$、$AB \to A$。</p>
+<p>怎么读函数依赖呢？我通常是这样，比如对于函数依赖 $A \to B$，读作：$A$ 一样的话，$B$ 也一样。</p>
+<p>对于一个函数依赖集 $F$ 来说，有可能推断出一些 $F$ 中没有的函数依赖成立。我们把所有能够由 $F$ 推断出来的函数依赖集记作 $F^+$。$F^+$ 包含了 F 中的所有函数依赖，定义为 $F$ 的闭包。</p>
+<h3 id="§7-2-3-Lossless-Decomposition-and-Functional-Dependencies"><a href="#§7-2-3-Lossless-Decomposition-and-Functional-Dependencies" class="headerlink" title="§7.2.3 Lossless Decomposition and Functional Dependencies"></a>§7.2.3 Lossless Decomposition and Functional Dependencies</h3><p>用函数依赖可以判断一个分解是否是无损的。具体来说，如果一个 $R$ 的分解 $R_1$ 和 $R_2$ 是无损的，则在 $F^+$ 中至少有以下一个条件满足：</p>
+<ul>
+<li>$R_1 \cap R_2 \to R_1$</li>
+<li>$R_1 \cap R_2 \to R_2$</li>
+</ul>
+<p>换句话说，也就是 $R_1$ 和 $R_2$ 的交集必须成为 $R_1$ 或 $R_2$ 的主键。</p>
+<p>这是很好理解的，因为，只有交集是主键，才能确保在 JOIN 的时候不存在混合连接的问题。</p>
+<p>比如上面的例子，交集 <em>name</em> 就不能成为任何一个分解后的模式的主键，则说明分解是有损的。</p>
+<p>技术上说，在关系模式上需要施加两个约束：</p>
+<ul>
+<li>$R_1 \cap R_2$ 是 $r_1$ 的主键；</li>
+<li>$R_1 \cap R_2$ 在 $r_2$ 中要引用 $r_1$，形成外键引用。</li>
+</ul>
+<p>当然，这个判断方法只是充分的，不是必要的。这涉及到多值依赖的问题，后续会再讨论。</p>
+<h2 id="§7-3-Normal-Forms"><a href="#§7-3-Normal-Forms" class="headerlink" title="§7.3 Normal Forms"></a>§7.3 Normal Forms</h2><p>这里介绍两个范式：BCNF 和 3NF。</p>
+<h3 id="§7-3-1-Boyce-Codd-Normal-Form"><a href="#§7-3-1-Boyce-Codd-Normal-Form" class="headerlink" title="§7.3.1 Boyce-Codd Normal Form"></a>§7.3.1 Boyce-Codd Normal Form</h3><p>一个我们最喜欢的范式是 BCNF，它基于函数依赖理论去除了所有的冗余。</p>
+<h4 id="§7-3-1-1-Definition"><a href="#§7-3-1-1-Definition" class="headerlink" title="§7.3.1.1 Definition"></a>§7.3.1.1 Definition</h4><p>一个关系模式 $R$ 关于一个函数依赖集 $F$ 满足 BCNF，如果对于 $F^+$ 中所有的函数依赖，至少以下一个成立：</p>
+<ol>
+<li>这个函数依赖是平凡的；</li>
+<li>函数依赖左侧的条件是模式 $R$ 的超码。</li>
+</ol>
+<p>换句话说，对于任何一个非平凡的函数依赖，箭头左侧的内容应该是这个模式的超码，可以确定模式的元组。</p>
+<hr>
+<p>那么，如果一个模式不是 BCNF 的，如何转变为 BCNF 呢？</p>
+<p>很简单，如果一个模式不是 BCNF，则至少存在一个非平凡的函数依赖 $\alpha \to \beta$，其中 $\alpha$ 不是模式 $R$ 的超码。</p>
+<p>那么，新创建一个关系模式，由 $\alpha \cup \beta$ 组成。然后，在原来的关系模式中删除 $\beta$，但是要保留 $\alpha$。</p>
+<p>举个例子，在 $in_dep(ID, name, salary, dept_name, building, budget)$ 中，存在两个函数依赖：$ID \to name, dept_name, salary$ 和 $dept_name \to building, budget$。</p>
+<p>显然 ID 是个超码，但是 dept_name 不是。所以，把 dept_name，building，budget 提取出来，创建一个新的关系。把老关系去掉箭头右侧的部分，保留 dept_name。</p>
+<p>这样，形成两个新的关系模式：</p>
+<ul>
+<li>$ID, name, salary, dept_name$；</li>
+<li>$dept_name, building, budget$。</li>
+</ul>
+<p>之所以要强调，保留 dept_name，是因为有时候，箭头右侧会包含箭头左侧的内容。如果进行第一次 BCNF 分解后，得到的模式还不满足 BCNF，则需要进一步分解。</p>
+<h4 id="§7-3-1-2-BCNF-and-Dependency-Preservation"><a href="#§7-3-1-2-BCNF-and-Dependency-Preservation" class="headerlink" title="§7.3.1.2 BCNF and Dependency Preservation"></a>§7.3.1.2 BCNF and Dependency Preservation</h4><p>我们之前讲过，数据库要检查许多约束。如果这种约束的检查在一个关系上就可以完成，肯定是很高效的事情。然而，BCNF 可能会阻碍这一目的。</p>
+<p>举个例子。原来，一个学生只能选一个导师。现在改了，一个导师只能隶属于某个学院，而学生可以选许多导师，但是在一个学院只能选一个导师。</p>
+<p>现在，可以使用一个三元组来表示这一关系：</p>
+<p>$dept_advisor(s_ID,  i<br>_ID, dept_name)$</p>
+<p>根据上面的文字描述，在这一模式上需要满足两个函数依赖：</p>
+<ol>
+<li>$i_ID \to dept_name$</li>
+<li>$s_ID, dept_name \to i_ID$</li>
+</ol>
+<p>这两个函数依赖中，第一个的 $i_ID$ 并不是超码，所以需要分解，最终得到以下两个新的模式：</p>
+<p>$i_ID, dept_name$</p>
+<p>$s_ID, i_ID$</p>
+<p>这两个模式是符合 BCNF 的，但是上文的第二个函数依赖无法在任何一个模式中被检查，只能通过把两个模式并起来才能检查。</p>
+<p>由于这种数据库设计必须通过 JOIN 才能检查函数依赖，所以这种设计被叫做<em>非</em><strong>依赖保持</strong>的。</p>
+<p>因为以来保持非常好，所以我们需要啊考虑另一种比 BCNF 弱一些的范式，它允许依赖保持。</p>
+<h3 id="§7-3-2-Third-Normal-Form"><a href="#§7-3-2-Third-Normal-Form" class="headerlink" title="§7.3.2 Third Normal Form"></a>§7.3.2 Third Normal Form</h3><p>3NF 只比 BCNF 多了一个条件，不过为了严谨，还是把 3NF 需要的所有条件列出来，新增的条件是最后一条：</p>
+<ol>
+<li>$\alpha \to \beta$ 是平凡的函数依赖；</li>
+<li>$\alpha$ 是 $R$ 的超码；</li>
+<li>在 $\beta - \alpha$ 的每一个属性 $A$ 被包含在 $R$ 的候选码中。</li>
+</ol>
+<p>注意，第三点并不是要求一个候选码包含所有的 $\beta - \alpha$ 的属性。这些属性可以被不同的候选码包含，但是至少要被一个候选码包含。</p>
+<p>还是看看之前的例子：</p>
+<ol>
+<li>$i_ID \to dept_name$</li>
+<li>$s_ID, dept_name \to i_ID$</li>
+</ol>
+<p>我们之前说到，第一个函数依赖的存在导致数据库模式不满足 BCNF。不过，这里，$dept_name - i_ID$ 后得到的 $dept_name$ 在候选码中，因而符合 3NF 的第三条。</p>
+<h3 id="§7-3-3-Comparison-of-BCNF-and-3NF"><a href="#§7-3-3-Comparison-of-BCNF-and-3NF" class="headerlink" title="§7.3.3 Comparison of BCNF and 3NF"></a>§7.3.3 Comparison of BCNF and 3NF</h3><p>3NF 相较于 BCNF 有一个很大的优势，在于依赖保持。但它也有不足，也就是有时候，我们必须用空值来表示重复的信息。</p>
+<p>总的来说，设计数据库要达成的 3 个目标是：</p>
+<ol>
+<li>BCNF</li>
+<li>无损</li>
+<li>依赖保持</li>
+</ol>
+<p>然而，由于开销的原因，市面上绝大多数数据库系统都没有提供除了 key 之外的其他函数依赖约束的设计。总而言之，理论是理论，实操目前不太好实现。（反正我是不会实现，已被数据库内核劝退）</p>
+<h3 id="§7-3-4-Higher-Normal-Forms"><a href="#§7-3-4-Higher-Normal-Forms" class="headerlink" title="§7.3.4 Higher Normal Forms"></a>§7.3.4 Higher Normal Forms</h3><p>有时候，用函数依赖理论分解模式的时候，无法避免冗余的信息。比如，考虑一个教授可以有许多小孩，也可以有许多座机电话。那么，这两个多值属性就需要分别用两个模式来表示。</p>
+<p>$(ID, child_name)$</p>
+<p>$(ID, phone_number)$</p>
+<p>然而，其实也可以合在一起：</p>
+<p>$(ID, child_name, phone_number)$</p>
+<p>我们可以验证，合并后的结果满足 BCNF，因为其上没有函数依赖约束。然而，这个想法并不是很好，因为如果教授有两个小孩，两个座机号码，则需要从 $2 \times 2 &#x3D; 4$ 条记录来存储。</p>
+<p>$$<br>(123, A, 6666)<br>(123, A, 8888)<br>(123, B, 6666)<br>(123, B, 8888)<br>$$</p>
+<p>当然，你也可以选择其中的两条来记录，如第一条和最后一条，这样不存放冗余信息。然而，这样可能会导致一些错误的蕴含，因为事实上，A 也可以和 8888 关联，但是只选取两条记录可能丢失了这种关联。</p>
+<p>对于这种依赖，会在 7.6 和 7.7 讨论。</p>
+<h2 id="§7-4-Funtional-Dependency-Theory"><a href="#§7-4-Funtional-Dependency-Theory" class="headerlink" title="§7.4 Funtional-Dependency Theory"></a>§7.4 Funtional-Dependency Theory</h2><p>为了验证一个数据库设计是否满足某些范式，了解函数依赖理论是很必要的。比如，在 BCNF 和 3NF 的定义中，都要求对 $F^+$ 中的所有函数依赖，满足一些性质。然而，函数依赖的闭包，如何计算呢？接下来就会讨论这些问题。</p>
+<h3 id="§7-4-1-Closure-of-a-Set-of-Functional-Dependencies"><a href="#§7-4-1-Closure-of-a-Set-of-Functional-Dependencies" class="headerlink" title="§7.4.1 Closure of a Set of Functional Dependencies"></a>§7.4.1 Closure of a Set of Functional Dependencies</h3><p>对于一个函数依赖集 $F$，我们可以证明在 $F$ 外的一些函数依赖也在模式上成立。当我们验证范式的时候，不能只考虑 $F$ 中哦共的，而是考虑所有（$F^+$）中的函数依赖。</p>
+<p>函数依赖集 $F$ 的闭包 $F^+$ 指的是所有通过 $F$ 能推理得到的函数依赖的集合。</p>
+<p>以下的几个推理规则可以加快计算速度，它们叫做 Armstrong 公理：</p>
+<ul>
+<li><strong>自反律</strong> 如果 $\alpha$ 是一个属性集合并且 $\beta \subseteq \alpha$，则 $\alpha \to \beta$ 成立。</li>
+<li><strong>增广律</strong> 如果 $\alpha \to \beta$ 成立，并且 $\gamma$ 是一个属性集合，则 $\gamma\alpha \to \gamma\beta$ 成立。</li>
+<li><strong>传递律</strong> 如果 $\alpha \to \beta$ 成立且 $\beta \to \gamma$ 成立，则 $\alpha \to \gamma$ 成立。</li>
+</ul>
+<p>Armstrong 公理是正确且完备的。通过它可以推导以下 3 个推论：</p>
+<ul>
+<li><strong>合并律</strong> 如果 $\alpha \to \beta$ 成立且 $\alpha \to \gamma$ 成立，那么 $\alpha \to \beta\gamma$ 成立。</li>
+<li><strong>分解律</strong> 如果 $\alpha \to \beta\gamma$ 成立，那么 $\alpha \to \beta$ 成立，$\alpha \to \gamma$ 也成立。</li>
+<li><strong>伪传递律</strong> 如果 $\alpha \to \beta$ 成立且 $\gamma\beta \to \delta$ 成立，那么 $\alpha\gamma \to \delta$ 也成立。</li>
+</ul>
+<p>上面的三个推论都可以通过基本的 Armstrong 公理来证明，这里赘述一下。</p>
+<p>合并律的证明只需要在两个依赖上运用增广律，得到 $\beta\gamma$ 和 $\alpha\beta$ 的形式，再运用一次传递律。</p>
+<p>分解律对箭头右侧的两个属性运用自反律，然后运用传递律。</p>
+<p>伪传递律使用一次增广律，然后运用传递律即可。</p>
+<p>下面展示一个找 $F^+$ 的算法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">F+ = F</span><br><span class="line">应用自反律 // 找到所有平凡依赖</span><br><span class="line">重复</span><br><span class="line">    对每个 F+ 中的函数依赖 F</span><br><span class="line">        对 f 增广律</span><br><span class="line">        把得到的新函数依赖添加到 F+ 中</span><br><span class="line">    对每对 F+ 中的函数依赖 f1 和 f2</span><br><span class="line">        如果 f1 和 f2 可以用传递律合并</span><br><span class="line">            则把得到的结果添加到 F+ 中</span><br><span class="line">直到 F+ 不改变</span><br></pre></td></tr></table></figure>
+
+<p>当然，这种算法很可能非常冗长。7.4.2 介绍另一种算法。</p>
+<h3 id="§7-4-2-Closure-of-Attribute-Sets"><a href="#§7-4-2-Closure-of-Attribute-Sets" class="headerlink" title="§7.4.2 Closure of Attribute Sets"></a>§7.4.2 Closure of Attribute Sets</h3><p>属性集的闭包指的是，某个属性 $\alpha$ 通过函数依赖能够确定的属性集合，记作 $\alpha^+$。</p>
+<p>算法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">result := α</span><br><span class="line">重复</span><br><span class="line">    对每个 F 中的函数依赖 β → γ</span><br><span class="line">        如果 β ⊆ result 则 result :=  result ∪ γ</span><br><span class="line">直到 result 不改变</span><br></pre></td></tr></table></figure>
+
+<p>属性闭包有如下的用处：</p>
+<ol>
+<li>测试 $\alpha$ 是不是超码；</li>
+<li>判断 $\alpha \to \beta$ 是否成立</li>
+<li>另一种计算 $F^+$ 的方式。</li>
+</ol>
+<h3 id="§7-4-3-Canonical-Cover"><a href="#§7-4-3-Canonical-Cover" class="headerlink" title="§7.4.3 Canonical Cover"></a>§7.4.3 Canonical Cover</h3><p>为了花费更小的开销验证函数依赖集 $F$，需要用到正则覆盖这个概念。引入这一概念之前，先定义什么是冗余属性。</p>
+<p>冗余属性有两种可能，从左侧删除属性和从右侧删除属性。</p>
+<hr>
+<p>先讨论从左侧删除，这一操作会让新的函数依赖集更强。因为原来需要 $m$ 个属性才能确定等式右侧，现在只需要 $m - 1$ 个。</p>
+<p>既然函数依赖集更强了，有必要考察，到底被删除的属性是不是冗余的。换言之，删除前比较弱的函数依赖集能否蕴含新的函数依赖集呢？如果可以，则说明属性是冗余的。</p>
+<hr>
+<p>从右侧删除道理类似，这一操作会让新的属性集更弱。因为，原来能推出 $m$ 个属性，现在只能推出 $m - 1$ 个了。</p>
+<p>原来的函数依赖集更强，那么就需要考察下新的函数依赖集能否蕴含原来的出来。</p>
+<hr>
+<p>道理我都懂，但是，怎么判断这种蕴含关系呢？事实上，其实不用查看整个函数依赖集的蕴含关系，毕竟我们只对集合进行了一个属性的删除，只需要考察和这一删除相关的函数依赖是否能被蕴含。</p>
+<p>就从左侧删除而言，新的依赖集更强。那么，考察旧的依赖集能否推出新的依赖集。不过，其实只需要在乎一个函数依赖能否被推出。哪一个呢？是让新的依赖集更强的那个，也就是 $(\alpha - A) \to \beta$。</p>
+<p>总结一下，我们要验证上述的函数依赖在<strong>弱</strong>的函数依赖集（$F$）中是否能蕴含得到。怎么理解这种强的关系呢？弱的函数依赖集需要 $\alpha \to \beta$ 才能确定 $\beta$，但是新的函数依赖集可以去掉 $\alpha$ 中 $A$ 这一条件。</p>
+<p>所以，验证左侧删除的属性是否冗余的方法是，在 $F$ 中计算 $(\alpha - A)^+$，考察其是否包含 $\beta$。</p>
+<p>从右侧删除则同理，这次是新的函数依赖集（$F’$）更弱。反过来想，$F$ 强在哪里呢？强在 $\alpha \to \beta$，因为 $F’$ 只能做到 $\alpha \to (\beta - A)$。不过更具体些，$F$ 强在 $\alpha \to A$。</p>
+<p>那么，就需要在 $F’$ 上验证 $\alpha \to A$ 是否成立。</p>
+<p>计算正则覆盖的算法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Fc = F</span><br><span class="line">重复</span><br><span class="line">    用合并律，使得 a -&gt; b, a -&gt; c 合并为 a -&gt; bc</span><br><span class="line">    找到 Fc 中的一个存在冗余属性的函数依赖 a-&gt; b</span><br><span class="line">    如果属性是冗余的，则从 Fc 中的 a -&gt; b 中删除之</span><br><span class="line">直到 Fc 不改变</span><br></pre></td></tr></table></figure>
+
+<p>有时候，如果一个函数依赖的某一侧全部是冗余的，那么，可以放心地把整个函数依赖删掉。</p>
+<p>如 $A \to B$，$A \to C$， $C \to B$ 这三个函数依赖中，第一个就是多余的，因为在 $F’$ 中，仍然能得到 $A \to B$。</p>
+<p>当然，正则覆盖不一定是唯一的，但是各个正则覆盖是等价的，就像极大无关组一样。</p>
+<h3 id="§7-4-4-Dependency-Preservation"><a href="#§7-4-4-Dependency-Preservation" class="headerlink" title="§7.4.4 Dependency Preservation"></a>§7.4.4 Dependency Preservation</h3><p>学习函数依赖理论后，就可以更准确地刻画依赖保持这一概念。</p>
+<p>先引入一个概念，叫做 $F$ 在 $R_i$ 上的限制：令 $F$ 是一个模式 $R$ 上的函数依赖。$F$ 在 $R_i$ 上的限制指的是所有在 $F^+$ （注意是 $F^+$）中只包含 $R_i$ 中属性的函数依赖的集合。</p>
+<p>令 $F’ &#x3D; F_1 \cup F_2 \cup \cdots \cup F_n$，其中 $F_i$ 是 $F$ 在 $R_i$ 上的限制。如果 $F’^+ &#x3D; F+$，则这个分解是<strong>依赖保持分解</strong>。</p>
+<p>根据定义，一个朴素的算法是这样的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">计算 F+</span><br><span class="line">对 D 中的每个 R_i</span><br><span class="line">    F_i 是 F+ 在 R_i 上的限制</span><br><span class="line">F&#x27; = 空集</span><br><span class="line">对每个限制 Fi</span><br><span class="line">    F&#x27; = F&#x27; ∪ Fi</span><br><span class="line">计算 F&#x27;+</span><br><span class="line">如果 F&#x27;+ = F+ 则返回 true 否则返回 false</span><br></pre></td></tr></table></figure>
+
+<p>然而，因为它要计算 $F^+$，所以开销很大。因此，有以下两个解决方案：</p>
+<ol>
+<li>如果 $F$ 中的每个函数依赖都可以在分解中的某个关系上进行检测，则分解是依赖保持的；</li>
+<li>指数级的算法。</li>
+</ol>
+<p>前者不一定每次都能成功，因此我们更关注后者。</p>
+<p>算法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">result = a</span><br><span class="line">重复</span><br><span class="line">    对分解中的每个 Ri</span><br><span class="line">        t = (result ∩ Ri)+ ∩ Ri</span><br><span class="line">        result = result ∪ t</span><br><span class="line">直到 result 不改变</span><br></pre></td></tr></table></figure>
+
+<p>换句话说，每一轮都要对每个 $R_i$ 和 result 的共有元素算一下再 $F$ 下的属性闭包，再交上 $R_i$。如果 result 包含了 $\alpha \to \beta$ 中 $\beta$ 的所有属性，则这一条依赖被保持了。</p>
+<h2 id="§7-5-Algorithms-for-Decomposition-Using-Functional-Dependencies"><a href="#§7-5-Algorithms-for-Decomposition-Using-Functional-Dependencies" class="headerlink" title="§7.5 Algorithms for Decomposition Using Functional Dependencies"></a>§7.5 Algorithms for Decomposition Using Functional Dependencies</h2><h3 id="§7-5-1-BCNF-Decomposition"><a href="#§7-5-1-BCNF-Decomposition" class="headerlink" title="§7.5.1 BCNF Decomposition"></a>§7.5.1 BCNF Decomposition</h3><p>前面讲过，对 BCNF 的验证，只需要根据定义就好了。但是，定义需要计算 $F^+$，开销很大。不过好消息是，有更高效的测试方法。</p>
+<h4 id="§7-5-1-1-Testing-for-BCNF"><a href="#§7-5-1-1-Testing-for-BCNF" class="headerlink" title="§7.5.1.1 Testing for BCNF"></a>§7.5.1.1 Testing for BCNF</h4><p>为了验证一个关系模式 $R$ 是否满足 BCNF，可以简化为诶两种情形：</p>
+<ol>
+<li>检查非平凡的函数依赖是否违反了 BCNF，即 $\alpha^+ \neq R$；</li>
+<li>检查一个关系模式 $R$ 是否满足 BCNF，只需要检查所有 $F$ 中的函数依赖即可，不需要检查所有 $F^+$ 的。</li>
+</ol>
+<p>这真是一个天大的好消息，然而，第 2 点可能对分解之后的模式不适用。</p>
+<p>例：有 $(A, B, C, D, E)$ 上的 $A \to B$ 和 $BC \to D$，分解为 $(A, B)$ 和 $(A, C, D, E)$ 后，看上去后者上没有成立的函数依赖了，但是在 $F^+$ 中却存在 $AC \to D$，令后者不满足 BCNF。</p>
+<p>为了解决这一问题，可以应用这一算法：</p>
+<ul>
+<li>对 $R_i$ 中属性的每一个子集 $\alpha$，计算 $\alpha^+$ 要么包含 $R_i$ 的所有属性，要么不包含 $R_i$ 的任何属性（除了自己）。</li>
+</ul>
+<p>对于前者，说明 $\alpha$ 是个超码，OK。对于后者，说明 $F^+$ 中没有非平凡的函数依赖和 $\alpha$ 有关，也 OK。</p>
+<h4 id="§7-5-1-2-BCNF-Decomposition-Algorithm"><a href="#§7-5-1-2-BCNF-Decomposition-Algorithm" class="headerlink" title="§7.5.1.2 BCNF Decomposition Algorithm"></a>§7.5.1.2 BCNF Decomposition Algorithm</h4><p>BCNF 的分解算法，其实和 7.3.1 节的差不多。这里列出来这个算法，兼听则明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">result := R</span><br><span class="line">done := false</span><br><span class="line">当没有 done</span><br><span class="line">    如果 有个 R 中的 Ri 不满足 BCNF</span><br><span class="line">        令 a -&gt; b 是在 Ri 上成立的非平凡函数依赖，且 a+ 不包含 Ri 且 a ∩ b 是空集</span><br><span class="line">        result := (result - Ri) ∪ (Ri - b) ∪ (a, b)</span><br><span class="line">    否则 done := true</span><br></pre></td></tr></table></figure>
+
+<p>说人话，就是对于一个关系模式集合，如果其中有一个关系模式上的函数依赖导致这个关系模式不满足 BCNF，则拆分这个关系模式。</p>
+<p>拆分的方法是，先把这个模式从 result 关系模式集合中删掉。</p>
+<p>之后，$\beta$ 从原模式中剔除（如果 $\beta$ 中有 $\alpha$ 则保留 $\alpha$），形成第一个新模式。另一个新模式是 $(\alpha, \beta)$。</p>
+<p>可以验证这个分解是无损的，因为根据无损分解的定义，分解后两个模式的交集 $\alpha$ 能够在 $(\alpha, \beta)$ 上满足 $\alpha \to \beta$。</p>
+<h3 id="§7-5-2-3NF-Decomposition"><a href="#§7-5-2-3NF-Decomposition" class="headerlink" title="§7.5.2 3NF Decomposition"></a>§7.5.2 3NF Decomposition</h3><p>算法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">令 Fc 是 F 的正则覆盖</span><br><span class="line">i = 0</span><br><span class="line">对 Fc 中的所有函数依赖 a -&gt; b</span><br><span class="line">    i++</span><br><span class="line">    Ri = ab</span><br><span class="line">如果 Rj 中没有一个包含了 R 的候选键</span><br><span class="line">    则 i++</span><br><span class="line">    Ri 是 R 的任何一个候选键</span><br><span class="line">重复</span><br><span class="line">    如果任何一个 Rj 被包含在了另一个模式 Rk 中</span><br><span class="line">        则删除 Rj</span><br><span class="line">直到不能删除更多的 Rj</span><br></pre></td></tr></table></figure>
+
+<p>这个算法的思想是，对每个正则覆盖中的函数依赖，都创建了一个模式，满足了 3NF 的定义。同时，它确保了至少有一个模式包含了候选键，从而确保了是无损分解。</p>
+<h3 id="§7-5-3-Correctness-of-the-3NF-Algorithm"><a href="#§7-5-3-Correctness-of-the-3NF-Algorithm" class="headerlink" title="§7.5.3 Correctness of the 3NF Algorithm"></a>§7.5.3 Correctness of the 3NF Algorithm</h3><p>略。</p>
+<h2 id="§7-6-Decomposition-Using-Multivalued-Dependencies"><a href="#§7-6-Decomposition-Using-Multivalued-Dependencies" class="headerlink" title="§7.6 Decomposition Using Multivalued Dependencies"></a>§7.6 Decomposition Using Multivalued Dependencies</h2><p>有时候 BCNF 的约束还不够，比如之前我们讲的教授、座机电话和小孩的例子。这种问题出现在多个多值属性交织在一起的情形。</p>
+<p>当然，很自然的避免冗余的想法是，把属性分解。如，原来是 $(ID, phone_number, child)$，分解为 $(ID, phone_number)$ 和 (ID, child) 不就好了？但是，这样的分解并没有理论支撑，所以这里引入多值依赖和第四范式 4NF。</p>
+<h3 id="§7-6-1-Multivalued-Dependencies"><a href="#§7-6-1-Multivalued-Dependencies" class="headerlink" title="§7.6.1 Multivalued Dependencies"></a>§7.6.1 Multivalued Dependencies</h3><p>函数依赖的目标是消除一些元组的存在，它也叫<strong>平等生成依赖</strong>，而多值依赖被称为<strong>元组生成依赖</strong>。</p>
+<p>严谨地，令 $r(R)$ 是一个关系模式，$\alpha \subseteq R$ 且 $\beta \subseteq R$，多值依赖 $\alpha \twoheadrightarrow \beta$ 在 $R$ 上成立，<br>如果对 $r(R)$ 的每个合法实例，对所有的元组对 $t_1$ 和 $t_2$ 使得 $t_1[\alpha] &#x3D; t_2[\alpha]$，都在 $r$ 中存在 $t_3$ 和 $t_4$，使得</p>
+<p>$$<br>t_1[\alpha] &#x3D; t_2[\alpha] &#x3D; t_3[\alpha] &#x3D; t_4[\alpha]<br>\<br>t_3[\beta] &#x3D; t_1[\beta]<br>\<br>t_3[R - \beta] &#x3D; t_2[ R - \beta]<br>\<br>t_4[\beta] &#x3D; t_2[\beta]<br>\<br>t_4[R - \beta] &#x3D; t_1[ R - \beta]<br>$$</p>
+<p>看起来很复杂，但想要表达的意思是，这一对出现了，和这对属性互补的一对也应该出现。</p>
+<p>从多值依赖的定义出发，以下两个规则成立：</p>
+<ul>
+<li>函数依赖也是多值依赖；</li>
+<li>$\alpha \twoheadrightarrow \beta \implies \alpha \twoheadrightarrow R - \alpha - \beta$</li>
+</ul>
+<h3 id="§7-6-2-Fourth-Normal-Form"><a href="#§7-6-2-Fourth-Normal-Form" class="headerlink" title="§7.6.2 Fourth Normal Form"></a>§7.6.2 Fourth Normal Form</h3><p>第四范式和 BCNF 范式的定义非常像，只是把函数依赖换成了多值依赖。如果一个模式在函数依赖和多值依赖集 $D$ 上满足 4NF，则对 $D^+$ 中的所有形如 $\alpha \twoheadrightarrow \beta$ 多值属性：</p>
+<ul>
+<li>$\alpha \twoheadrightarrow \beta$ 平凡；</li>
+<li>$\alpha$ 是 $R$ 的超码。</li>
+</ul>
+<h3 id="§7-6-3-4NF-Decomposition"><a href="#§7-6-3-4NF-Decomposition" class="headerlink" title="§7.6.3 4NF Decomposition"></a>§7.6.3 4NF Decomposition</h3><p>4NF 分解和 BCNF 的分解算法类似，对于导致不满足 4NF 的多值依赖，进行拆分。不再赘述。</p>
+<h2 id="§7-7-More-Normal-Forms"><a href="#§7-7-More-Normal-Forms" class="headerlink" title="§7.7 More Normal Forms"></a>§7.7 More Normal Forms</h2><p>4NF 绝不是最终的范式，还有 PJNF 和 DKNF 等等，但是这两个因为缺少正确和完备的推理，所以用得少。</p>
+<p>2NF 只有历史爱好者才会研究。1NF 将会在下一节提到。</p>
+<h2 id="§7-8-Atomic-Domains-and-First-Normal-Form"><a href="#§7-8-Atomic-Domains-and-First-Normal-Form" class="headerlink" title="§7.8 Atomic Domains and First Normal Form"></a>§7.8 Atomic Domains and First Normal Form</h2><p>第一范式解决的是原子取值域的问题。之前我们讲过多值属性，讲过复合属性，这些属性可以再分，因此不是原子属性，不满足 1NF。</p>
+<p>当然了，到底原子与否还是要看数据库是怎么用的。比如，整型可以认为是原子了吧？但要是把每一位当做基本单元，还是非原子的。</p>
+<p>有时候，非原子的属性很有用，所以现代数据库也支持一些非原子属性。</p>
+<h2 id="§7-9-Database-Design-Process"><a href="#§7-9-Database-Design-Process" class="headerlink" title="§7.9 Database-Design Process"></a>§7.9 Database-Design Process</h2><h3 id="§7-9-1-E-R-Model-and-Normalization"><a href="#§7-9-1-E-R-Model-and-Normalization" class="headerlink" title="§7.9.1 E-R Model and Normalization"></a>§7.9.1 E-R Model and Normalization</h3><p>如果 E-R 模型选的好，按理来说应该不需要花太大精力正则化。当然，设计的不好另说。</p>
+<h3 id="§7-9-2-Naming-of-Attributes-and-Relationships"><a href="#§7-9-2-Naming-of-Attributes-and-Relationships" class="headerlink" title="§7.9.2 Naming of Attributes and Relationships"></a>§7.9.2 Naming of Attributes and Relationships</h3><p>给属性和关系起名，也有讲究。</p>
+<h3 id="§7-9-3-Denormalization-for-Performance"><a href="#§7-9-3-Denormalization-for-Performance" class="headerlink" title="§7.9.3 Denormalization for Performance"></a>§7.9.3 Denormalization for Performance</h3><p>有时候为了性能，需要反范式化。</p>
+<h3 id="§7-9-4-Other-Design-Issues"><a href="#§7-9-4-Other-Design-Issues" class="headerlink" title="§7.9.4 Other Design Issues"></a>§7.9.4 Other Design Issues</h3><p>有时候，一些涉及到时间的设计，crosstabs 并不是很好的选择。</p>
+<h2 id="§7-10-Modeling-Temporal-Data"><a href="#§7-10-Modeling-Temporal-Data" class="headerlink" title="§7.10 Modeling Temporal Data"></a>§7.10 Modeling Temporal Data</h2><p>涉及到时间的数据，比如，某个数据只在某些时间段内有效，需要一些设计原则。在这种情况下，关系、主键并不是永久成立的，而是在一定时间的条件下才成立。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" data-sites="wechat,qq,weibo"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2025/05/cn-atda-chap1/" title="「计算机网络：自顶向下方法」读书笔记-第一章"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">「计算机网络：自顶向下方法」读书笔记-第一章</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://static.xialing.icu/img/%E5%A4%B4%E5%83%8F%E7%B3%BB%E5%88%97/lks1.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夏凌</div><div class="author-info__description">continue;</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">49</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">24</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XiaLing233" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/266920609" target="_blank" title="BiliBili"><i class="fa-brands fa-bilibili" style="color: #48affe;"></i></a><a class="social-icon" href="https://www.zhihu.com/people/xia-ling-22-64" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu" style="color: #1180d4;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn"></i><span>公告</span></div><div class="announcement_content">发布一些给自己看的文章。如果文章具有借鉴价值，会同步到知乎。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-1-Features-of-Good-Relational-Designs"><span class="toc-text">§7.1 Features of Good Relational Designs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-1-1-Decomposition"><span class="toc-text">§7.1.1 Decomposition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-1-2-%E6%97%A0%E6%8D%9F%E5%88%86%E8%A7%A3"><span class="toc-text">§7.1.2 无损分解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-1-3-Normalization-Theory"><span class="toc-text">§7.1.3 Normalization Theory</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-2-Decomposition-Using-Functional-Dependencies"><span class="toc-text">§7.2 Decomposition Using Functional Dependencies</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-2-1-Notational-Conventions"><span class="toc-text">§7.2.1 Notational Conventions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-2-2-Keys-and-Functional-Dependencies"><span class="toc-text">§7.2.2 Keys and Functional Dependencies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-2-3-Lossless-Decomposition-and-Functional-Dependencies"><span class="toc-text">§7.2.3 Lossless Decomposition and Functional Dependencies</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-3-Normal-Forms"><span class="toc-text">§7.3 Normal Forms</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-3-1-Boyce-Codd-Normal-Form"><span class="toc-text">§7.3.1 Boyce-Codd Normal Form</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%C2%A77-3-1-1-Definition"><span class="toc-text">§7.3.1.1 Definition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%C2%A77-3-1-2-BCNF-and-Dependency-Preservation"><span class="toc-text">§7.3.1.2 BCNF and Dependency Preservation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-3-2-Third-Normal-Form"><span class="toc-text">§7.3.2 Third Normal Form</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-3-3-Comparison-of-BCNF-and-3NF"><span class="toc-text">§7.3.3 Comparison of BCNF and 3NF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-3-4-Higher-Normal-Forms"><span class="toc-text">§7.3.4 Higher Normal Forms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-4-Funtional-Dependency-Theory"><span class="toc-text">§7.4 Funtional-Dependency Theory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-4-1-Closure-of-a-Set-of-Functional-Dependencies"><span class="toc-text">§7.4.1 Closure of a Set of Functional Dependencies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-4-2-Closure-of-Attribute-Sets"><span class="toc-text">§7.4.2 Closure of Attribute Sets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-4-3-Canonical-Cover"><span class="toc-text">§7.4.3 Canonical Cover</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-4-4-Dependency-Preservation"><span class="toc-text">§7.4.4 Dependency Preservation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-5-Algorithms-for-Decomposition-Using-Functional-Dependencies"><span class="toc-text">§7.5 Algorithms for Decomposition Using Functional Dependencies</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-5-1-BCNF-Decomposition"><span class="toc-text">§7.5.1 BCNF Decomposition</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%C2%A77-5-1-1-Testing-for-BCNF"><span class="toc-text">§7.5.1.1 Testing for BCNF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%C2%A77-5-1-2-BCNF-Decomposition-Algorithm"><span class="toc-text">§7.5.1.2 BCNF Decomposition Algorithm</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-5-2-3NF-Decomposition"><span class="toc-text">§7.5.2 3NF Decomposition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-5-3-Correctness-of-the-3NF-Algorithm"><span class="toc-text">§7.5.3 Correctness of the 3NF Algorithm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-6-Decomposition-Using-Multivalued-Dependencies"><span class="toc-text">§7.6 Decomposition Using Multivalued Dependencies</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-6-1-Multivalued-Dependencies"><span class="toc-text">§7.6.1 Multivalued Dependencies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-6-2-Fourth-Normal-Form"><span class="toc-text">§7.6.2 Fourth Normal Form</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-6-3-4NF-Decomposition"><span class="toc-text">§7.6.3 4NF Decomposition</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-7-More-Normal-Forms"><span class="toc-text">§7.7 More Normal Forms</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-8-Atomic-Domains-and-First-Normal-Form"><span class="toc-text">§7.8 Atomic Domains and First Normal Form</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-9-Database-Design-Process"><span class="toc-text">§7.9 Database-Design Process</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-9-1-E-R-Model-and-Normalization"><span class="toc-text">§7.9.1 E-R Model and Normalization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-9-2-Naming-of-Attributes-and-Relationships"><span class="toc-text">§7.9.2 Naming of Attributes and Relationships</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-9-3-Denormalization-for-Performance"><span class="toc-text">§7.9.3 Denormalization for Performance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%C2%A77-9-4-Other-Design-Issues"><span class="toc-text">§7.9.4 Other Design Issues</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%C2%A77-10-Modeling-Temporal-Data"><span class="toc-text">§7.10 Modeling Temporal Data</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: #273b5d"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 夏凌</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>

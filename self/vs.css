@@ -6,7 +6,7 @@ Visual Studio-like style based on original C# coloring by Jason Diamond <jason@d
 
 :root {
   --hl-color: black;
-  --hl-bg: white;
+  --hl-bg: #F1F1F1;
   /* --hltools-bg: #321a0f; */
   /* --hltools-color: #fff; */
   /* --hlnumber-bg: #221a0f; */
@@ -16,7 +16,7 @@ Visual Studio-like style based on original C# coloring by Jason Diamond <jason@d
 }
 
 #article-container figure.highlight .hljs {
-  background: white;
+  background: #F1F1F1;
   color: black;
 }
 

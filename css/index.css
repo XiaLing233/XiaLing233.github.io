@@ -1478,7 +1478,7 @@ body {
   background: var(--global-bg);
   color: var(--font-color);
   font-size: var(--global-font-size);
-  font-family: Stone Serif Std;
+  font-family: Arial Stone Serif Std;
   line-height: 2;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
@@ -1605,7 +1605,7 @@ img:not([src]) {
 blockquote {
   margin: 0 0 20px;
   padding: 12px 15px;
-  border-left: 6px solid #79b6df;
+  border-left: 5px solid #79b6df;
   background-color: var(--blockquote-bg);
   color: var(--blockquote-color);
 }
@@ -1621,8 +1621,8 @@ blockquote > :last-child {
   --hl-bg: #f6f8fa;
   --hltools-bg: #e6ebf1;
   --hltools-color: #90a4ae;
-  --hlnumber-bg: #f6f8fa;
-  --hlnumber-color: rgba(144,164,174,0.5);
+  --hlnumber-bg: #f1f1f1;
+  --hlnumber-color: #000;
   --hlscrollbar-bg: #dce4eb;
   --hlexpand-bg: linear-gradient(180deg, rgba(246,248,250,0.6), rgba(246,248,250,0.9));
 }

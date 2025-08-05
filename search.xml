@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>未来的工作是-2？</title>
+      <link href="//2025/08/future-work-prospect-2/"/>
+      <url>//2025/08/future-work-prospect-2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>在今年寒假的<a href="../../02/future-work-prospect/">文章</a>中提到了我未来感兴趣的 3 个方向：前端、后端和运维。现在看看，自己的想法变的很快。我们来看看现在夏凌有哪些想法。</p><h2 id="拒绝运维"><a href="#拒绝运维" class="headerlink" title="拒绝运维"></a>拒绝运维</h2><p>第一个排除的是运维的岗位。说句实在话，当我在 JD 上看到运维岗招的是大专生起步的人才时，我是震惊的。诚然，我对连连网线、打打命令的事情比较感兴趣，但是确实不太愿意拉低自己的档次。好不容易考上一所不错的学校，去到这样的岗位上有点屈才了。而且，确实干的工作都是些脏活累活，甚至是夜班。我受不了这个。</p><h2 id="FinTech"><a href="#FinTech" class="headerlink" title="FinTech"></a>FinTech</h2><p>很早就留意了知乎上的一个博主，叫弈心，是个挺厉害的网络工程师，说自己是布道者。他有的观点确实很正确，比如学习英语、以及提升认知等等。不过我对他一味劝润的思想并不是很苟同。他提到了一个职位，我很感兴趣，叫 FinTech。</p><p>国内有许多这样的投资企业，它们获利的方式就是信息差，低买高卖。就像微信或者 B 站上常见的那些 Python 广告一样，总是喜欢放一张股市曲线的大图，显示用 Python 可以实现自动化投资一样。不过和这种路边广告相比，量化公司考虑的更多，远不止于此。</p><p>既然想赚钱，首先要组建一支专业团队。当然要有许多经济学的人才，了解股市规则；还要有数学和信息学竞赛的大牛，负责设计算法，到底何时买，何时卖，提取有效信息；还要有 AI 人才，训练模型以超越人类的先验知识水平；最后，还需要一些 C++ 工程师，在网络、通信等方面减小延迟。</p><p>这正好符合我的预期：我希望能够从事优化协议栈的行业。</p><p>在调研工业界之前，我想近水楼台先得月，利用学校的科研资源，为自己积累一些论文。在上学期加入实验室后，我便进行了大量的实验工作，极大地巩固了我的 Python 水平，以及 torch, sklearn, pandas 等库的使用。不过我对这课题并不是很感兴趣，而且也并不是我 lead 的，我能挂个名已经是非常不错了。</p><p>因此，在假期我试图联系南大的一位老师，他就是负责协议栈优化和拥塞控制的，我想他的方向跟我很合适。不过老师毕竟是大牛，比较忙，也可能我的 bg 比较差，告诉了我他的 QQ 号后便没有回信，也不同意我的申请。算啦，问题不大。正好我在下学期还可以试试找本校的老师，不过确实本校没有方向特别合适的了。</p><p>总而言之，FinTech 是个好去处。我肯定没法通过算法岗进入这种头部公司，不过可以试试从网络的岗位入职。</p><h2 id="拒绝前后端"><a href="#拒绝前后端" class="headerlink" title="拒绝前后端"></a>拒绝前后端</h2><p>说实在的，我对前后端开发没那么感兴趣了。今天刚好维护了一下之前同济的爬虫，确实 Debug 很方便，不过我确实不太想再写网页了。不过数据库的课设可能还是要写个前端，小意思。</p><h2 id="路线"><a href="#路线" class="headerlink" title="路线"></a>路线</h2><p>我的方向还是网络，只不过，离最底层的路由器和交换机越来越远了。有意思的是，这样反而工作更轻松，且待遇更好。</p><p>不过看看前端的招聘要求，其实我现在也达到了；对于后端的要求，可能是 Java 多一些，但是我对它并不是很感兴趣，还是 C&#x2F;C++ 熟悉一点。</p><p>那么现在，针对这个方向，可以做什么打算呢？</p><p>🧭 一、能力需求全景图</p><p>从 JD 可以归纳出6 大核心能力板块：</p><table><thead><tr><th>模块</th><th>关键词</th></tr></thead><tbody><tr><td>🔧 系统编程基础</td><td>C++（11&#x2F;14&#x2F;17）、Linux 系统编程、模板、智能指针、STL、内存管理</td></tr><tr><td>🌐 网络协议栈</td><td>TCP&#x2F;UDP、Socket 编程、epoll、零拷贝、网络协议实现与调优</td></tr><tr><td>📉 高性能优化</td><td>多线程并发、无锁队列、缓存优化、内存对齐、SIMD、NUMA</td></tr><tr><td>🧠 工程设计能力</td><td>设计模式、代码架构、单元测试、性能分析工具</td></tr><tr><td>📊 数据系统 &amp; 回测</td><td>数据库操作（MySQL）、回测系统架构、滑点模型、交易成本建模</td></tr><tr><td>💻 系统调优 &amp; DevOps</td><td>Docker、Linux 配置调优、系统监控、自动化脚本、数据平台开发</td></tr></tbody></table><p>📚 二、书籍推荐（含路径图）</p><p>🧱 C++ 系统开发（主语言）</p><table><thead><tr><th>阶段</th><th>书籍 &#x2F; 资源</th><th>内容重点</th></tr></thead><tbody><tr><td>入门</td><td>《C++ Primer》</td><td>C++11 语法全覆盖，尤其是智能指针、模板基础</td></tr><tr><td>提升</td><td>《Effective Modern C++》</td><td>深入理解 auto、lambda、右值引用、move、RAII 等</td></tr><tr><td>提升</td><td>《STL 源码剖析》侯捷</td><td>理解容器&#x2F;迭代器&#x2F;allocator 的底层原理</td></tr><tr><td>精通</td><td>《C++ Concurrency in Action》</td><td>多线程、锁、无锁编程、线程池等</td></tr></tbody></table><p>🧠 软件工程与系统设计</p><table><thead><tr><th>阶段</th><th>书籍 &#x2F; 资源</th><th>内容重点</th></tr></thead><tbody><tr><td>入门</td><td>《设计模式之禅》 &#x2F; 《Head First 设计模式》</td><td>面向对象设计基本功</td></tr><tr><td>提升</td><td>《Linux 编程实战》陈莉君</td><td>面向大型项目的 Linux 工程实践</td></tr><tr><td>提升</td><td>Google’s C++ style guide</td><td>实际工业编码规范（可对照学习）</td></tr></tbody></table><p>🌐 Linux 网络编程 &amp; 系统内核</p><table><thead><tr><th>阶段</th><th>书籍 &#x2F; 资源</th><th>内容重点</th></tr></thead><tbody><tr><td>入门</td><td>《UNIX 环境高级编程》</td><td>文件描述符、进程控制、信号等系统调用</td></tr><tr><td>提升</td><td>《Linux 高性能服务器编程》游双</td><td>epoll、非阻塞 I&#x2F;O、定时器、优雅退出等</td></tr><tr><td>提升</td><td>《TCP&#x2F;IP 详解 卷1》</td><td>IP&#x2F;TCP&#x2F;UDP 报文格式，拥塞控制等细节</td></tr><tr><td>精通</td><td>《Linux 内核设计与实现》 &#x2F; LWN</td><td>内核网络栈、协议处理流程、socket 实现</td></tr><tr><td>拓展</td><td>DPDK 教程、RDMA 白皮书</td><td>如果你想卷极致性能</td></tr></tbody></table><p>🧮 高性能计算与优化</p><table><thead><tr><th>阶段</th><th>书籍 &#x2F; 资源</th><th>内容重点</th></tr></thead><tbody><tr><td>提升</td><td>《深入理解计算机系统（CSAPP）》</td><td>缓存结构、内存层次、指令流水、性能陷阱</td></tr><tr><td>精通</td><td>Intel VTune 官方文档</td><td>缓存 miss、分支预测失败分析工具实战</td></tr><tr><td>精通</td><td>《高性能 C++ 编程》</td><td>SIMD、内存对齐、指令集优化技巧</td></tr></tbody></table><p>🧪 回测系统与交易建模（量化视角）</p><table><thead><tr><th>阶段</th><th>书籍 &#x2F; 资源</th><th>内容重点</th></tr></thead><tbody><tr><td>入门</td><td>《Python 量化交易》</td><td>简单理解策略建模&#x2F;回测框架结构</td></tr><tr><td>提升</td><td>开源项目 Backtrader &#x2F; Zipline &#x2F; Qlib</td><td>回测逻辑、事件驱动 vs 向量化架构</td></tr><tr><td>拓展</td><td>《Algorithmic Trading》 by Ernest Chan</td><td>交易成本模型、滑点、流动性建模等</td></tr></tbody></table>]]></content>
+      
+      
+      <categories>
+          
+          <category> 个人规划 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>重叠</title>
       <link href="//2025/06/24252-peaceful-term/"/>
       <url>//2025/06/24252-peaceful-term/</url>
@@ -213,25 +232,6 @@
     
     
     <entry>
-      <title>计组 | 浮点数的运算</title>
-      <link href="//2025/03/computer-architecture-floating-arithmetic/"/>
-      <url>//2025/03/computer-architecture-floating-arithmetic/</url>
-      
-        <content type="html"><![CDATA[<h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>浮点数的运算步骤比较多，而且种类也比较多。</p><p>运算数的不同会影响运算进行多少步；而运算数的表示方式（原码、补码、移码）会影响具体问题的分析。</p><h2 id="浮点数的加减法"><a href="#浮点数的加减法" class="headerlink" title="浮点数的加减法"></a>浮点数的加减法</h2><p>加减法大概需要这样几步：</p><ol><li>对阶。小阶向大阶对齐，否则大阶的高位被舍去，误差太大；</li><li>尾数的相加；</li><li>规格化；<ul><li>左规</li><li>右规</li></ul></li><li>舍入处理；<ul><li>截断；</li><li>末尾恒置 1；</li><li>0 舍 1  入。</li></ul></li></ol><p>看看流程图吧：</p><p><img src="https://static.xialing.icu/img/202503281031109.webp" alt="浮点加法 - 西电车向泉老师 ppt"></p><p>所以如果理解了这一个过程，就会明白，为什么浮点数中，一个很大的数加很小的数会损失精度了。</p><h2 id="浮点数的乘除法"><a href="#浮点数的乘除法" class="headerlink" title="浮点数的乘除法"></a>浮点数的乘除法</h2><p>浮点数的乘除法，要经历如下的阶段。不用文字了，直接展示流程图：</p><p><img src="https://static.xialing.icu/img/202503281110579.webp" alt="浮点乘法 - 西电车向泉老师 ppt"></p><p><img src="https://static.xialing.icu/img/202503281111836.webp" alt="浮点除法 - 西电车向泉老师 ppt"></p><p>这里常考的一类题目是到底需要规格化几次，需要明白原码或补码表示时，数值的范围。</p><p>有时候是 0 次，不过最多是一次。</p><p>说明的是，在加减法和乘除法的过程中，如果使用更大的扩展位，可以提高精度。例如，Intel 在实现浮点数运算的时候，采用 80 位扩展，等保存结果的时候，再截断到 <code>float</code> 或者 <code>double</code> 的长度。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 计组 </category>
-          
-      </categories>
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>自动部署 HTTPS 证书</title>
       <link href="//2025/03/auto-ssl-cert/"/>
       <url>//2025/03/auto-ssl-cert/</url>
@@ -242,6 +242,25 @@
       <categories>
           
           <category> 建站 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>计组 | 浮点数的运算</title>
+      <link href="//2025/03/computer-architecture-floating-arithmetic/"/>
+      <url>//2025/03/computer-architecture-floating-arithmetic/</url>
+      
+        <content type="html"><![CDATA[<h2 id="说在前面"><a href="#说在前面" class="headerlink" title="说在前面"></a>说在前面</h2><p>浮点数的运算步骤比较多，而且种类也比较多。</p><p>运算数的不同会影响运算进行多少步；而运算数的表示方式（原码、补码、移码）会影响具体问题的分析。</p><h2 id="浮点数的加减法"><a href="#浮点数的加减法" class="headerlink" title="浮点数的加减法"></a>浮点数的加减法</h2><p>加减法大概需要这样几步：</p><ol><li>对阶。小阶向大阶对齐，否则大阶的高位被舍去，误差太大；</li><li>尾数的相加；</li><li>规格化；<ul><li>左规</li><li>右规</li></ul></li><li>舍入处理；<ul><li>截断；</li><li>末尾恒置 1；</li><li>0 舍 1  入。</li></ul></li></ol><p>看看流程图吧：</p><p><img src="https://static.xialing.icu/img/202503281031109.webp" alt="浮点加法 - 西电车向泉老师 ppt"></p><p>所以如果理解了这一个过程，就会明白，为什么浮点数中，一个很大的数加很小的数会损失精度了。</p><h2 id="浮点数的乘除法"><a href="#浮点数的乘除法" class="headerlink" title="浮点数的乘除法"></a>浮点数的乘除法</h2><p>浮点数的乘除法，要经历如下的阶段。不用文字了，直接展示流程图：</p><p><img src="https://static.xialing.icu/img/202503281110579.webp" alt="浮点乘法 - 西电车向泉老师 ppt"></p><p><img src="https://static.xialing.icu/img/202503281111836.webp" alt="浮点除法 - 西电车向泉老师 ppt"></p><p>这里常考的一类题目是到底需要规格化几次，需要明白原码或补码表示时，数值的范围。</p><p>有时候是 0 次，不过最多是一次。</p><p>说明的是，在加减法和乘除法的过程中，如果使用更大的扩展位，可以提高精度。例如，Intel 在实现浮点数运算的时候，采用 80 位扩展，等保存结果的时候，再截断到 <code>float</code> 或者 <code>double</code> 的长度。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计组 </category>
           
       </categories>
       
@@ -346,11 +365,11 @@
     
     
     <entry>
-      <title>MySQL 的用户和用户权限管理</title>
-      <link href="//2025/03/mysql-user/"/>
-      <url>//2025/03/mysql-user/</url>
+      <title>MySQL 数据库的导入导出</title>
+      <link href="//2025/03/mysql-dump/"/>
+      <url>//2025/03/mysql-dump/</url>
       
-        <content type="html"><![CDATA[<h2 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;password123&#x27;</span>;</span><br></pre></td></tr></table></figure><h2 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">USER</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br></pre></td></tr></table></figure><h2 id="授予用户权限"><a href="#授予用户权限" class="headerlink" title="授予用户权限"></a>授予用户权限</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">SELECT</span>, <span class="keyword">UPDATE</span> <span class="keyword">ON</span> foo.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure><h2 id="查看某个用户的权限"><a href="#查看某个用户的权限" class="headerlink" title="查看某个用户的权限"></a>查看某个用户的权限</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> GRANTS <span class="keyword">FOR</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br></pre></td></tr></table></figure><h2 id="删除用户权限"><a href="#删除用户权限" class="headerlink" title="删除用户权限"></a>删除用户权限</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">REVOKE</span> <span class="keyword">ALL</span> PRIVILEGES <span class="keyword">ON</span> foo.<span class="operator">*</span> <span class="keyword">FROM</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>]]></content>
+        <content type="html"><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>可能需要迁移本地的表格到服务器，或者反之。也有可能在服务器之间传送数据库内容。总结一下。</p><h2 id="图形化界面"><a href="#图形化界面" class="headerlink" title="图形化界面"></a>图形化界面</h2><p>#TODO</p><h2 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h2><h3 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h3><p>导出 <code>foo</code> 数据库中 <code>bar</code> 和 <code>baz</code> 表到 <code>mydump.sql</code> 中：</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysqldump <span class="comment">--add-drop-table --databases foo --tables bar baz &gt; /path/to/mydump.sql</span></span><br></pre></td></tr></table></figure><p>导出所有表：</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysqldump <span class="comment">--add-drop-database --databases foo &gt; /path/to/mydump.sql</span></span><br></pre></td></tr></table></figure><h3 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h3><p>在启动 <code>mysql</code> 后(<code>sudo mysql</code>)</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /path/to/mydump.sql</span><br></pre></td></tr></table></figure><p>或者命令行中输入</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysql <span class="operator">&lt;</span> &quot;/path/to/mydump.sql&quot;</span><br></pre></td></tr></table></figure>]]></content>
       
       
       <categories>
@@ -365,11 +384,11 @@
     
     
     <entry>
-      <title>MySQL 数据库的导入导出</title>
-      <link href="//2025/03/mysql-dump/"/>
-      <url>//2025/03/mysql-dump/</url>
+      <title>MySQL 的用户和用户权限管理</title>
+      <link href="//2025/03/mysql-user/"/>
+      <url>//2025/03/mysql-user/</url>
       
-        <content type="html"><![CDATA[<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>可能需要迁移本地的表格到服务器，或者反之。也有可能在服务器之间传送数据库内容。总结一下。</p><h2 id="图形化界面"><a href="#图形化界面" class="headerlink" title="图形化界面"></a>图形化界面</h2><p>#TODO</p><h2 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h2><h3 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h3><p>导出 <code>foo</code> 数据库中 <code>bar</code> 和 <code>baz</code> 表到 <code>mydump.sql</code> 中：</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysqldump <span class="comment">--add-drop-table --databases foo --tables bar baz &gt; /path/to/mydump.sql</span></span><br></pre></td></tr></table></figure><p>导出所有表：</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysqldump <span class="comment">--add-drop-database --databases foo &gt; /path/to/mydump.sql</span></span><br></pre></td></tr></table></figure><h3 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h3><p>在启动 <code>mysql</code> 后(<code>sudo mysql</code>)</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /path/to/mydump.sql</span><br></pre></td></tr></table></figure><p>或者命令行中输入</p><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysql <span class="operator">&lt;</span> &quot;/path/to/mydump.sql&quot;</span><br></pre></td></tr></table></figure>]]></content>
+        <content type="html"><![CDATA[<h2 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;password123&#x27;</span>;</span><br></pre></td></tr></table></figure><h2 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">USER</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br></pre></td></tr></table></figure><h2 id="授予用户权限"><a href="#授予用户权限" class="headerlink" title="授予用户权限"></a>授予用户权限</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">SELECT</span>, <span class="keyword">UPDATE</span> <span class="keyword">ON</span> foo.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure><h2 id="查看某个用户的权限"><a href="#查看某个用户的权限" class="headerlink" title="查看某个用户的权限"></a>查看某个用户的权限</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> GRANTS <span class="keyword">FOR</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br></pre></td></tr></table></figure><h2 id="删除用户权限"><a href="#删除用户权限" class="headerlink" title="删除用户权限"></a>删除用户权限</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">REVOKE</span> <span class="keyword">ALL</span> PRIVILEGES <span class="keyword">ON</span> foo.<span class="operator">*</span> <span class="keyword">FROM</span> <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>]]></content>
       
       
       <categories>
